@@ -1,8 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from 'atomic-components/Button';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
-import DatePicker from 'atomic-components/DatePicker';
+import TextInput from 'atomic-components/TextInput';
+import NameInput from 'atomic-components/NameInput';
+import Radio from 'atomic-components/Radio';
+import Checkbox from 'atomic-components/Checkbox';
+import BirthdateInput from 'atomic-components/BirthdateInput';
 import NumberInput from 'atomic-components/NumberInput';
 import { ROUTES } from 'utils/constants';
 import styles from './ClientInformationSystemInsert.module.scss';
@@ -91,6 +95,19 @@ function ClientInformationSystemInsert() {
     [],
   );
 
+  // Auto-calculate noOfDependents when dependent fields change
+  useEffect(() => {
+    const total =
+      formData.elementaryDependents +
+      formData.highSchoolDependents +
+      formData.collegeDependents;
+    setFormData((prev) => ({ ...prev, noOfDependents: total }));
+  }, [
+    formData.elementaryDependents,
+    formData.highSchoolDependents,
+    formData.collegeDependents,
+  ]);
+
   const handleSave = useCallback(() => {
     // Save functionality will be implemented later
     console.log('Save clicked', formData);
@@ -126,8 +143,8 @@ function ClientInformationSystemInsert() {
 
   // Mock data for dropdowns
   const titleOptions = ['MR', 'MRS', 'MS', 'DR', 'ENG', 'ATTY'];
-  const suffixOptions = ['JR', 'SR', 'II', 'III', 'IV'];
-  const genderOptions = ['Male', 'Female'];
+  const suffixOptions = ['JR', 'SR', 'II', 'III', 'IV', 'V', 'NONE'];
+  const genderOptions = ['Male', 'Female', 'None'];
   const maritalStatusOptions = ['Single', 'Married', 'Divorced', 'Widowed'];
   const bloodTypeOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -190,10 +207,10 @@ function ClientInformationSystemInsert() {
                     <label className={styles.label}>
                       Title <span className={styles.required}>*</span>
                     </label>
-                    <AutocompleteInput
+                    <Radio
                       value={formData.title}
                       onChange={(value) => handleInputChange('title', value)}
-                      suggestions={titleOptions}
+                      options={titleOptions}
                       placeholder="Select title"
                     />
                   </div>
@@ -202,10 +219,9 @@ function ClientInformationSystemInsert() {
                     <label className={styles.label}>
                       Last Name <span className={styles.required}>*</span>
                     </label>
-                    <AutocompleteInput
+                    <NameInput
                       value={formData.lastName}
                       onChange={(value) => handleInputChange('lastName', value)}
-                      suggestions={[]}
                       placeholder="Enter last name"
                     />
                   </div>
@@ -214,34 +230,32 @@ function ClientInformationSystemInsert() {
                     <label className={styles.label}>
                       First Name <span className={styles.required}>*</span>
                     </label>
-                    <AutocompleteInput
+                    <NameInput
                       value={formData.firstName}
                       onChange={(value) =>
                         handleInputChange('firstName', value)
                       }
-                      suggestions={[]}
                       placeholder="Enter first name"
                     />
                   </div>
 
                   <div className={styles.field}>
                     <label className={styles.label}>Middle Name</label>
-                    <AutocompleteInput
+                    <NameInput
                       value={formData.middleName}
                       onChange={(value) =>
                         handleInputChange('middleName', value)
                       }
-                      suggestions={[]}
                       placeholder="Enter middle name"
                     />
                   </div>
 
                   <div className={styles.field}>
                     <label className={styles.label}>Suffix</label>
-                    <AutocompleteInput
+                    <Radio
                       value={formData.suffix}
                       onChange={(value) => handleInputChange('suffix', value)}
-                      suggestions={suffixOptions}
+                      options={suffixOptions}
                       placeholder="Select suffix"
                     />
                   </div>
@@ -250,22 +264,22 @@ function ClientInformationSystemInsert() {
                     <label className={styles.label}>
                       Gender <span className={styles.required}>*</span>
                     </label>
-                    <AutocompleteInput
+                    <Radio
                       value={formData.gender}
                       onChange={(value) => handleInputChange('gender', value)}
-                      suggestions={genderOptions}
+                      options={genderOptions}
                       placeholder="Select gender"
                     />
                   </div>
 
                   <div className={styles.field}>
                     <label className={styles.label}>Marital Status</label>
-                    <AutocompleteInput
+                    <Radio
                       value={formData.maritalStatus}
                       onChange={(value) =>
                         handleInputChange('maritalStatus', value)
                       }
-                      suggestions={maritalStatusOptions}
+                      options={maritalStatusOptions}
                       placeholder="Select marital status"
                     />
                   </div>
@@ -274,7 +288,7 @@ function ClientInformationSystemInsert() {
                     <label className={styles.label}>
                       Birthdate <span className={styles.required}>*</span>
                     </label>
-                    <DatePicker
+                    <BirthdateInput
                       value={formData.birthDate}
                       onChange={handleBirthDateChange}
                       placeholder="Select birthdate"
@@ -293,64 +307,56 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>Birthplace</label>
-                    <input
-                      type="text"
+                    <AutocompleteInput
                       value={formData.birthPlace}
-                      onChange={(e) =>
-                        handleInputChange('birthPlace', e.target.value)
+                      onChange={(value) =>
+                        handleInputChange('birthPlace', value)
                       }
-                      className={styles.input}
+                      suggestions={[]}
                       placeholder="Enter birthplace"
                     />
                   </div>
 
                   <div className={styles.field}>
                     <label className={styles.label}>Nationality</label>
-                    <input
-                      type="text"
+                    <AutocompleteInput
                       value={formData.nationality}
-                      onChange={(e) =>
-                        handleInputChange('nationality', e.target.value)
+                      onChange={(value) =>
+                        handleInputChange('nationality', value)
                       }
-                      className={styles.input}
+                      suggestions={[]}
                       placeholder="Enter nationality"
                     />
                   </div>
 
                   <div className={styles.field}>
                     <label className={styles.label}>Previous Name</label>
-                    <input
-                      type="text"
+                    <NameInput
                       value={formData.previousName}
-                      onChange={(e) =>
-                        handleInputChange('previousName', e.target.value)
+                      onChange={(value) =>
+                        handleInputChange('previousName', value)
                       }
-                      className={styles.input}
                       placeholder="Enter previous name"
                     />
                   </div>
 
                   <div className={styles.field}>
                     <label className={styles.label}>Nick Name</label>
-                    <input
-                      type="text"
+                    <NameInput
                       value={formData.nickName}
-                      onChange={(e) =>
-                        handleInputChange('nickName', e.target.value)
-                      }
-                      className={styles.input}
+                      onChange={(value) => handleInputChange('nickName', value)}
                       placeholder="Enter nick name"
                     />
                   </div>
 
                   <div className={styles.field}>
                     <label className={styles.label}>Blood Type</label>
-                    <AutocompleteInput
+                    <Radio
                       value={formData.bloodType}
                       onChange={(value) =>
                         handleInputChange('bloodType', value)
                       }
-                      suggestions={bloodTypeOptions}
+                      options={bloodTypeOptions}
                       placeholder="Select blood type"
                     />
                   </div>
@@ -375,17 +381,13 @@ function ClientInformationSystemInsert() {
                   </div>
 
                   <div className={styles.field}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        checked={formData.isDeceased}
-                        onChange={(e) =>
-                          handleInputChange('isDeceased', e.target.checked)
-                        }
-                        className={styles.checkbox}
-                      />
-                      Client is Deceased?
-                    </label>
+                    <Checkbox
+                      checked={formData.isDeceased}
+                      onChange={(checked) =>
+                        handleInputChange('isDeceased', checked)
+                      }
+                      label="Client is Deceased?"
+                    />
                   </div>
                 </div>
               </div>
@@ -395,22 +397,19 @@ function ClientInformationSystemInsert() {
                 <h3 className={styles.sectionTitle}>RELATIONSHIP</h3>
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        checked={formData.isBeneficiary}
-                        onChange={(e) =>
-                          handleInputChange('isBeneficiary', e.target.checked)
-                        }
-                        className={styles.checkbox}
-                      />
-                      This Client is Primary Beneficiary of another client?
-                    </label>
+                    <Checkbox
+                      checked={formData.isBeneficiary}
+                      onChange={(checked) =>
+                        handleInputChange('isBeneficiary', checked)
+                      }
+                      label="This Client is Primary Beneficiary of another client?"
+                    />
                   </div>
                   {formData.isBeneficiary && (
                     <div className={styles.field}>
                       <label className={styles.label}>
                         Primary Beneficiary
+                        <Button>+</Button>
                       </label>
                       <AutocompleteInput
                         value={formData.primaryBeneficiary}
@@ -442,13 +441,12 @@ function ClientInformationSystemInsert() {
                   </div>
                   <div className={styles.field}>
                     <label className={styles.label}>School Level</label>
-                    <AutocompleteInput
+                    <TextInput
                       value={formData.schoolLevel}
                       onChange={(value) =>
                         handleInputChange('schoolLevel', value)
                       }
-                      suggestions={[]}
-                      placeholder="Type search"
+                      placeholder="Enter school level"
                     />
                   </div>
                 </div>

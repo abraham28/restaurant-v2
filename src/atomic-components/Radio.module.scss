@@ -1,0 +1,121 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  background-color: white;
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover:not(.disabled) {
+    border-color: hsl(148, 100%, 25%);
+    background-color: hsl(0 0% 99%);
+  }
+
+  &.open {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px hsla(222.2, 47.4%, 11.2%, 0.1);
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: hsl(0 0% 98%);
+  }
+}
+
+.displayValue {
+  flex: 1;
+  font-weight: 400;
+  text-align: left;
+
+  &.placeholder {
+    color: hsl(0 0% 60%);
+  }
+}
+
+.chevron {
+  color: hsl(0 0% 50%);
+  flex-shrink: 0;
+  transition: transform 0.2s ease-in-out;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid hsl(0 0% 95%);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  font-size: 0.9375rem;
+  font-family: inherit;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: hsl(0 0% 98%);
+  }
+
+  &.selected {
+    background-color: hsl(148, 100%, 95%);
+    color: var(--color-primary);
+    font-weight: 500;
+
+    &:hover {
+      background-color: hsl(148, 100%, 92%);
+    }
+  }
+}
+
+.radioText {
+  width: 100%;
+  font-size: 0.9375rem;
+}
