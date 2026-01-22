@@ -1,0 +1,71 @@
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 180px;
+}
+
+.filterLabel {
+  font-size: 0.9rem;
+  color: hsl(0 0% 35%);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill {
+  border: 1px solid hsl(0 0% 85%);
+  background: hsl(0 0% 98%);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.9rem;
+  color: hsl(222.2 47.4% 20%);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pillActive {
+  background: hsl(222.2 47.4% 11.2%);
+  color: hsl(0 0% 100%);
+  border-color: hsl(222.2 47.4% 11.2%);
+}
+
+.pillCount {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  font-weight: 600;
+  background: hsl(0 0% 0% / 0.1);
+  border-radius: 999px;
+  padding: 0.15rem 0.4rem;
+  min-width: 1.4rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.pillActive .pillCount {
+  background: hsl(0 0% 100% / 0.2);
+  opacity: 0.9;
+}
+
+.pillWarning {
+  border-color: hsl(0 84.2% 60.2%);
+  background: hsl(0 84.2% 60.2% / 0.1);
+  color: hsl(0 84.2% 50%);
+}
+
+.pillWarning:hover {
+  border-color: hsl(0 84.2% 55%);
+  background: hsl(0 84.2% 60.2% / 0.15);
+  color: hsl(0 84.2% 45%);
+}
+
+.pillWarning .pillCount {
+  background: hsl(0 84.2% 60.2% / 0.2);
+  color: hsl(0 84.2% 50%);
+}

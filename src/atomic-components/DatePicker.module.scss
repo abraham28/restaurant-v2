@@ -1,0 +1,281 @@
+// Custom Date Picker
+.dateInputWrapper {
+  position: relative;
+}
+
+.customDateInput {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  
+  background-color: white;
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    border-color: hsl(148, 100%, 25%);
+    background-color: hsl(0 0% 99%);
+  }
+
+  &:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px hsla(222.2, 47.4%, 11.2%, 0.1);
+  }
+}
+
+.calendarIcon {
+  color: hsl(0 0% 50%);
+  flex-shrink: 0;
+}
+
+.dateDisplay {
+  flex: 1;
+  font-weight: 400;
+}
+
+.datePickerDropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 0.875rem;
+  min-width: 280px;
+  max-width: 280px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.calendarNavButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background-color: transparent;
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: 4px;
+  
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: hsl(0 0% 96%);
+    border-color: hsl(148, 100%, 25%);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.calendarMonthYearWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.calendarMonthYear {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  
+  background-color: transparent;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: hsl(0 0% 96%);
+  }
+}
+
+.calendarWeekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: hsl(0 0% 50%);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.25rem 0;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.125rem;
+  margin-bottom: 0.75rem;
+}
+
+.calendarDay {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  
+  background-color: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  min-height: 28px;
+
+  &:hover:not(.emptyDay) {
+    background-color: hsl(0 0% 96%);
+    
+  }
+
+  &.emptyDay {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &.today {
+    font-weight: 600;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border: 1.5px solid #009245;
+      border-radius: 4px;
+    }
+  }
+
+  &.selected {
+    background-color: #009245;
+    color: white;
+    font-weight: 600;
+
+    &.today::before {
+      display: none;
+    }
+
+    &:hover {
+      background-color: hsl(148, 100%, 20%);
+    }
+  }
+}
+
+.calendarQuickActions {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid hsl(0 0% 89%);
+}
+
+.quickActionButton {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  
+  background-color: transparent;
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: hsl(0 0% 96%);
+    border-color: hsl(148, 100%, 25%);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Month and Year Pickers
+.monthPicker,
+.yearPicker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background-color: hsl(0 0% 98%);
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.monthPickerItem,
+.yearPickerItem {
+  padding: 0.5rem 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  
+  background-color: white;
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  text-align: center;
+
+  &:hover {
+    background-color: hsl(0 0% 96%);
+    border-color: hsl(148, 100%, 25%);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.monthPickerItemActive,
+.yearPickerItemActive {
+  background-color: #009245;
+  color: white;
+  border-color: #009245;
+
+  &:hover {
+    background-color: hsl(148, 100%, 20%);
+    border-color: hsl(148, 100%, 20%);
+  }
+}
+
+.yearPicker {
+  grid-template-columns: repeat(4, 1fr);
+}
+

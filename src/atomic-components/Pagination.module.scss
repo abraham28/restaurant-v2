@@ -1,0 +1,149 @@
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid hsl(218 11% 65%);
+  border-radius: 0.75rem;
+  background-color: hsl(0 0% 100%);
+  box-shadow: 0 4px 8px hsla(220 13% 18% / 0.08);
+}
+
+.pageSize,
+.pageJump {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: hsl(222 47% 11%);
+  font-size: 0.875rem;
+
+  label {
+    font-size: 0.875rem;
+    color: hsl(222 47% 11%);
+    margin: 0;
+  }
+}
+
+.labelFull {
+  display: inline;
+}
+
+.labelShort {
+  display: none;
+}
+
+.pageSizeSelect,
+.pageJumpInput {
+  min-width: 4.5rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid hsl(217 16% 84%);
+  border-radius: 0.5rem;
+  background-color: hsl(0 0% 100%);
+  font-size: 0.875rem;
+  color: hsl(222 47% 11%);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pageSizeSelect:focus,
+.pageJumpInput:focus {
+  outline: none;
+  border-color: hsl(217 91% 60%);
+  box-shadow: 0 0 0 3px hsla(217 91% 60% / 0.2);
+}
+
+.pageJumpInput {
+  width: 4.5rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pageButton {
+  min-width: 2rem;
+}
+
+.pageButtonActive {
+  pointer-events: none;
+}
+
+.ellipsis {
+  padding: 0 0.5rem;
+  color: hsl(215 16% 47%);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .labelFull {
+    display: none;
+  }
+
+  .labelShort {
+    display: inline;
+  }
+
+  .pageSize {
+    justify-self: flex-start;
+    white-space: nowrap;
+  }
+
+  .controls {
+    justify-self: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pageJump {
+    justify-self: flex-end;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 538px) {
+  .pagination {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .controls {
+    order: 1;
+    flex-basis: 100%;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .pageSize {
+    order: 2;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .pageJump {
+    order: 2;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+}
+
