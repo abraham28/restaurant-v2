@@ -44,6 +44,8 @@ const routeTitles: Record<string, string> = {
   '/financial-planning': 'Financial Planning',
   '/financial-planning/liabilities': 'Liabilities',
   '/financial-planning/expenses': 'Expenses',
+  '/client-information-system': 'Client Information System',
+  '/client-information-system/insert': 'Client Information System - Insert',
 };
 
 // Function to get title from path (handles dynamic routes like /sales/:id)
