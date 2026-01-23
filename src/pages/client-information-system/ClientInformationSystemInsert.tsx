@@ -146,6 +146,27 @@ interface FormData {
   pesonet: number;
   instapay: number;
   mobileWallet: number;
+  // AMLA - Employee Related Account (ERA)
+  isBankEmployeeRelated: boolean;
+  bankEmployeeName: string;
+  relationship: string;
+  dosri: string;
+  isBankEmployee: boolean;
+  employeeType: string;
+  // AMLA - Politically Exposed Person
+  isPEP: boolean;
+  pepPosition: string;
+  pepPlace: string;
+  pepTerm: string;
+  // AMLA - Tagging
+  isWatchListed: boolean;
+  isLinkedAccount: boolean;
+  isPayee: boolean;
+  relatedParty: string;
+  // AMLA - Risk Assessment
+  overallScore: number;
+  classification: string;
+  customerDueDiligence: string;
 }
 
 function ClientInformationSystemInsert() {
@@ -260,6 +281,27 @@ function ClientInformationSystemInsert() {
     pesonet: 0,
     instapay: 0,
     mobileWallet: 0,
+    // AMLA - Employee Related Account (ERA)
+    isBankEmployeeRelated: false,
+    bankEmployeeName: '',
+    relationship: '',
+    dosri: '',
+    isBankEmployee: false,
+    employeeType: '',
+    // AMLA - Politically Exposed Person
+    isPEP: false,
+    pepPosition: '',
+    pepPlace: '',
+    pepTerm: '1900-01-01',
+    // AMLA - Tagging
+    isWatchListed: false,
+    isLinkedAccount: false,
+    isPayee: false,
+    relatedParty: '',
+    // AMLA - Risk Assessment
+    overallScore: 0,
+    classification: 'None',
+    customerDueDiligence: 'None',
   });
 
   const handleInputChange = useCallback(
@@ -352,6 +394,14 @@ function ClientInformationSystemInsert() {
     'Other',
   ];
   const salaryIndicatorOptions = ['Monthly', 'Weekly', 'Bi-weekly', 'Yearly'];
+  const dosriOptions = ['Yes', 'No', 'N/A'];
+  const relatedPartyOptions = ['None', 'Related', 'Affiliate'];
+  const customerDueDiligenceOptions = [
+    'None',
+    'Simplified',
+    'Standard',
+    'Enhanced',
+  ];
 
   const tabs: { id: TabType; label: string }[] = [
     { id: 'individual', label: 'Individual' },
@@ -451,7 +501,16 @@ function ClientInformationSystemInsert() {
           />
         )}
 
-        {activeTab === 'amla' && <AmlaTab />}
+        {activeTab === 'amla' && (
+          <AmlaTab
+            formData={formData}
+            onInputChange={handleInputChange}
+            onOpenModal={handleOpenModal}
+            dosriOptions={dosriOptions}
+            relatedPartyOptions={relatedPartyOptions}
+            customerDueDiligenceOptions={customerDueDiligenceOptions}
+          />
+        )}
 
         {activeTab === 'remarks' && <RemarksTab />}
 

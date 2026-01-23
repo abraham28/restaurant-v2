@@ -232,6 +232,24 @@
   gap: 1rem;
 }
 
+.amlaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  
+  // First two sections (ERA and PEP) take full width
+  .section:nth-child(1),
+  .section:nth-child(2) {
+    grid-column: 1 / -1;
+  }
+  
+  // ERA section has internal two-column layout for its fields
+  .section:nth-child(1) .fieldsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.375rem;
+  }
+}
+
 .subsection {
   display: flex;
   flex-direction: column;
@@ -423,5 +441,14 @@
 
   .financialGrid {
     grid-template-columns: 1fr;
+  }
+
+  .amlaGrid {
+    grid-template-columns: 1fr;
+    
+    .section:nth-child(1),
+    .section:nth-child(2) {
+      grid-column: 1;
+    }
   }
 }
