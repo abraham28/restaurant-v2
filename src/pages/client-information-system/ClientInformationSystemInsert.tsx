@@ -1,18 +1,18 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
-import { Grid3x3, CreditCard, Phone, User } from 'lucide-react';
 import Button from 'atomic-components/Button';
-import ListButton from 'atomic-components/ListButton';
-import AutocompleteInput from 'atomic-components/AutocompleteInput';
-import TextInput from 'atomic-components/TextInput';
-import Textarea from 'atomic-components/Textarea';
-import NameInput from 'atomic-components/NameInput';
-import Radio from 'atomic-components/Radio';
-import Checkbox from 'atomic-components/Checkbox';
-import BirthdateInput from 'atomic-components/BirthdateInput';
-import NumberInput from 'atomic-components/NumberInput';
+import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet';
 import { ROUTES } from 'utils/constants';
+import IndividualTab from './Individual';
+import ContactsTab from './Contacts';
+import DocumentsTab from './Documents';
+import EmploymentTab from './Employment';
+import BusinessTab from './Business';
+import FinancialTab from './Financial';
+import AmlaTab from './Amla';
+import RemarksTab from './Remarks';
+import PictureTab from './Picture';
 import styles from './ClientInformationSystemInsert.module.scss';
 
 type TabType =
@@ -84,6 +84,106 @@ interface FormData {
   insufficientInformationRemarks: string;
   insufficientDocuments: boolean;
   insufficientDocumentsRemarks: string;
+  // Employment
+  employeeID: string;
+  occupation: string;
+  status: string;
+  position: string;
+  inclusiveDate: string;
+  startDate: string;
+  endDate: string;
+  lengthOfService: number;
+  companyEmployerName: string;
+  employerTIN: string;
+  employerAddress: string;
+  employerContactPerson: string;
+  employerContactNo: string;
+  businessActivities: string;
+  industry: string;
+  // Business Information
+  businessName: string;
+  businessActivity: string;
+  businessMainAddress: string;
+  businessAdditionalAddress: string;
+  businessID1: string;
+  businessID2: string;
+  businessPrimaryContact: string;
+  businessSecondaryContact: string;
+  // Other Business Information
+  otherBusinessName: string;
+  otherBusinessActivity: string;
+  otherBusinessMainAddress: string;
+  otherBusinessAdditionalAddress: string;
+  otherBusinessID1: string;
+  otherBusinessID2: string;
+  otherBusinessPrimaryContact: string;
+  otherBusinessSecondaryContact: string;
+  // Financial Information
+  salaryIndicator: string;
+  fundSource: string;
+  salary: number;
+  grossIncome: number;
+  otherIncome: number;
+  otherIncomeSource: string;
+  otherIncomeSourceAmount: number;
+  monthlyAverageIncome: number;
+  isLargeExposure: boolean;
+  // Loans
+  isMicrofinanceBorrower: boolean;
+  isRegularLoanBorrower: boolean;
+  isComaker: boolean;
+  // Savings
+  isSavingsAcctDepositor: boolean;
+  isCurrentAcctDepositor: boolean;
+  // Time Deposit
+  isTimeDepositDepositor: boolean;
+  isSpecialSavingsDepositor: boolean;
+  // Credit Line
+  enforceCreditLimit: boolean;
+  originalBalance: number;
+  outstandingBalance: number;
+  // Daily OTC IBFT Limit Amount
+  pesonet: number;
+  instapay: number;
+  mobileWallet: number;
+  // AMLA - Employee Related Account (ERA)
+  isBankEmployeeRelated: boolean;
+  bankEmployeeName: string;
+  relationship: string;
+  dosri: string;
+  isBankEmployee: boolean;
+  employeeType: string;
+  // AMLA - Politically Exposed Person
+  isPEP: boolean;
+  pepPosition: string;
+  pepPlace: string;
+  pepTerm: string;
+  // AMLA - Tagging
+  isWatchListed: boolean;
+  isLinkedAccount: boolean;
+  isPayee: boolean;
+  relatedParty: string;
+  // AMLA - Risk Assessment
+  overallScore: number;
+  classification: string;
+  customerDueDiligence: string;
+  // Remarks/Groupings
+  group1: string;
+  group2: string;
+  group3: string;
+  customUse1: string;
+  customUse2: string;
+  customUse3: string;
+  customUse4: string;
+  remarks: string;
+  clientStatus: string;
+  memberSinceDate: string;
+  lastClientUpdate: string;
+  // Picture/Signature
+  clientPicture1: string;
+  clientPicture2: string;
+  signaturePicture1: string;
+  signaturePicture2: string;
 }
 
 function ClientInformationSystemInsert() {
@@ -137,6 +237,105 @@ function ClientInformationSystemInsert() {
     insufficientInformationRemarks: '',
     insufficientDocuments: false,
     insufficientDocumentsRemarks: '',
+    employeeID: '',
+    occupation: '',
+    status: '',
+    position: '',
+    inclusiveDate: '',
+    startDate: '',
+    endDate: '',
+    lengthOfService: 0,
+    companyEmployerName: '',
+    employerTIN: '',
+    employerAddress: '',
+    employerContactPerson: '',
+    employerContactNo: '',
+    businessActivities: '',
+    industry: '',
+    // Business Information
+    businessName: '',
+    businessActivity: '',
+    businessMainAddress: '',
+    businessAdditionalAddress: '',
+    businessID1: '',
+    businessID2: '',
+    businessPrimaryContact: '',
+    businessSecondaryContact: '',
+    // Other Business Information
+    otherBusinessName: '',
+    otherBusinessActivity: '',
+    otherBusinessMainAddress: '',
+    otherBusinessAdditionalAddress: '',
+    otherBusinessID1: '',
+    otherBusinessID2: '',
+    otherBusinessPrimaryContact: '',
+    otherBusinessSecondaryContact: '',
+    // Financial Information
+    salaryIndicator: 'Monthly',
+    fundSource: '',
+    salary: 0,
+    grossIncome: 0,
+    otherIncome: 0,
+    otherIncomeSource: '',
+    otherIncomeSourceAmount: 0,
+    monthlyAverageIncome: 0,
+    isLargeExposure: false,
+    // Loans
+    isMicrofinanceBorrower: false,
+    isRegularLoanBorrower: false,
+    isComaker: false,
+    // Savings
+    isSavingsAcctDepositor: false,
+    isCurrentAcctDepositor: false,
+    // Time Deposit
+    isTimeDepositDepositor: false,
+    isSpecialSavingsDepositor: false,
+    // Credit Line
+    enforceCreditLimit: false,
+    originalBalance: 0,
+    outstandingBalance: 0,
+    // Daily OTC IBFT Limit Amount
+    pesonet: 0,
+    instapay: 0,
+    mobileWallet: 0,
+    // AMLA - Employee Related Account (ERA)
+    isBankEmployeeRelated: false,
+    bankEmployeeName: '',
+    relationship: '',
+    dosri: '',
+    isBankEmployee: false,
+    employeeType: '',
+    // AMLA - Politically Exposed Person
+    isPEP: false,
+    pepPosition: '',
+    pepPlace: '',
+    pepTerm: '1900-01-01',
+    // AMLA - Tagging
+    isWatchListed: false,
+    isLinkedAccount: false,
+    isPayee: false,
+    relatedParty: '',
+    // AMLA - Risk Assessment
+    overallScore: 0,
+    classification: 'None',
+    customerDueDiligence: 'None',
+    // Remarks/Groupings
+    group1: '',
+    group2: '',
+    group3: '',
+    customUse1: '',
+    customUse2: '',
+    customUse3: '',
+    customUse4: '',
+    remarks: '',
+    clientStatus: 'Active',
+    memberSinceDate: '',
+    lastClientUpdate: '1900-01-01',
+    // Picture/Signature
+    clientPicture1: '',
+    clientPicture2: '',
+    signaturePicture1: '',
+    signaturePicture2: '',
   });
 
   const handleInputChange = useCallback(
@@ -228,6 +427,16 @@ function ClientInformationSystemInsert() {
     'School ID',
     'Other',
   ];
+  const salaryIndicatorOptions = ['Monthly', 'Weekly', 'Bi-weekly', 'Yearly'];
+  const dosriOptions = ['Yes', 'No', 'N/A'];
+  const relatedPartyOptions = ['None', 'Related', 'Affiliate'];
+  const customerDueDiligenceOptions = [
+    'None',
+    'Simplified',
+    'Standard',
+    'Enhanced',
+  ];
+  const clientStatusOptions = ['Active', 'Inactive', 'Suspended', 'Closed'];
 
   const tabs: { id: TabType; label: string }[] = [
     { id: 'individual', label: 'Individual' },
@@ -249,8 +458,8 @@ function ClientInformationSystemInsert() {
           <div className={styles.requiredFields}>
             Required Fields:{' '}
             <span className={styles.requiredText}>
-              CIC <span className={styles.cicBullet}></span> AMLA{' '}
-              <span className={styles.amlaBullet}></span>
+              CIC <RequiredFieldBullet /> AMLA{' '}
+              <RequiredFieldBullet type="amla" />
             </span>
           </div>
           <div className={styles.buttons}>
@@ -281,699 +490,82 @@ function ClientInformationSystemInsert() {
 
       <div className={styles.content}>
         {activeTab === 'individual' && (
-          <div className={styles.tabContent}>
-            <div className={styles.formGrid}>
-              {/* BASIC INFORMATION Section */}
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>BASIC INFORMATION</h3>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Title <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.title}
-                      onChange={(value) => handleInputChange('title', value)}
-                      options={titleOptions}
-                      placeholder="Select title"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Last Name <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <NameInput
-                      value={formData.lastName}
-                      onChange={(value) => handleInputChange('lastName', value)}
-                      placeholder="Enter last name"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      First Name <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <NameInput
-                      value={formData.firstName}
-                      onChange={(value) =>
-                        handleInputChange('firstName', value)
-                      }
-                      placeholder="Enter first name"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Middle Name <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <NameInput
-                      value={formData.middleName}
-                      onChange={(value) =>
-                        handleInputChange('middleName', value)
-                      }
-                      placeholder="Enter middle name"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Suffix</label>
-                    <Radio
-                      value={formData.suffix}
-                      onChange={(value) => handleInputChange('suffix', value)}
-                      options={suffixOptions}
-                      placeholder="Select suffix"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Gender <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.gender}
-                      onChange={(value) => handleInputChange('gender', value)}
-                      options={genderOptions}
-                      placeholder="Select gender"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Marital Status <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.maritalStatus}
-                      onChange={(value) =>
-                        handleInputChange('maritalStatus', value)
-                      }
-                      options={maritalStatusOptions}
-                      placeholder="Select marital status"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Birthdate <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <BirthdateInput
-                      value={formData.birthDate}
-                      onChange={handleBirthDateChange}
-                      placeholder="Select birthdate"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Age</label>
-                    <input
-                      type="text"
-                      value={formData.age || ''}
-                      readOnly
-                      className={styles.readOnlyInput}
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Birthplace</label>
-                    <AutocompleteInput
-                      value={formData.birthPlace}
-                      onChange={(value) =>
-                        handleInputChange('birthPlace', value)
-                      }
-                      suggestions={[]}
-                      placeholder="Enter birthplace"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Nationality <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <AutocompleteInput
-                      value={formData.nationality}
-                      onChange={(value) =>
-                        handleInputChange('nationality', value)
-                      }
-                      suggestions={[]}
-                      placeholder="Enter nationality"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Previous Name</label>
-                    <NameInput
-                      value={formData.previousName}
-                      onChange={(value) =>
-                        handleInputChange('previousName', value)
-                      }
-                      placeholder="Enter previous name"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Nick Name</label>
-                    <NameInput
-                      value={formData.nickName}
-                      onChange={(value) => handleInputChange('nickName', value)}
-                      placeholder="Enter nick name"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Blood Type</label>
-                    <Radio
-                      value={formData.bloodType}
-                      onChange={(value) =>
-                        handleInputChange('bloodType', value)
-                      }
-                      options={bloodTypeOptions}
-                      placeholder="Select blood type"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Weight (kg)</label>
-                    <NumberInput
-                      value={formData.weight}
-                      onChange={(value) => handleInputChange('weight', value)}
-                      placeholder="Enter weight"
-                      decimal
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <label className={styles.label}>Height (cm)</label>
-                    <NumberInput
-                      value={formData.height}
-                      onChange={(value) => handleInputChange('height', value)}
-                      placeholder="Enter height"
-                    />
-                  </div>
-
-                  <div className={styles.field}>
-                    <Checkbox
-                      checked={formData.isDeceased}
-                      onChange={(checked) =>
-                        handleInputChange('isDeceased', checked)
-                      }
-                      label="Client is Deceased?"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Relationship Section */}
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>RELATIONSHIP</h3>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <Checkbox
-                      checked={formData.isBeneficiary}
-                      onChange={(checked) =>
-                        handleInputChange('isBeneficiary', checked)
-                      }
-                      label="This Client is Primary Beneficiary of another client?"
-                    />
-                  </div>
-                  {formData.isBeneficiary && (
-                    <div className={styles.field}>
-                      <label className={styles.label}>
-                        Primary Beneficiary
-                        <Button>+</Button>
-                      </label>
-                      <AutocompleteInput
-                        value={formData.primaryBeneficiary}
-                        onChange={(value) =>
-                          handleInputChange('primaryBeneficiary', value)
-                        }
-                        suggestions={[]}
-                        placeholder="Type search"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Education Section */}
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>EDUCATION</h3>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Education</label>
-                    <AutocompleteInput
-                      value={formData.education}
-                      onChange={(value) =>
-                        handleInputChange('education', value)
-                      }
-                      suggestions={[]}
-                      placeholder="Type search"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>School Level</label>
-                    <TextInput
-                      value={formData.schoolLevel}
-                      onChange={(value) =>
-                        handleInputChange('schoolLevel', value)
-                      }
-                      placeholder="Enter school level"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Dependents Section */}
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>DEPENDENTS</h3>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Elementary</label>
-                    <NumberInput
-                      value={formData.elementaryDependents}
-                      onChange={(value) =>
-                        handleInputChange('elementaryDependents', value)
-                      }
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>High School</label>
-                    <NumberInput
-                      value={formData.highSchoolDependents}
-                      onChange={(value) =>
-                        handleInputChange('highSchoolDependents', value)
-                      }
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>College</label>
-                    <NumberInput
-                      value={formData.collegeDependents}
-                      onChange={(value) =>
-                        handleInputChange('collegeDependents', value)
-                      }
-                      placeholder="0"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>No. of Dependents</label>
-                    <NumberInput
-                      value={formData.noOfDependents}
-                      onChange={(value) =>
-                        handleInputChange('noOfDependents', value)
-                      }
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Cars Owned Section */}
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>CARS OWNED</h3>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>No. of Cars Owned</label>
-                    <NumberInput
-                      value={formData.numberOfCarsOwned}
-                      onChange={(value) =>
-                        handleInputChange('numberOfCarsOwned', value)
-                      }
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <IndividualTab
+            formData={formData}
+            onInputChange={handleInputChange}
+            onBirthDateChange={handleBirthDateChange}
+            titleOptions={titleOptions}
+            suffixOptions={suffixOptions}
+            genderOptions={genderOptions}
+            maritalStatusOptions={maritalStatusOptions}
+            bloodTypeOptions={bloodTypeOptions}
+          />
         )}
 
         {activeTab === 'contacts' && (
-          <div className={styles.tabContent}>
-            <div className={styles.formGrid}>
-              {/* Addresses Section */}
-              <div className={styles.section}>
-                <div className={styles.sectionHeader}>
-                  <h3 className={styles.sectionTitle}>Addresses</h3>
-                  <ListButton
-                    icon={Grid3x3}
-                    label="Address List"
-                    onClick={() => handleOpenModal('Address List')}
-                    aria-label="Open Address List"
-                  />
-                </div>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Primary <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <AutocompleteInput
-                      value={formData.address1Used}
-                      onChange={(value) =>
-                        handleInputChange('address1Used', value)
-                      }
-                      suggestions={[]}
-                      placeholder="Select or enter primary address"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Secondary <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <AutocompleteInput
-                      value={formData.address2Used}
-                      onChange={(value) =>
-                        handleInputChange('address2Used', value)
-                      }
-                      suggestions={[]}
-                      placeholder="Select or enter secondary address"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Primary ID Section */}
-              <div className={styles.section}>
-                <div className={styles.sectionHeader}>
-                  <div className={styles.sectionTitleWithIcon}>
-                    <CreditCard size={16} className={styles.sectionIcon} />
-                    <h3 className={styles.sectionTitle}>Primary ID</h3>
-                  </div>
-                  <ListButton
-                    icon={Grid3x3}
-                    label="Primary ID List"
-                    onClick={() => handleOpenModal('Primary ID List')}
-                    aria-label="Open Primary ID List"
-                  />
-                </div>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      ID 1:
-                      <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.primaryID1}
-                      onChange={(value) =>
-                        handleInputChange('primaryID1', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select ID 1"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      ID 2: <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.primaryID2}
-                      onChange={(value) =>
-                        handleInputChange('primaryID2', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select ID 2"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      ID 3: <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.primaryID3}
-                      onChange={(value) =>
-                        handleInputChange('primaryID3', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select ID 3"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Secondary ID Section */}
-              <div className={styles.section}>
-                <div className={styles.sectionHeader}>
-                  <div className={styles.sectionTitleWithIcon}>
-                    <CreditCard size={16} className={styles.sectionIcon} />
-                    <h3 className={styles.sectionTitle}>Secondary ID</h3>
-                  </div>
-                  <ListButton
-                    icon={Grid3x3}
-                    label="Secondary ID List"
-                    onClick={() => handleOpenModal('Secondary ID List')}
-                    aria-label="Open Secondary ID List"
-                  />
-                </div>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      ID 1:
-                      <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.secondaryID1}
-                      onChange={(value) =>
-                        handleInputChange('secondaryID1', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select or enter ID 1"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>ID 2:</label>
-                    <Radio
-                      value={formData.secondaryID2}
-                      onChange={(value) =>
-                        handleInputChange('secondaryID2', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select or enter ID 2"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>ID 3:</label>
-                    <Radio
-                      value={formData.secondaryID3}
-                      onChange={(value) =>
-                        handleInputChange('secondaryID3', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select or enter ID 3"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Contacts Section */}
-              <div className={styles.section}>
-                <div className={styles.sectionHeader}>
-                  <div className={styles.sectionTitleWithIcon}>
-                    <Phone size={16} className={styles.sectionIcon} />
-                    <h3 className={styles.sectionTitle}>Contacts</h3>
-                  </div>
-                  <ListButton
-                    icon={Grid3x3}
-                    label="Contact List"
-                    onClick={() => handleOpenModal('Contact List')}
-                    aria-label="Open Contact List"
-                  />
-                </div>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Primary: <span className={styles.cicBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.primaryContact}
-                      onChange={(value) =>
-                        handleInputChange('primaryContact', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select or enter primary contact"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Secondary:</label>
-                    <Radio
-                      value={formData.secondaryContact}
-                      onChange={(value) =>
-                        handleInputChange('secondaryContact', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select or enter secondary contact"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* For AMLA Section */}
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>For AMLA</h3>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      Presented ID Type:{' '}
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <Radio
-                      value={formData.presentedIDType}
-                      onChange={(value) =>
-                        handleInputChange('presentedIDType', value)
-                      }
-                      options={idTypeOptions}
-                      placeholder="Select presented ID type"
-                    />
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>
-                      ID No. Presented for AMLA:{' '}
-                      <span className={styles.amlaBullet}></span>
-                    </label>
-                    <TextInput
-                      value={formData.idNoPresentedForAMLA}
-                      onChange={(value) =>
-                        handleInputChange('idNoPresentedForAMLA', value)
-                      }
-                      placeholder="Enter ID number"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Mobile Banking Section */}
-              <div className={styles.section}>
-                <div className={styles.sectionHeader}>
-                  <h3 className={styles.sectionTitle}>Mobile Banking</h3>
-                  <Button
-                    variant="primary"
-                    className={styles.activateButton}
-                    onClick={() => {
-                      // TODO: Implement mobile banking activation
-                      console.log('Activate Mobile Banking clicked');
-                    }}
-                  >
-                    <User size={16} />
-                    ACTIVATE
-                  </Button>
-                </div>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Mobile Number:</label>
-                    <div className={styles.mobileNumberWrapper}>
-                      <div className={styles.countryCodeWrapper}>
-                        <Radio
-                          value={formData.countryCode}
-                          onChange={(value) =>
-                            handleInputChange('countryCode', value)
-                          }
-                          options={countryCodeOptions}
-                          placeholder="+63"
-                        />
-                      </div>
-                      <NumberInput
-                        decimal={false}
-                        value={
-                          formData.mobileNumber
-                            ? Number(formData.mobileNumber)
-                            : undefined
-                        }
-                        onChange={(value) =>
-                          handleInputChange('mobileNumber', value)
-                        }
-                        placeholder="Enter mobile number"
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.field}>
-                    <label className={styles.label}>Email Address:</label>
-                    <TextInput
-                      value={formData.emailAddress}
-                      onChange={(value) =>
-                        handleInputChange('emailAddress', value)
-                      }
-                      placeholder="Enter email address"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ContactsTab
+            formData={formData}
+            onInputChange={handleInputChange}
+            onOpenModal={handleOpenModal}
+            idTypeOptions={idTypeOptions}
+            countryCodeOptions={countryCodeOptions}
+          />
         )}
 
         {activeTab === 'documents' && (
-          <div className={styles.tabContent}>
-            <div className={styles.documentsContainer}>
-              <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>Documents</h3>
-                <div className={styles.fieldsGrid}>
-                  <div className={styles.field}>
-                    <Checkbox
-                      checked={formData.insufficientInformation}
-                      onChange={(checked) =>
-                        handleInputChange('insufficientInformation', checked)
-                      }
-                      label="Insufficient Information"
-                    />
-                    <div className={styles.textareaWrapper}>
-                      <Textarea
-                        value={formData.insufficientInformationRemarks}
-                        onChange={(value) =>
-                          handleInputChange(
-                            'insufficientInformationRemarks',
-                            value,
-                          )
-                        }
-                        placeholder="Type in your remarks(optional)"
-                        rows={6}
-                      />
-                    </div>
-                  </div>
-                  <div className={styles.field}>
-                    <Checkbox
-                      checked={formData.insufficientDocuments}
-                      onChange={(checked) =>
-                        handleInputChange('insufficientDocuments', checked)
-                      }
-                      label="Insufficient Documents"
-                    />
-                    <div className={styles.textareaWrapper}>
-                      <Textarea
-                        value={formData.insufficientDocumentsRemarks}
-                        onChange={(value) =>
-                          handleInputChange(
-                            'insufficientDocumentsRemarks',
-                            value,
-                          )
-                        }
-                        placeholder="Type in your remarks(optional)"
-                        rows={6}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <DocumentsTab formData={formData} onInputChange={handleInputChange} />
         )}
 
-        {activeTab !== 'individual' &&
-          activeTab !== 'contacts' &&
-          activeTab !== 'documents' && (
-            <div className={styles.tabContent}>
-              <div className={styles.emptyTab}>
-                {tabs.find((t) => t.id === activeTab)?.label} content coming
-                soon...
-              </div>
-            </div>
-          )}
+        {activeTab === 'employment' && (
+          <EmploymentTab
+            formData={formData}
+            onInputChange={handleInputChange}
+          />
+        )}
+
+        {activeTab === 'business' && (
+          <BusinessTab formData={formData} onInputChange={handleInputChange} />
+        )}
+
+        {activeTab === 'financial' && (
+          <FinancialTab
+            formData={formData}
+            onInputChange={handleInputChange}
+            onOpenModal={handleOpenModal}
+            salaryIndicatorOptions={salaryIndicatorOptions}
+          />
+        )}
+
+        {activeTab === 'amla' && (
+          <AmlaTab
+            formData={formData}
+            onInputChange={handleInputChange}
+            onOpenModal={handleOpenModal}
+            dosriOptions={dosriOptions}
+            relatedPartyOptions={relatedPartyOptions}
+            customerDueDiligenceOptions={customerDueDiligenceOptions}
+          />
+        )}
+
+        {activeTab === 'remarks' && (
+          <RemarksTab
+            formData={formData}
+            onInputChange={handleInputChange}
+            clientStatusOptions={clientStatusOptions}
+          />
+        )}
+
+        {activeTab === 'picture' && (
+          <PictureTab
+            formData={{
+              clientPicture1: formData.clientPicture1,
+              clientPicture2: formData.clientPicture2,
+              signaturePicture1: formData.signaturePicture1,
+              signaturePicture2: formData.signaturePicture2,
+            }}
+            onInputChange={(field, value) => handleInputChange(field, value)}
+          />
+        )}
       </div>
 
       {/* Empty Modal for List Buttons */}
