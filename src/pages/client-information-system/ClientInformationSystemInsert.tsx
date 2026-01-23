@@ -167,6 +167,18 @@ interface FormData {
   overallScore: number;
   classification: string;
   customerDueDiligence: string;
+  // Remarks/Groupings
+  group1: string;
+  group2: string;
+  group3: string;
+  customUse1: string;
+  customUse2: string;
+  customUse3: string;
+  customUse4: string;
+  remarks: string;
+  clientStatus: string;
+  memberSinceDate: string;
+  lastClientUpdate: string;
 }
 
 function ClientInformationSystemInsert() {
@@ -302,6 +314,18 @@ function ClientInformationSystemInsert() {
     overallScore: 0,
     classification: 'None',
     customerDueDiligence: 'None',
+    // Remarks/Groupings
+    group1: '',
+    group2: '',
+    group3: '',
+    customUse1: '',
+    customUse2: '',
+    customUse3: '',
+    customUse4: '',
+    remarks: '',
+    clientStatus: 'Active',
+    memberSinceDate: '',
+    lastClientUpdate: '1900-01-01',
   });
 
   const handleInputChange = useCallback(
@@ -402,6 +426,7 @@ function ClientInformationSystemInsert() {
     'Standard',
     'Enhanced',
   ];
+  const clientStatusOptions = ['Active', 'Inactive', 'Suspended', 'Closed'];
 
   const tabs: { id: TabType; label: string }[] = [
     { id: 'individual', label: 'Individual' },
@@ -512,7 +537,13 @@ function ClientInformationSystemInsert() {
           />
         )}
 
-        {activeTab === 'remarks' && <RemarksTab />}
+        {activeTab === 'remarks' && (
+          <RemarksTab
+            formData={formData}
+            onInputChange={handleInputChange}
+            clientStatusOptions={clientStatusOptions}
+          />
+        )}
 
         {activeTab === 'picture' && <PictureTab />}
       </div>

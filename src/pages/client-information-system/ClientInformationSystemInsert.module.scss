@@ -250,6 +250,12 @@
   }
 }
 
+.remarksGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 .subsection {
   display: flex;
   flex-direction: column;
@@ -450,5 +456,9 @@
     .section:nth-child(2) {
       grid-column: 1;
     }
+  }
+
+  .remarksGrid {
+    grid-template-columns: 1fr;
   }
 }
