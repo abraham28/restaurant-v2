@@ -6,6 +6,7 @@ import Button from 'atomic-components/Button';
 import ListButton from 'atomic-components/ListButton';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput';
+import Textarea from 'atomic-components/Textarea';
 import NameInput from 'atomic-components/NameInput';
 import Radio from 'atomic-components/Radio';
 import Checkbox from 'atomic-components/Checkbox';
@@ -78,6 +79,11 @@ interface FormData {
   countryCode: string;
   mobileNumber: string;
   emailAddress: string;
+  // Documents
+  insufficientInformation: boolean;
+  insufficientInformationRemarks: string;
+  insufficientDocuments: boolean;
+  insufficientDocumentsRemarks: string;
 }
 
 function ClientInformationSystemInsert() {
@@ -127,6 +133,10 @@ function ClientInformationSystemInsert() {
     countryCode: '+63',
     mobileNumber: '',
     emailAddress: '',
+    insufficientInformation: false,
+    insufficientInformationRemarks: '',
+    insufficientDocuments: false,
+    insufficientDocumentsRemarks: '',
   });
 
   const handleInputChange = useCallback(
@@ -898,14 +908,72 @@ function ClientInformationSystemInsert() {
           </div>
         )}
 
-        {activeTab !== 'individual' && activeTab !== 'contacts' && (
+        {activeTab === 'documents' && (
           <div className={styles.tabContent}>
-            <div className={styles.emptyTab}>
-              {tabs.find((t) => t.id === activeTab)?.label} content coming
-              soon...
+            <div className={styles.documentsContainer}>
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>Documents</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.insufficientInformation}
+                      onChange={(checked) =>
+                        handleInputChange('insufficientInformation', checked)
+                      }
+                      label="Insufficient Information"
+                    />
+                    <div className={styles.textareaWrapper}>
+                      <Textarea
+                        value={formData.insufficientInformationRemarks}
+                        onChange={(value) =>
+                          handleInputChange(
+                            'insufficientInformationRemarks',
+                            value,
+                          )
+                        }
+                        placeholder="Type in your remarks(optional)"
+                        rows={6}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.insufficientDocuments}
+                      onChange={(checked) =>
+                        handleInputChange('insufficientDocuments', checked)
+                      }
+                      label="Insufficient Documents"
+                    />
+                    <div className={styles.textareaWrapper}>
+                      <Textarea
+                        value={formData.insufficientDocumentsRemarks}
+                        onChange={(value) =>
+                          handleInputChange(
+                            'insufficientDocumentsRemarks',
+                            value,
+                          )
+                        }
+                        placeholder="Type in your remarks(optional)"
+                        rows={6}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
+
+        {activeTab !== 'individual' &&
+          activeTab !== 'contacts' &&
+          activeTab !== 'documents' && (
+            <div className={styles.tabContent}>
+              <div className={styles.emptyTab}>
+                {tabs.find((t) => t.id === activeTab)?.label} content coming
+                soon...
+              </div>
+            </div>
+          )}
       </div>
 
       {/* Empty Modal for List Buttons */}
