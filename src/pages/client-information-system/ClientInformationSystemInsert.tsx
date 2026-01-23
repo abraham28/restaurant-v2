@@ -1,7 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
-import { Grid3x3, CreditCard, Phone, User } from 'lucide-react';
+import {
+  Grid3x3,
+  CreditCard,
+  Phone,
+  User,
+  Eye,
+  Users,
+  FileText,
+} from 'lucide-react';
 import Button from 'atomic-components/Button';
 import ListButton from 'atomic-components/ListButton';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
@@ -101,6 +109,24 @@ interface FormData {
   employerContactNo: string;
   businessActivities: string;
   industry: string;
+  // Business Information
+  businessName: string;
+  businessActivity: string;
+  businessMainAddress: string;
+  businessAdditionalAddress: string;
+  businessID1: string;
+  businessID2: string;
+  businessPrimaryContact: string;
+  businessSecondaryContact: string;
+  // Other Business Information
+  otherBusinessName: string;
+  otherBusinessActivity: string;
+  otherBusinessMainAddress: string;
+  otherBusinessAdditionalAddress: string;
+  otherBusinessID1: string;
+  otherBusinessID2: string;
+  otherBusinessPrimaryContact: string;
+  otherBusinessSecondaryContact: string;
 }
 
 function ClientInformationSystemInsert() {
@@ -169,6 +195,24 @@ function ClientInformationSystemInsert() {
     employerContactNo: '',
     businessActivities: '',
     industry: '',
+    // Business Information
+    businessName: '',
+    businessActivity: '',
+    businessMainAddress: '',
+    businessAdditionalAddress: '',
+    businessID1: '',
+    businessID2: '',
+    businessPrimaryContact: '',
+    businessSecondaryContact: '',
+    // Other Business Information
+    otherBusinessName: '',
+    otherBusinessActivity: '',
+    otherBusinessMainAddress: '',
+    otherBusinessAdditionalAddress: '',
+    otherBusinessID1: '',
+    otherBusinessID2: '',
+    otherBusinessPrimaryContact: '',
+    otherBusinessSecondaryContact: '',
   });
 
   const handleInputChange = useCallback(
@@ -723,7 +767,7 @@ function ClientInformationSystemInsert() {
                   </div>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      ID 2: <span className={styles.cicBullet}></span>
+                      ID 2: 
                     </label>
                     <Radio
                       value={formData.primaryID2}
@@ -736,7 +780,7 @@ function ClientInformationSystemInsert() {
                   </div>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      ID 3: <span className={styles.cicBullet}></span>
+                      ID 3: 
                     </label>
                     <Radio
                       value={formData.primaryID3}
@@ -1176,10 +1220,441 @@ function ClientInformationSystemInsert() {
           </div>
         )}
 
+        {activeTab === 'business' && (
+          <div className={styles.tabContent}>
+            <div className={styles.businessGrid}>
+              {/* BUSINESS INFORMATION Section */}
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>BUSINESS INFORMATION</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Business Name</label>
+                    <TextInput
+                      value={formData.businessName}
+                      onChange={(value) =>
+                        handleInputChange('businessName', value)
+                      }
+                      placeholder="Enter business name"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Business Activities</label>
+                    <AutocompleteInput
+                      value={formData.businessActivity}
+                      onChange={(value) =>
+                        handleInputChange('businessActivity', value)
+                      }
+                      suggestions={[]}
+                      placeholder="Type to Search."
+                    />
+                  </div>
+
+                  {/* Addresses Section */}
+                  <div className={styles.subsection}>
+                    <h4 className={styles.subsectionTitle}>Addresses</h4>
+                    <div className={styles.fieldsGrid}>
+                      <div className={styles.field}>
+                        <label className={styles.label}>Main</label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.businessMainAddress}
+                            onChange={(value) =>
+                              handleInputChange('businessMainAddress', value)
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter address"
+                          />
+                          <div className={styles.iconButtons}>
+                            <button
+                              type="button"
+                              className={styles.iconButton}
+                              onClick={() =>
+                                handleOpenModal('View Business Main Address')
+                              }
+                              aria-label="View address"
+                            >
+                              <Eye size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.iconButton}
+                              onClick={() =>
+                                handleOpenModal('Link Business Main Address')
+                              }
+                              aria-label="Link address"
+                            >
+                              <Users size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div className={styles.field}>
+                        <label className={styles.label}>Additional</label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.businessAdditionalAddress}
+                            onChange={(value) =>
+                              handleInputChange(
+                                'businessAdditionalAddress',
+                                value,
+                              )
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter address"
+                          />
+                          <div className={styles.iconButtons}>
+                            <button
+                              type="button"
+                              className={styles.iconButton}
+                              onClick={() =>
+                                handleOpenModal(
+                                  'View Business Additional Address',
+                                )
+                              }
+                              aria-label="View address"
+                            >
+                              <Eye size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.iconButton}
+                              onClick={() =>
+                                handleOpenModal(
+                                  'Link Business Additional Address',
+                                )
+                              }
+                              aria-label="Link address"
+                            >
+                              <Users size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Business ID Section */}
+                  <div className={styles.subsection}>
+                    <div className={styles.subsectionHeader}>
+                      <div className={styles.sectionTitleWithIcon}>
+                        <FileText size={16} className={styles.sectionIcon} />
+                        <h4 className={styles.subsectionTitle}>Business ID</h4>
+                      </div>
+                      <span className={styles.subsectionLabel}>
+                        Identification
+                      </span>
+                    </div>
+                    <div className={styles.fieldsGrid}>
+                      <div className={styles.field}>
+                        <label className={styles.label}>
+                          ID 1 <span className={styles.cicBullet}></span>
+                        </label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.businessID1}
+                            onChange={(value) =>
+                              handleInputChange('businessID1', value)
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter ID"
+                          />
+                          <button
+                            type="button"
+                            className={styles.iconButton}
+                            onClick={() =>
+                              handleOpenModal('View Business ID 1')
+                            }
+                            aria-label="View ID"
+                          >
+                            <Eye size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.field}>
+                        <label className={styles.label}>ID 2</label>
+                        <AutocompleteInput
+                          value={formData.businessID2}
+                          onChange={(value) =>
+                            handleInputChange('businessID2', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter ID"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contacts Section */}
+                  <div className={styles.subsection}>
+                    <div className={styles.subsectionHeader}>
+                      <div className={styles.sectionTitleWithIcon}>
+                        <Phone size={16} className={styles.sectionIcon} />
+                        <h4 className={styles.subsectionTitle}>Contacts</h4>
+                      </div>
+                      <span className={styles.subsectionLabel}>
+                        Contact List
+                      </span>
+                    </div>
+                    <div className={styles.fieldsGrid}>
+                      <div className={styles.field}>
+                        <label className={styles.label}>
+                          Primary <span className={styles.cicBullet}></span>
+                        </label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.businessPrimaryContact}
+                            onChange={(value) =>
+                              handleInputChange('businessPrimaryContact', value)
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter contact"
+                          />
+                          <button
+                            type="button"
+                            className={styles.iconButton}
+                            onClick={() =>
+                              handleOpenModal('View Business Primary Contact')
+                            }
+                            aria-label="View contact"
+                          >
+                            <Eye size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.field}>
+                        <label className={styles.label}>Secondary</label>
+                        <AutocompleteInput
+                          value={formData.businessSecondaryContact}
+                          onChange={(value) =>
+                            handleInputChange('businessSecondaryContact', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter contact"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Other Business Information Section */}
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>
+                  Other Business Information
+                </h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Business Name</label>
+                    <TextInput
+                      value={formData.otherBusinessName}
+                      onChange={(value) =>
+                        handleInputChange('otherBusinessName', value)
+                      }
+                      placeholder="Enter business name"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Business Activities</label>
+                    <AutocompleteInput
+                      value={formData.otherBusinessActivity}
+                      onChange={(value) =>
+                        handleInputChange('otherBusinessActivity', value)
+                      }
+                      suggestions={[]}
+                      placeholder="Type to Search."
+                    />
+                  </div>
+
+                  {/* Addresses Section */}
+                  <div className={styles.subsection}>
+                    <h4 className={styles.subsectionTitle}>Addresses</h4>
+                    <div className={styles.fieldsGrid}>
+                      <div className={styles.field}>
+                        <label className={styles.label}>Main</label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.otherBusinessMainAddress}
+                            onChange={(value) =>
+                              handleInputChange(
+                                'otherBusinessMainAddress',
+                                value,
+                              )
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter address"
+                          />
+                          <div className={styles.iconButtons}>
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <div className={styles.field}>
+                        <label className={styles.label}>Additional</label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.otherBusinessAdditionalAddress}
+                            onChange={(value) =>
+                              handleInputChange(
+                                'otherBusinessAdditionalAddress',
+                                value,
+                              )
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter address"
+                          />
+                          <div className={styles.iconButtons}>
+                            <button
+                              type="button"
+                              className={styles.iconButton}
+                              onClick={() =>
+                                handleOpenModal(
+                                  'View Other Business Additional Address',
+                                )
+                              }
+                              aria-label="View address"
+                            >
+                              <Eye size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.iconButton}
+                              onClick={() =>
+                                handleOpenModal(
+                                  'Link Other Business Additional Address',
+                                )
+                              }
+                              aria-label="Link address"
+                            >
+                              <Users size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Business ID Section */}
+                  <div className={styles.subsection}>
+                    <div className={styles.subsectionHeader}>
+                      <div className={styles.sectionTitleWithIcon}>
+                        <FileText size={16} className={styles.sectionIcon} />
+                        <h4 className={styles.subsectionTitle}>Business ID</h4>
+                      </div>
+                      <span className={styles.subsectionLabel}>
+                        Identification
+                      </span>
+                    </div>
+                    <div className={styles.fieldsGrid}>
+                      <div className={styles.field}>
+                        <label className={styles.label}>
+                          ID 1 <span className={styles.cicBullet}></span>
+                        </label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.otherBusinessID1}
+                            onChange={(value) =>
+                              handleInputChange('otherBusinessID1', value)
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter ID"
+                          />
+                          <button
+                            type="button"
+                            className={styles.iconButton}
+                            onClick={() =>
+                              handleOpenModal('View Other Business ID 1')
+                            }
+                            aria-label="View ID"
+                          >
+                            <Eye size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.field}>
+                        <label className={styles.label}>ID 2</label>
+                        <AutocompleteInput
+                          value={formData.otherBusinessID2}
+                          onChange={(value) =>
+                            handleInputChange('otherBusinessID2', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter ID"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contacts Section */}
+                  <div className={styles.subsection}>
+                    <div className={styles.subsectionHeader}>
+                      <div className={styles.sectionTitleWithIcon}>
+                        <Phone size={16} className={styles.sectionIcon} />
+                        <h4 className={styles.subsectionTitle}>Contacts</h4>
+                      </div>
+                      <span className={styles.subsectionLabel}>
+                        Contact List
+                      </span>
+                    </div>
+                    <div className={styles.fieldsGrid}>
+                      <div className={styles.field}>
+                        <label className={styles.label}>
+                          Primary <span className={styles.cicBullet}></span>
+                        </label>
+                        <div className={styles.inputWithIcons}>
+                          <AutocompleteInput
+                            value={formData.otherBusinessPrimaryContact}
+                            onChange={(value) =>
+                              handleInputChange(
+                                'otherBusinessPrimaryContact',
+                                value,
+                              )
+                            }
+                            suggestions={[]}
+                            placeholder="Select or enter contact"
+                          />
+                          <button
+                            type="button"
+                            className={styles.iconButton}
+                            onClick={() =>
+                              handleOpenModal(
+                                'View Other Business Primary Contact',
+                              )
+                            }
+                            aria-label="View contact"
+                          >
+                            <Eye size={14} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className={styles.field}>
+                        <label className={styles.label}>Secondary</label>
+                        <AutocompleteInput
+                          value={formData.otherBusinessSecondaryContact}
+                          onChange={(value) =>
+                            handleInputChange(
+                              'otherBusinessSecondaryContact',
+                              value,
+                            )
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter contact"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab !== 'individual' &&
           activeTab !== 'contacts' &&
           activeTab !== 'documents' &&
-          activeTab !== 'employment' && (
+          activeTab !== 'employment' &&
+          activeTab !== 'business' && (
             <div className={styles.tabContent}>
               <div className={styles.emptyTab}>
                 {tabs.find((t) => t.id === activeTab)?.label} content coming

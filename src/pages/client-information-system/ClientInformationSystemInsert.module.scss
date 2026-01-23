@@ -233,6 +233,90 @@
   gap: 0.375rem;
 }
 
+.businessGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid hsl(0 0% 90%);
+  margin-top: 0.5rem;
+}
+
+.subsectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.subsectionTitle {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: hsl(222.2 47.4% 11.2%);
+  margin: 0;
+}
+
+.subsectionLabel {
+  font-size: 0.625rem;
+  color: hsl(222.2 47.4% 11.2%);
+  opacity: 0.7;
+}
+
+.inputWithIcons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  position: relative;
+  
+  > *:first-child {
+    flex: 1;
+  }
+}
+
+.iconButtons {
+  display: flex;
+  gap: 0.125rem;
+  flex-shrink: 0;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  background: none;
+  border: 1px solid hsl(0 0% 85%);
+  border-radius: 0.25rem;
+  color: hsl(222.2 47.4% 11.2%);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  
+  &:hover {
+    background-color: hsl(0 0% 98%);
+    border-color: hsl(221.2 83.2% 53.3%);
+    color: hsl(221.2 83.2% 53.3%);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: hsl(221.2 83.2% 53.3%);
+    box-shadow: 0 0 0 2px hsl(221.2 83.2% 53.3% / 0.1);
+  }
+  
+  svg {
+    flex-shrink: 0;
+  }
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -337,6 +421,10 @@
   }
 
   .employmentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .businessGrid {
     grid-template-columns: 1fr;
   }
 }
