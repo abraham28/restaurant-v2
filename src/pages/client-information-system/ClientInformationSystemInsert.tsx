@@ -766,9 +766,7 @@ function ClientInformationSystemInsert() {
                     />
                   </div>
                   <div className={styles.field}>
-                    <label className={styles.label}>
-                      ID 2: 
-                    </label>
+                    <label className={styles.label}>ID 2:</label>
                     <Radio
                       value={formData.primaryID2}
                       onChange={(value) =>
@@ -779,9 +777,7 @@ function ClientInformationSystemInsert() {
                     />
                   </div>
                   <div className={styles.field}>
-                    <label className={styles.label}>
-                      ID 3: 
-                    </label>
+                    <label className={styles.label}>ID 3:</label>
                     <Radio
                       value={formData.primaryID3}
                       onChange={(value) =>
@@ -1485,9 +1481,7 @@ function ClientInformationSystemInsert() {
                             suggestions={[]}
                             placeholder="Select or enter address"
                           />
-                          <div className={styles.iconButtons}>
-                            
-                          </div>
+                          <div className={styles.iconButtons}></div>
                         </div>
                       </div>
                       <div className={styles.field}>
