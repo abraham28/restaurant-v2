@@ -6,9 +6,9 @@ import {
   CreditCard,
   Phone,
   User,
-  Eye,
-  Users,
   FileText,
+  Info,
+  Folder,
 } from 'lucide-react';
 import Button from 'atomic-components/Button';
 import ListButton from 'atomic-components/ListButton';
@@ -21,6 +21,7 @@ import Checkbox from 'atomic-components/Checkbox';
 import BirthdateInput from 'atomic-components/BirthdateInput';
 import DatePicker from 'atomic-components/DatePicker';
 import NumberInput from 'atomic-components/NumberInput';
+import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet';
 import { ROUTES } from 'utils/constants';
 import styles from './ClientInformationSystemInsert.module.scss';
 
@@ -127,6 +128,34 @@ interface FormData {
   otherBusinessID2: string;
   otherBusinessPrimaryContact: string;
   otherBusinessSecondaryContact: string;
+  // Financial Information
+  salaryIndicator: string;
+  fundSource: string;
+  salary: number;
+  grossIncome: number;
+  otherIncome: number;
+  otherIncomeSource: string;
+  otherIncomeSourceAmount: number;
+  monthlyAverageIncome: number;
+  isLargeExposure: boolean;
+  // Loans
+  isMicrofinanceBorrower: boolean;
+  isRegularLoanBorrower: boolean;
+  isComaker: boolean;
+  // Savings
+  isSavingsAcctDepositor: boolean;
+  isCurrentAcctDepositor: boolean;
+  // Time Deposit
+  isTimeDepositDepositor: boolean;
+  isSpecialSavingsDepositor: boolean;
+  // Credit Line
+  enforceCreditLimit: boolean;
+  originalBalance: number;
+  outstandingBalance: number;
+  // Daily OTC IBFT Limit Amount
+  pesonet: number;
+  instapay: number;
+  mobileWallet: number;
 }
 
 function ClientInformationSystemInsert() {
@@ -213,6 +242,34 @@ function ClientInformationSystemInsert() {
     otherBusinessID2: '',
     otherBusinessPrimaryContact: '',
     otherBusinessSecondaryContact: '',
+    // Financial Information
+    salaryIndicator: 'Monthly',
+    fundSource: '',
+    salary: 0,
+    grossIncome: 0,
+    otherIncome: 0,
+    otherIncomeSource: '',
+    otherIncomeSourceAmount: 0,
+    monthlyAverageIncome: 0,
+    isLargeExposure: false,
+    // Loans
+    isMicrofinanceBorrower: false,
+    isRegularLoanBorrower: false,
+    isComaker: false,
+    // Savings
+    isSavingsAcctDepositor: false,
+    isCurrentAcctDepositor: false,
+    // Time Deposit
+    isTimeDepositDepositor: false,
+    isSpecialSavingsDepositor: false,
+    // Credit Line
+    enforceCreditLimit: false,
+    originalBalance: 0,
+    outstandingBalance: 0,
+    // Daily OTC IBFT Limit Amount
+    pesonet: 0,
+    instapay: 0,
+    mobileWallet: 0,
   });
 
   const handleInputChange = useCallback(
@@ -304,6 +361,7 @@ function ClientInformationSystemInsert() {
     'School ID',
     'Other',
   ];
+  const salaryIndicatorOptions = ['Monthly', 'Weekly', 'Bi-weekly', 'Yearly'];
 
   const tabs: { id: TabType; label: string }[] = [
     { id: 'individual', label: 'Individual' },
@@ -325,8 +383,8 @@ function ClientInformationSystemInsert() {
           <div className={styles.requiredFields}>
             Required Fields:{' '}
             <span className={styles.requiredText}>
-              CIC <span className={styles.cicBullet}></span> AMLA{' '}
-              <span className={styles.amlaBullet}></span>
+              CIC <RequiredFieldBullet /> AMLA{' '}
+              <RequiredFieldBullet type="amla" />
             </span>
           </div>
           <div className={styles.buttons}>
@@ -365,7 +423,7 @@ function ClientInformationSystemInsert() {
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Title <span className={styles.cicBullet}></span>
+                      Title <RequiredFieldBullet />
                     </label>
                     <Radio
                       value={formData.title}
@@ -377,8 +435,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Last Name <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
+                      Last Name <RequiredFieldBullet />{' '}
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <NameInput
                       value={formData.lastName}
@@ -389,8 +447,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      First Name <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
+                      First Name <RequiredFieldBullet />{' '}
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <NameInput
                       value={formData.firstName}
@@ -403,8 +461,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Middle Name <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
+                      Middle Name <RequiredFieldBullet />{' '}
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <NameInput
                       value={formData.middleName}
@@ -427,7 +485,7 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Gender <span className={styles.cicBullet}></span>
+                      Gender <RequiredFieldBullet />
                     </label>
                     <Radio
                       value={formData.gender}
@@ -439,7 +497,7 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Marital Status <span className={styles.cicBullet}></span>
+                      Marital Status <RequiredFieldBullet />
                     </label>
                     <Radio
                       value={formData.maritalStatus}
@@ -453,8 +511,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Birthdate <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
+                      Birthdate <RequiredFieldBullet />{' '}
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <BirthdateInput
                       value={formData.birthDate}
@@ -487,8 +545,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Nationality <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
+                      Nationality <RequiredFieldBullet />{' '}
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <AutocompleteInput
                       value={formData.nationality}
@@ -707,8 +765,8 @@ function ClientInformationSystemInsert() {
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Primary <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
+                      Primary <RequiredFieldBullet />{' '}
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <AutocompleteInput
                       value={formData.address1Used}
@@ -721,8 +779,8 @@ function ClientInformationSystemInsert() {
                   </div>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Secondary <span className={styles.cicBullet}></span>
-                      <span className={styles.amlaBullet}></span>
+                      Secondary <RequiredFieldBullet />{' '}
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <AutocompleteInput
                       value={formData.address2Used}
@@ -753,8 +811,7 @@ function ClientInformationSystemInsert() {
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      ID 1:
-                      <span className={styles.cicBullet}></span>
+                      ID 1: <RequiredFieldBullet />
                     </label>
                     <Radio
                       value={formData.primaryID1}
@@ -807,8 +864,7 @@ function ClientInformationSystemInsert() {
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      ID 1:
-                      <span className={styles.cicBullet}></span>
+                      ID 1: <RequiredFieldBullet />
                     </label>
                     <Radio
                       value={formData.secondaryID1}
@@ -861,7 +917,7 @@ function ClientInformationSystemInsert() {
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Primary: <span className={styles.cicBullet}></span>
+                      Primary: <RequiredFieldBullet />
                     </label>
                     <Radio
                       value={formData.primaryContact}
@@ -892,8 +948,7 @@ function ClientInformationSystemInsert() {
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Presented ID Type:{' '}
-                      <span className={styles.amlaBullet}></span>
+                      Presented ID Type: <RequiredFieldBullet type="amla" />
                     </label>
                     <Radio
                       value={formData.presentedIDType}
@@ -907,7 +962,7 @@ function ClientInformationSystemInsert() {
                   <div className={styles.field}>
                     <label className={styles.label}>
                       ID No. Presented for AMLA:{' '}
-                      <span className={styles.amlaBullet}></span>
+                      <RequiredFieldBullet type="amla" />
                     </label>
                     <TextInput
                       value={formData.idNoPresentedForAMLA}
@@ -1216,6 +1271,301 @@ function ClientInformationSystemInsert() {
           </div>
         )}
 
+        {activeTab === 'financial' && (
+          <div className={styles.tabContent}>
+            <div className={styles.financialGrid}>
+              {/* FINANCIAL INFORMATION Section - Left Column */}
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>FINANCIAL INFORMATION</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Salary Indicator:
+                      <Info size={14} className={styles.infoIcon} />
+                    </label>
+                    <Radio
+                      value={formData.salaryIndicator}
+                      onChange={(value) =>
+                        handleInputChange('salaryIndicator', value)
+                      }
+                      options={salaryIndicatorOptions}
+                      placeholder="Select salary indicator"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Fund Source:</label>
+                    <div className={styles.inputWithIcons}>
+                      <TextInput
+                        value={formData.fundSource}
+                        onChange={(value) =>
+                          handleInputChange('fundSource', value)
+                        }
+                        placeholder="Enter fund source"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        iconOnly
+                        onClick={() => handleOpenModal('Fund Source List')}
+                        aria-label="Open fund source list"
+                      >
+                        <Folder size={14} />
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Salary:</label>
+                    <NumberInput
+                      value={formData.salary}
+                      onChange={(value) => handleInputChange('salary', value)}
+                      placeholder="0.00"
+                      decimal
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Gross Income:</label>
+                    <NumberInput
+                      value={formData.grossIncome}
+                      onChange={(value) =>
+                        handleInputChange('grossIncome', value)
+                      }
+                      placeholder="0.00"
+                      decimal
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Other Income:</label>
+                    <NumberInput
+                      value={formData.otherIncome}
+                      onChange={(value) =>
+                        handleInputChange('otherIncome', value)
+                      }
+                      placeholder="0.00"
+                      decimal
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Other Income Source:</label>
+                    <TextInput
+                      value={formData.otherIncomeSource}
+                      onChange={(value) =>
+                        handleInputChange('otherIncomeSource', value)
+                      }
+                      placeholder="Enter other income source"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Other Income Source Amount:
+                    </label>
+                    <NumberInput
+                      value={formData.otherIncomeSourceAmount}
+                      onChange={(value) =>
+                        handleInputChange('otherIncomeSourceAmount', value)
+                      }
+                      placeholder="0.00"
+                      decimal
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Monthly Average Income:
+                    </label>
+                    <NumberInput
+                      value={formData.monthlyAverageIncome}
+                      onChange={(value) =>
+                        handleInputChange('monthlyAverageIncome', value)
+                      }
+                      placeholder="0.00"
+                      decimal
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isLargeExposure}
+                      onChange={(checked) =>
+                        handleInputChange('isLargeExposure', checked)
+                      }
+                      label="Is Large Exposure?"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Middle Column: Loans, Savings, Time Deposit */}
+              <div className={styles.section}>
+                {/* Loans Section */}
+                <h3 className={styles.sectionTitle}>Loans</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isMicrofinanceBorrower}
+                      onChange={(checked) =>
+                        handleInputChange('isMicrofinanceBorrower', checked)
+                      }
+                      label="Is Microfinance Borrower?"
+                      disabled
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isRegularLoanBorrower}
+                      onChange={(checked) =>
+                        handleInputChange('isRegularLoanBorrower', checked)
+                      }
+                      label="Is Regular Loan Borrower?"
+                      disabled
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isComaker}
+                      onChange={(checked) =>
+                        handleInputChange('isComaker', checked)
+                      }
+                      label="Is Comaker?"
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                {/* Savings Section */}
+                <h3 className={styles.sectionTitle}>Savings</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isSavingsAcctDepositor}
+                      onChange={(checked) =>
+                        handleInputChange('isSavingsAcctDepositor', checked)
+                      }
+                      label="Is Savings Acct Depositor?"
+                      disabled
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isCurrentAcctDepositor}
+                      onChange={(checked) =>
+                        handleInputChange('isCurrentAcctDepositor', checked)
+                      }
+                      label="Is Current Acct Depositor?"
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                {/* Time Deposit Section */}
+                <h3 className={styles.sectionTitle}>Time Deposit</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isTimeDepositDepositor}
+                      onChange={(checked) =>
+                        handleInputChange('isTimeDepositDepositor', checked)
+                      }
+                      label="Is Time Deposit Depositor?"
+                      disabled
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.isSpecialSavingsDepositor}
+                      onChange={(checked) =>
+                        handleInputChange('isSpecialSavingsDepositor', checked)
+                      }
+                      label="Is Special Savings Depositor?"
+                      disabled
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Credit Line, Daily OTC IBFT Limit Amount */}
+              <div className={styles.section}>
+                {/* Credit Line Section */}
+                <h3 className={styles.sectionTitle}>Credit Line</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <Checkbox
+                      checked={formData.enforceCreditLimit}
+                      onChange={(checked) =>
+                        handleInputChange('enforceCreditLimit', checked)
+                      }
+                      label="Enforce Credit Limit"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Original Balance:</label>
+                    <NumberInput
+                      value={formData.originalBalance}
+                      onChange={(value) =>
+                        handleInputChange('originalBalance', value)
+                      }
+                      placeholder="0.00"
+                      decimal
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Outstanding Balance:</label>
+                    <NumberInput
+                      value={formData.outstandingBalance}
+                      onChange={(value) =>
+                        handleInputChange('outstandingBalance', value)
+                      }
+                      placeholder="0.00"
+                      decimal
+                    />
+                  </div>
+                </div>
+
+                {/* Daily OTC IBFT Limit Amount Section */}
+                <h3 className={styles.sectionTitle}>
+                  Daily OTC IBFT Limit Amount
+                </h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>PESONet:</label>
+                    <NumberInput
+                      value={formData.pesonet}
+                      onChange={(value) => handleInputChange('pesonet', value)}
+                      placeholder=""
+                      decimal
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>InstaPay:</label>
+                    <NumberInput
+                      value={formData.instapay}
+                      onChange={(value) => handleInputChange('instapay', value)}
+                      placeholder=""
+                      decimal
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Mobile Wallet:</label>
+                    <NumberInput
+                      value={formData.mobileWallet}
+                      onChange={(value) =>
+                        handleInputChange('mobileWallet', value)
+                      }
+                      placeholder=""
+                      decimal
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'business' && (
           <div className={styles.tabContent}>
             <div className={styles.businessGrid}>
@@ -1251,81 +1601,35 @@ function ClientInformationSystemInsert() {
                     <h4 className={styles.subsectionTitle}>Addresses</h4>
                     <div className={styles.fieldsGrid}>
                       <div className={styles.field}>
-                        <label className={styles.label}>Main</label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.businessMainAddress}
-                            onChange={(value) =>
-                              handleInputChange('businessMainAddress', value)
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter address"
-                          />
-                          <div className={styles.iconButtons}>
-                            <button
-                              type="button"
-                              className={styles.iconButton}
-                              onClick={() =>
-                                handleOpenModal('View Business Main Address')
-                              }
-                              aria-label="View address"
-                            >
-                              <Eye size={14} />
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.iconButton}
-                              onClick={() =>
-                                handleOpenModal('Link Business Main Address')
-                              }
-                              aria-label="Link address"
-                            >
-                              <Users size={14} />
-                            </button>
-                          </div>
-                        </div>
+                        <label className={styles.label}>
+                          Main <RequiredFieldBullet />{' '}
+                          <RequiredFieldBullet type="amla" />
+                        </label>
+                        <AutocompleteInput
+                          value={formData.businessMainAddress}
+                          onChange={(value) =>
+                            handleInputChange('businessMainAddress', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter address"
+                        />
                       </div>
                       <div className={styles.field}>
-                        <label className={styles.label}>Additional</label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.businessAdditionalAddress}
-                            onChange={(value) =>
-                              handleInputChange(
-                                'businessAdditionalAddress',
-                                value,
-                              )
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter address"
-                          />
-                          <div className={styles.iconButtons}>
-                            <button
-                              type="button"
-                              className={styles.iconButton}
-                              onClick={() =>
-                                handleOpenModal(
-                                  'View Business Additional Address',
-                                )
-                              }
-                              aria-label="View address"
-                            >
-                              <Eye size={14} />
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.iconButton}
-                              onClick={() =>
-                                handleOpenModal(
-                                  'Link Business Additional Address',
-                                )
-                              }
-                              aria-label="Link address"
-                            >
-                              <Users size={14} />
-                            </button>
-                          </div>
-                        </div>
+                        <label className={styles.label}>
+                          Additional <RequiredFieldBullet />{' '}
+                          <RequiredFieldBullet type="amla" />
+                        </label>
+                        <AutocompleteInput
+                          value={formData.businessAdditionalAddress}
+                          onChange={(value) =>
+                            handleInputChange(
+                              'businessAdditionalAddress',
+                              value,
+                            )
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter address"
+                        />
                       </div>
                     </div>
                   </div>
@@ -1344,28 +1648,16 @@ function ClientInformationSystemInsert() {
                     <div className={styles.fieldsGrid}>
                       <div className={styles.field}>
                         <label className={styles.label}>
-                          ID 1 <span className={styles.cicBullet}></span>
+                          ID 1 <RequiredFieldBullet />
                         </label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.businessID1}
-                            onChange={(value) =>
-                              handleInputChange('businessID1', value)
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter ID"
-                          />
-                          <button
-                            type="button"
-                            className={styles.iconButton}
-                            onClick={() =>
-                              handleOpenModal('View Business ID 1')
-                            }
-                            aria-label="View ID"
-                          >
-                            <Eye size={14} />
-                          </button>
-                        </div>
+                        <AutocompleteInput
+                          value={formData.businessID1}
+                          onChange={(value) =>
+                            handleInputChange('businessID1', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter ID"
+                        />
                       </div>
                       <div className={styles.field}>
                         <label className={styles.label}>ID 2</label>
@@ -1395,28 +1687,16 @@ function ClientInformationSystemInsert() {
                     <div className={styles.fieldsGrid}>
                       <div className={styles.field}>
                         <label className={styles.label}>
-                          Primary <span className={styles.cicBullet}></span>
+                          Primary <RequiredFieldBullet />
                         </label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.businessPrimaryContact}
-                            onChange={(value) =>
-                              handleInputChange('businessPrimaryContact', value)
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter contact"
-                          />
-                          <button
-                            type="button"
-                            className={styles.iconButton}
-                            onClick={() =>
-                              handleOpenModal('View Business Primary Contact')
-                            }
-                            aria-label="View contact"
-                          >
-                            <Eye size={14} />
-                          </button>
-                        </div>
+                        <AutocompleteInput
+                          value={formData.businessPrimaryContact}
+                          onChange={(value) =>
+                            handleInputChange('businessPrimaryContact', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter contact"
+                        />
                       </div>
                       <div className={styles.field}>
                         <label className={styles.label}>Secondary</label>
@@ -1468,63 +1748,35 @@ function ClientInformationSystemInsert() {
                     <h4 className={styles.subsectionTitle}>Addresses</h4>
                     <div className={styles.fieldsGrid}>
                       <div className={styles.field}>
-                        <label className={styles.label}>Main</label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.otherBusinessMainAddress}
-                            onChange={(value) =>
-                              handleInputChange(
-                                'otherBusinessMainAddress',
-                                value,
-                              )
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter address"
-                          />
-                          <div className={styles.iconButtons}></div>
-                        </div>
+                        <label className={styles.label}>
+                          Main <RequiredFieldBullet />{' '}
+                          <RequiredFieldBullet type="amla" />
+                        </label>
+                        <AutocompleteInput
+                          value={formData.otherBusinessMainAddress}
+                          onChange={(value) =>
+                            handleInputChange('otherBusinessMainAddress', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter address"
+                        />
                       </div>
                       <div className={styles.field}>
-                        <label className={styles.label}>Additional</label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.otherBusinessAdditionalAddress}
-                            onChange={(value) =>
-                              handleInputChange(
-                                'otherBusinessAdditionalAddress',
-                                value,
-                              )
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter address"
-                          />
-                          <div className={styles.iconButtons}>
-                            <button
-                              type="button"
-                              className={styles.iconButton}
-                              onClick={() =>
-                                handleOpenModal(
-                                  'View Other Business Additional Address',
-                                )
-                              }
-                              aria-label="View address"
-                            >
-                              <Eye size={14} />
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.iconButton}
-                              onClick={() =>
-                                handleOpenModal(
-                                  'Link Other Business Additional Address',
-                                )
-                              }
-                              aria-label="Link address"
-                            >
-                              <Users size={14} />
-                            </button>
-                          </div>
-                        </div>
+                        <label className={styles.label}>
+                          Additional <RequiredFieldBullet />{' '}
+                          <RequiredFieldBullet type="amla" />
+                        </label>
+                        <AutocompleteInput
+                          value={formData.otherBusinessAdditionalAddress}
+                          onChange={(value) =>
+                            handleInputChange(
+                              'otherBusinessAdditionalAddress',
+                              value,
+                            )
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter address"
+                        />
                       </div>
                     </div>
                   </div>
@@ -1543,28 +1795,16 @@ function ClientInformationSystemInsert() {
                     <div className={styles.fieldsGrid}>
                       <div className={styles.field}>
                         <label className={styles.label}>
-                          ID 1 <span className={styles.cicBullet}></span>
+                          ID 1 <RequiredFieldBullet />
                         </label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.otherBusinessID1}
-                            onChange={(value) =>
-                              handleInputChange('otherBusinessID1', value)
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter ID"
-                          />
-                          <button
-                            type="button"
-                            className={styles.iconButton}
-                            onClick={() =>
-                              handleOpenModal('View Other Business ID 1')
-                            }
-                            aria-label="View ID"
-                          >
-                            <Eye size={14} />
-                          </button>
-                        </div>
+                        <AutocompleteInput
+                          value={formData.otherBusinessID1}
+                          onChange={(value) =>
+                            handleInputChange('otherBusinessID1', value)
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter ID"
+                        />
                       </div>
                       <div className={styles.field}>
                         <label className={styles.label}>ID 2</label>
@@ -1594,33 +1834,19 @@ function ClientInformationSystemInsert() {
                     <div className={styles.fieldsGrid}>
                       <div className={styles.field}>
                         <label className={styles.label}>
-                          Primary <span className={styles.cicBullet}></span>
+                          Primary <RequiredFieldBullet />
                         </label>
-                        <div className={styles.inputWithIcons}>
-                          <AutocompleteInput
-                            value={formData.otherBusinessPrimaryContact}
-                            onChange={(value) =>
-                              handleInputChange(
-                                'otherBusinessPrimaryContact',
-                                value,
-                              )
-                            }
-                            suggestions={[]}
-                            placeholder="Select or enter contact"
-                          />
-                          <button
-                            type="button"
-                            className={styles.iconButton}
-                            onClick={() =>
-                              handleOpenModal(
-                                'View Other Business Primary Contact',
-                              )
-                            }
-                            aria-label="View contact"
-                          >
-                            <Eye size={14} />
-                          </button>
-                        </div>
+                        <AutocompleteInput
+                          value={formData.otherBusinessPrimaryContact}
+                          onChange={(value) =>
+                            handleInputChange(
+                              'otherBusinessPrimaryContact',
+                              value,
+                            )
+                          }
+                          suggestions={[]}
+                          placeholder="Select or enter contact"
+                        />
                       </div>
                       <div className={styles.field}>
                         <label className={styles.label}>Secondary</label>
@@ -1648,7 +1874,8 @@ function ClientInformationSystemInsert() {
           activeTab !== 'contacts' &&
           activeTab !== 'documents' &&
           activeTab !== 'employment' &&
-          activeTab !== 'business' && (
+          activeTab !== 'business' &&
+          activeTab !== 'financial' && (
             <div className={styles.tabContent}>
               <div className={styles.emptyTab}>
                 {tabs.find((t) => t.id === activeTab)?.label} content coming
