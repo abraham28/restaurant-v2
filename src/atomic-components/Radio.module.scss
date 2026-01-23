@@ -9,12 +9,12 @@
   justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 0.9375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   background-color: white;
-  border: 1.5px solid hsl(0 0% 89%);
-  border-radius: 8px;
+  border: 1px solid hsl(0 0% 85%);
+  border-radius: 6px;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   user-select: none;
@@ -26,7 +26,7 @@
 
   &.open {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px hsla(222.2, 47.4%, 11.2%, 0.1);
+    outline: none;
   }
 
   &.disabled {
@@ -58,13 +58,13 @@
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + 0.25rem);
   left: 0;
   right: 0;
   background-color: white;
-  border: 1.5px solid hsl(0 0% 89%);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid hsl(0 0% 89%);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   max-height: 300px;
   overflow-y: auto;
@@ -86,14 +86,14 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   text-align: left;
   background-color: transparent;
   border: none;
   border-bottom: 1px solid hsl(0 0% 95%);
   cursor: pointer;
   transition: all 0.15s ease-in-out;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-family: inherit;
 
   &:last-child {
@@ -117,5 +117,5 @@
 
 .radioText {
   width: 100%;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }

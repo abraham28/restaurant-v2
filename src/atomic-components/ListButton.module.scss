@@ -1,0 +1,43 @@
+.listButton {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: 1px solid hsl(0 0% 85%);
+  border-radius: 0.25rem;
+  font-size: 0.6875rem;
+  color: hsl(222.2 47.4% 11.2%);
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1.5;
+
+  &:hover {
+    background-color: hsl(0 0% 98%);
+    border-color: hsl(221.2 83.2% 53.3%);
+    color: hsl(221.2 83.2% 53.3%);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: hsl(221.2 83.2% 53.3%);
+    box-shadow: 0 0 0 2px hsl(221.2 83.2% 53.3% / 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.label {
+  display: inline-block;
+  line-height: 1.5;
+  font-size: 0.6875rem;
+  color: inherit;
+}

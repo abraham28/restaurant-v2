@@ -87,6 +87,42 @@ export interface CifClientDocument {
   /** Reference to education lookup (optional, string - foreign key to cifEducation) */
   EducationID?: string;
 
+  /** Reference to primary address used by CIC (optional, string - foreign key to cifAddress) */
+  address1UsedByCIC?: string;
+
+  /** Reference to secondary address used by CIC (optional, string - foreign key to cifAddress) */
+  address2UsedByCIC?: string;
+
+  /** Reference to first contact used by CIC (optional, string - foreign key to contact) */
+  contact1UsedByCIC?: string;
+
+  /** Reference to second contact used by CIC (optional, string - foreign key to contact) */
+  contact2UsedByCIC?: string;
+
+  /** Reference to first identification document (optional, string - foreign key to identification document) */
+  indentificationID1?: string;
+
+  /** Reference to second identification document (optional, string - foreign key to identification document) */
+  indentificationID2?: string;
+
+  /** Reference to third identification document (optional, string - foreign key to identification document) */
+  indentificationID3?: string;
+
+  /** Reference to first secondary identification document (optional, string - foreign key to identification document) */
+  SecondaryIdentificationD1?: string;
+
+  /** Reference to second secondary identification document (optional, string - foreign key to identification document) */
+  SecondaryIdentificationD2?: string;
+
+  /** Reference to third secondary identification document (optional, string - foreign key to identification document) */
+  SecondaryIdentificationD3?: string;
+
+  /** Reference to presented ID type (optional, string - foreign key to ID type lookup) */
+  presentedIDTypeID?: string;
+
+  /** IDs presented (optional, string) */
+  IDsPresented?: string;
+
   /** Timestamp when the client record was created (optional, number - milliseconds since epoch) */
   createdAt?: number;
 

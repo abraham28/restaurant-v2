@@ -1,6 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Modal } from 'react-bootstrap';
+import { Grid3x3, CreditCard, Phone, User } from 'lucide-react';
 import Button from 'atomic-components/Button';
+import ListButton from 'atomic-components/ListButton';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput';
 import NameInput from 'atomic-components/NameInput';
@@ -54,11 +57,34 @@ interface FormData {
   noOfDependents: number;
   // Cars Owned
   numberOfCarsOwned: number;
+  // Addresses
+  address1Used: string;
+  address2Used: string;
+  // Primary ID
+  primaryID1: string;
+  primaryID2: string;
+  primaryID3: string;
+  // Secondary ID
+  secondaryID1: string;
+  secondaryID2: string;
+  secondaryID3: string;
+  // Contacts
+  primaryContact: string;
+  secondaryContact: string;
+  // For AMLA
+  presentedIDType: string;
+  idNoPresentedForAMLA: string;
+  // Mobile Banking
+  countryCode: string;
+  mobileNumber: string;
+  emailAddress: string;
 }
 
 function ClientInformationSystemInsert() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('individual');
+  const [showModal, setShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
   const [formData, setFormData] = useState<FormData>({
     title: '',
     lastName: '',
@@ -86,6 +112,21 @@ function ClientInformationSystemInsert() {
     collegeDependents: 0,
     noOfDependents: 0,
     numberOfCarsOwned: 0,
+    address1Used: '',
+    address2Used: '',
+    primaryID1: '',
+    primaryID2: '',
+    primaryID3: '',
+    secondaryID1: '',
+    secondaryID2: '',
+    secondaryID3: '',
+    primaryContact: '',
+    secondaryContact: '',
+    presentedIDType: '',
+    idNoPresentedForAMLA: '',
+    countryCode: '+63',
+    mobileNumber: '',
+    emailAddress: '',
   });
 
   const handleInputChange = useCallback(
@@ -117,6 +158,21 @@ function ClientInformationSystemInsert() {
     navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT);
   }, [navigate]);
 
+  const handleOpenModal = useCallback((title: string) => {
+    setModalTitle(title);
+    setShowModal(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setShowModal(false);
+    setModalTitle('');
+  }, []);
+
+  const handleModalOk = useCallback(() => {
+    // No function - just close the modal
+    handleCloseModal();
+  }, [handleCloseModal]);
+
   const calculateAge = useCallback((birthDate: string) => {
     if (!birthDate) return 0;
     const today = new Date();
@@ -147,6 +203,21 @@ function ClientInformationSystemInsert() {
   const genderOptions = ['Male', 'Female', 'None'];
   const maritalStatusOptions = ['Single', 'Married', 'Divorced', 'Widowed'];
   const bloodTypeOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+  const countryCodeOptions = ['+63', '+1', '+44', '+61', '+65', '+66'];
+  const idTypeOptions = [
+    "Driver's License",
+    'Passport',
+    'SSS ID',
+    'TIN ID',
+    'PhilHealth ID',
+    'Postal ID',
+    'National ID',
+    "Voter's ID",
+    'PRC ID',
+    'Company ID',
+    'School ID',
+    'Other',
+  ];
 
   const tabs: { id: TabType; label: string }[] = [
     { id: 'individual', label: 'Individual' },
@@ -167,7 +238,10 @@ function ClientInformationSystemInsert() {
         <div className={styles.headerActions}>
           <div className={styles.requiredFields}>
             Required Fields:{' '}
-            <span className={styles.requiredText}>CIC AMLA</span>
+            <span className={styles.requiredText}>
+              CIC <span className={styles.cicBullet}></span> AMLA{' '}
+              <span className={styles.amlaBullet}></span>
+            </span>
           </div>
           <div className={styles.buttons}>
             <Button variant="primary" onClick={handleSave}>
@@ -205,7 +279,7 @@ function ClientInformationSystemInsert() {
                 <div className={styles.fieldsGrid}>
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Title <span className={styles.required}>*</span>
+                      Title <span className={styles.cicBullet}></span>
                     </label>
                     <Radio
                       value={formData.title}
@@ -217,7 +291,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Last Name <span className={styles.required}>*</span>
+                      Last Name <span className={styles.cicBullet}></span>
+                      <span className={styles.amlaBullet}></span>
                     </label>
                     <NameInput
                       value={formData.lastName}
@@ -228,7 +303,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      First Name <span className={styles.required}>*</span>
+                      First Name <span className={styles.cicBullet}></span>
+                      <span className={styles.amlaBullet}></span>
                     </label>
                     <NameInput
                       value={formData.firstName}
@@ -240,7 +316,10 @@ function ClientInformationSystemInsert() {
                   </div>
 
                   <div className={styles.field}>
-                    <label className={styles.label}>Middle Name</label>
+                    <label className={styles.label}>
+                      Middle Name <span className={styles.cicBullet}></span>
+                      <span className={styles.amlaBullet}></span>
+                    </label>
                     <NameInput
                       value={formData.middleName}
                       onChange={(value) =>
@@ -262,7 +341,7 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Gender <span className={styles.required}>*</span>
+                      Gender <span className={styles.cicBullet}></span>
                     </label>
                     <Radio
                       value={formData.gender}
@@ -273,7 +352,9 @@ function ClientInformationSystemInsert() {
                   </div>
 
                   <div className={styles.field}>
-                    <label className={styles.label}>Marital Status</label>
+                    <label className={styles.label}>
+                      Marital Status <span className={styles.cicBullet}></span>
+                    </label>
                     <Radio
                       value={formData.maritalStatus}
                       onChange={(value) =>
@@ -286,7 +367,8 @@ function ClientInformationSystemInsert() {
 
                   <div className={styles.field}>
                     <label className={styles.label}>
-                      Birthdate <span className={styles.required}>*</span>
+                      Birthdate <span className={styles.cicBullet}></span>
+                      <span className={styles.amlaBullet}></span>
                     </label>
                     <BirthdateInput
                       value={formData.birthDate}
@@ -318,7 +400,10 @@ function ClientInformationSystemInsert() {
                   </div>
 
                   <div className={styles.field}>
-                    <label className={styles.label}>Nationality</label>
+                    <label className={styles.label}>
+                      Nationality <span className={styles.cicBullet}></span>
+                      <span className={styles.amlaBullet}></span>
+                    </label>
                     <AutocompleteInput
                       value={formData.nationality}
                       onChange={(value) =>
@@ -519,7 +604,301 @@ function ClientInformationSystemInsert() {
           </div>
         )}
 
-        {activeTab !== 'individual' && (
+        {activeTab === 'contacts' && (
+          <div className={styles.tabContent}>
+            <div className={styles.formGrid}>
+              {/* Addresses Section */}
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <h3 className={styles.sectionTitle}>Addresses</h3>
+                  <ListButton
+                    icon={Grid3x3}
+                    label="Address List"
+                    onClick={() => handleOpenModal('Address List')}
+                    aria-label="Open Address List"
+                  />
+                </div>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Primary <span className={styles.cicBullet}></span>
+                      <span className={styles.amlaBullet}></span>
+                    </label>
+                    <AutocompleteInput
+                      value={formData.address1Used}
+                      onChange={(value) =>
+                        handleInputChange('address1Used', value)
+                      }
+                      suggestions={[]}
+                      placeholder="Select or enter primary address"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Secondary <span className={styles.cicBullet}></span>
+                      <span className={styles.amlaBullet}></span>
+                    </label>
+                    <AutocompleteInput
+                      value={formData.address2Used}
+                      onChange={(value) =>
+                        handleInputChange('address2Used', value)
+                      }
+                      suggestions={[]}
+                      placeholder="Select or enter secondary address"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Primary ID Section */}
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <div className={styles.sectionTitleWithIcon}>
+                    <CreditCard size={16} className={styles.sectionIcon} />
+                    <h3 className={styles.sectionTitle}>Primary ID</h3>
+                  </div>
+                  <ListButton
+                    icon={Grid3x3}
+                    label="Primary ID List"
+                    onClick={() => handleOpenModal('Primary ID List')}
+                    aria-label="Open Primary ID List"
+                  />
+                </div>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      ID 1:
+                      <span className={styles.cicBullet}></span>
+                    </label>
+                    <Radio
+                      value={formData.primaryID1}
+                      onChange={(value) =>
+                        handleInputChange('primaryID1', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select ID 1"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      ID 2: <span className={styles.cicBullet}></span>
+                    </label>
+                    <Radio
+                      value={formData.primaryID2}
+                      onChange={(value) =>
+                        handleInputChange('primaryID2', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select ID 2"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      ID 3: <span className={styles.cicBullet}></span>
+                    </label>
+                    <Radio
+                      value={formData.primaryID3}
+                      onChange={(value) =>
+                        handleInputChange('primaryID3', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select ID 3"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Secondary ID Section */}
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <div className={styles.sectionTitleWithIcon}>
+                    <CreditCard size={16} className={styles.sectionIcon} />
+                    <h3 className={styles.sectionTitle}>Secondary ID</h3>
+                  </div>
+                  <ListButton
+                    icon={Grid3x3}
+                    label="Secondary ID List"
+                    onClick={() => handleOpenModal('Secondary ID List')}
+                    aria-label="Open Secondary ID List"
+                  />
+                </div>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      ID 1:
+                      <span className={styles.cicBullet}></span>
+                    </label>
+                    <Radio
+                      value={formData.secondaryID1}
+                      onChange={(value) =>
+                        handleInputChange('secondaryID1', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select or enter ID 1"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>ID 2:</label>
+                    <Radio
+                      value={formData.secondaryID2}
+                      onChange={(value) =>
+                        handleInputChange('secondaryID2', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select or enter ID 2"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>ID 3:</label>
+                    <Radio
+                      value={formData.secondaryID3}
+                      onChange={(value) =>
+                        handleInputChange('secondaryID3', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select or enter ID 3"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Contacts Section */}
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <div className={styles.sectionTitleWithIcon}>
+                    <Phone size={16} className={styles.sectionIcon} />
+                    <h3 className={styles.sectionTitle}>Contacts</h3>
+                  </div>
+                  <ListButton
+                    icon={Grid3x3}
+                    label="Contact List"
+                    onClick={() => handleOpenModal('Contact List')}
+                    aria-label="Open Contact List"
+                  />
+                </div>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Primary: <span className={styles.cicBullet}></span>
+                    </label>
+                    <Radio
+                      value={formData.primaryContact}
+                      onChange={(value) =>
+                        handleInputChange('primaryContact', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select or enter primary contact"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Secondary:</label>
+                    <Radio
+                      value={formData.secondaryContact}
+                      onChange={(value) =>
+                        handleInputChange('secondaryContact', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select or enter secondary contact"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* For AMLA Section */}
+              <div className={styles.section}>
+                <h3 className={styles.sectionTitle}>For AMLA</h3>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Presented ID Type:{' '}
+                      <span className={styles.amlaBullet}></span>
+                    </label>
+                    <Radio
+                      value={formData.presentedIDType}
+                      onChange={(value) =>
+                        handleInputChange('presentedIDType', value)
+                      }
+                      options={idTypeOptions}
+                      placeholder="Select presented ID type"
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      ID No. Presented for AMLA:{' '}
+                      <span className={styles.amlaBullet}></span>
+                    </label>
+                    <TextInput
+                      value={formData.idNoPresentedForAMLA}
+                      onChange={(value) =>
+                        handleInputChange('idNoPresentedForAMLA', value)
+                      }
+                      placeholder="Enter ID number"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Banking Section */}
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <h3 className={styles.sectionTitle}>Mobile Banking</h3>
+                  <Button
+                    variant="primary"
+                    className={styles.activateButton}
+                    onClick={() => {
+                      // TODO: Implement mobile banking activation
+                      console.log('Activate Mobile Banking clicked');
+                    }}
+                  >
+                    <User size={16} />
+                    ACTIVATE
+                  </Button>
+                </div>
+                <div className={styles.fieldsGrid}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Mobile Number:</label>
+                    <div className={styles.mobileNumberWrapper}>
+                      <div className={styles.countryCodeWrapper}>
+                        <Radio
+                          value={formData.countryCode}
+                          onChange={(value) =>
+                            handleInputChange('countryCode', value)
+                          }
+                          options={countryCodeOptions}
+                          placeholder="+63"
+                        />
+                      </div>
+                      <NumberInput
+                        decimal={false}
+                        value={
+                          formData.mobileNumber
+                            ? Number(formData.mobileNumber)
+                            : undefined
+                        }
+                        onChange={(value) =>
+                          handleInputChange('mobileNumber', value)
+                        }
+                        placeholder="Enter mobile number"
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Email Address:</label>
+                    <TextInput
+                      value={formData.emailAddress}
+                      onChange={(value) =>
+                        handleInputChange('emailAddress', value)
+                      }
+                      placeholder="Enter email address"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab !== 'individual' && activeTab !== 'contacts' && (
           <div className={styles.tabContent}>
             <div className={styles.emptyTab}>
               {tabs.find((t) => t.id === activeTab)?.label} content coming
@@ -528,6 +907,22 @@ function ClientInformationSystemInsert() {
           </div>
         )}
       </div>
+
+      {/* Empty Modal for List Buttons */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{modalTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{/* Empty modal body */}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="outline" onClick={handleCloseModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleModalOk}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
