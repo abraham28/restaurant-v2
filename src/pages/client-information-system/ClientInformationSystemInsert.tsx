@@ -179,6 +179,11 @@ interface FormData {
   clientStatus: string;
   memberSinceDate: string;
   lastClientUpdate: string;
+  // Picture/Signature
+  clientPicture1: string;
+  clientPicture2: string;
+  signaturePicture1: string;
+  signaturePicture2: string;
 }
 
 function ClientInformationSystemInsert() {
@@ -326,6 +331,11 @@ function ClientInformationSystemInsert() {
     clientStatus: 'Active',
     memberSinceDate: '',
     lastClientUpdate: '1900-01-01',
+    // Picture/Signature
+    clientPicture1: '',
+    clientPicture2: '',
+    signaturePicture1: '',
+    signaturePicture2: '',
   });
 
   const handleInputChange = useCallback(
@@ -545,7 +555,17 @@ function ClientInformationSystemInsert() {
           />
         )}
 
-        {activeTab === 'picture' && <PictureTab />}
+        {activeTab === 'picture' && (
+          <PictureTab
+            formData={{
+              clientPicture1: formData.clientPicture1,
+              clientPicture2: formData.clientPicture2,
+              signaturePicture1: formData.signaturePicture1,
+              signaturePicture2: formData.signaturePicture2,
+            }}
+            onInputChange={(field, value) => handleInputChange(field, value)}
+          />
+        )}
       </div>
 
       {/* Empty Modal for List Buttons */}
