@@ -105,6 +105,13 @@
   align-content: start;
 }
 
+.documentsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
 .section {
   background-color: hsl(0 0% 100%);
   border: 1px solid hsl(0 0% 90%);
@@ -218,6 +225,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
+}
+
+.textareaWrapper {
+  margin-top: 0.5rem;
 }
 
 .label {
