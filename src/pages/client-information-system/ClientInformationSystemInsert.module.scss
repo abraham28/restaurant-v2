@@ -221,6 +221,18 @@
   gap: 0.375rem;
 }
 
+.employmentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.employmentColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -322,5 +334,9 @@
   
   .section {
     min-height: auto;
+  }
+
+  .employmentGrid {
+    grid-template-columns: 1fr;
   }
 }

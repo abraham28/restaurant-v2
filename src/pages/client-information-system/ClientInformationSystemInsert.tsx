@@ -11,6 +11,7 @@ import NameInput from 'atomic-components/NameInput';
 import Radio from 'atomic-components/Radio';
 import Checkbox from 'atomic-components/Checkbox';
 import BirthdateInput from 'atomic-components/BirthdateInput';
+import DatePicker from 'atomic-components/DatePicker';
 import NumberInput from 'atomic-components/NumberInput';
 import { ROUTES } from 'utils/constants';
 import styles from './ClientInformationSystemInsert.module.scss';
@@ -84,6 +85,22 @@ interface FormData {
   insufficientInformationRemarks: string;
   insufficientDocuments: boolean;
   insufficientDocumentsRemarks: string;
+  // Employment
+  employeeID: string;
+  occupation: string;
+  status: string;
+  position: string;
+  inclusiveDate: string;
+  startDate: string;
+  endDate: string;
+  lengthOfService: number;
+  companyEmployerName: string;
+  employerTIN: string;
+  employerAddress: string;
+  employerContactPerson: string;
+  employerContactNo: string;
+  businessActivities: string;
+  industry: string;
 }
 
 function ClientInformationSystemInsert() {
@@ -137,6 +154,21 @@ function ClientInformationSystemInsert() {
     insufficientInformationRemarks: '',
     insufficientDocuments: false,
     insufficientDocumentsRemarks: '',
+    employeeID: '',
+    occupation: '',
+    status: '',
+    position: '',
+    inclusiveDate: '',
+    startDate: '',
+    endDate: '',
+    lengthOfService: 0,
+    companyEmployerName: '',
+    employerTIN: '',
+    employerAddress: '',
+    employerContactPerson: '',
+    employerContactNo: '',
+    businessActivities: '',
+    industry: '',
   });
 
   const handleInputChange = useCallback(
@@ -964,9 +996,190 @@ function ClientInformationSystemInsert() {
           </div>
         )}
 
+        {activeTab === 'employment' && (
+          <div className={styles.tabContent}>
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>EMPLOYMENT INFORMATION</h3>
+              <div className={styles.employmentGrid}>
+                {/* Left Column */}
+                <div className={styles.employmentColumn}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>Employee ID</label>
+                    <TextInput
+                      value={formData.employeeID}
+                      onChange={(value) =>
+                        handleInputChange('employeeID', value)
+                      }
+                      placeholder="Enter employee ID"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Occupation</label>
+                    <TextInput
+                      value={formData.occupation}
+                      onChange={(value) =>
+                        handleInputChange('occupation', value)
+                      }
+                      placeholder="Enter occupation"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Status</label>
+                    <AutocompleteInput
+                      value={formData.status}
+                      onChange={(value) => handleInputChange('status', value)}
+                      suggestions={[]}
+                      placeholder="Type to Search."
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Position</label>
+                    <AutocompleteInput
+                      value={formData.position}
+                      onChange={(value) => handleInputChange('position', value)}
+                      suggestions={[]}
+                      placeholder="Type to Search."
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Inclusive Date</label>
+                    <DatePicker
+                      value={formData.inclusiveDate}
+                      onChange={(value) =>
+                        handleInputChange('inclusiveDate', value)
+                      }
+                      placeholder="Select the date"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Start Date</label>
+                    <DatePicker
+                      value={formData.startDate}
+                      onChange={(value) =>
+                        handleInputChange('startDate', value)
+                      }
+                      placeholder="Select the date"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>End Date</label>
+                    <DatePicker
+                      value={formData.endDate}
+                      onChange={(value) => handleInputChange('endDate', value)}
+                      placeholder="Select the date"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Length of Service</label>
+                    <NumberInput
+                      value={formData.lengthOfService}
+                      onChange={(value) =>
+                        handleInputChange('lengthOfService', value)
+                      }
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
+
+                {/* Right Column */}
+                <div className={styles.employmentColumn}>
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Company/Employer Name
+                    </label>
+                    <TextInput
+                      value={formData.companyEmployerName}
+                      onChange={(value) =>
+                        handleInputChange('companyEmployerName', value)
+                      }
+                      placeholder="Enter company/employer name"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Employer TIN</label>
+                    <TextInput
+                      value={formData.employerTIN}
+                      onChange={(value) =>
+                        handleInputChange('employerTIN', value)
+                      }
+                      placeholder="Enter employer TIN"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Employer Address</label>
+                    <TextInput
+                      value={formData.employerAddress}
+                      onChange={(value) =>
+                        handleInputChange('employerAddress', value)
+                      }
+                      placeholder="Enter employer address"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>
+                      Employer Contact Person
+                    </label>
+                    <TextInput
+                      value={formData.employerContactPerson}
+                      onChange={(value) =>
+                        handleInputChange('employerContactPerson', value)
+                      }
+                      placeholder="Enter employer contact person"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Employer Contact No.</label>
+                    <TextInput
+                      value={formData.employerContactNo}
+                      onChange={(value) =>
+                        handleInputChange('employerContactNo', value)
+                      }
+                      placeholder="Enter employer contact number"
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Business Activities</label>
+                    <AutocompleteInput
+                      value={formData.businessActivities}
+                      onChange={(value) =>
+                        handleInputChange('businessActivities', value)
+                      }
+                      suggestions={[]}
+                      placeholder="Type to Search."
+                    />
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Industry</label>
+                    <AutocompleteInput
+                      value={formData.industry}
+                      onChange={(value) => handleInputChange('industry', value)}
+                      suggestions={[]}
+                      placeholder="Type to Search."
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab !== 'individual' &&
           activeTab !== 'contacts' &&
-          activeTab !== 'documents' && (
+          activeTab !== 'documents' &&
+          activeTab !== 'employment' && (
             <div className={styles.tabContent}>
               <div className={styles.emptyTab}>
                 {tabs.find((t) => t.id === activeTab)?.label} content coming
