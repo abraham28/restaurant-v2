@@ -51,23 +51,37 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value;
 
-      // Always update the display value to allow free typing
-      setDisplayValue(inputValue);
-
       // Allow empty input
       if (inputValue === '') {
+        setDisplayValue('');
         onChange(0);
         return;
       }
 
+      // Filter out non-numeric characters
+      // Allow: digits, decimal point (if decimal), minus sign (only at start)
+      let filteredValue = '';
+      for (let i = 0; i < inputValue.length; i++) {
+        const char = inputValue[i];
+        if (char >= '0' && char <= '9') {
+          filteredValue += char;
+        } else if (decimal && char === '.' && !filteredValue.includes('.')) {
+          filteredValue += char;
+        } else if (char === '-' && filteredValue === '' && i === 0) {
+          filteredValue += char;
+        }
+      }
+
+      // Update display value with filtered input
+      setDisplayValue(filteredValue);
+
       // Try to parse the value
       const parsed = decimal
-        ? parseFloat(inputValue)
-        : parseInt(inputValue, 10);
+        ? parseFloat(filteredValue)
+        : parseInt(filteredValue, 10);
 
       // Only update the numeric value if parsing succeeds
-      // This allows users to type intermediate invalid states (like "12a" or "-")
-      if (!isNaN(parsed)) {
+      if (!isNaN(parsed) && filteredValue !== '' && filteredValue !== '-') {
         // Apply min/max constraints if provided
         let finalValue = parsed;
         if (min !== undefined && finalValue < min) {
@@ -78,9 +92,9 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         }
 
         onChange(finalValue);
+      } else if (filteredValue === '' || filteredValue === '-') {
+        onChange(0);
       }
-      // If parsing fails, we don't call onChange, but the display value is updated
-      // This allows users to continue typing and fix their input
     };
 
     // Merge form-control class with provided className
