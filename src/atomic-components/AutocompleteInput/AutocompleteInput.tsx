@@ -1,16 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import styles from './AutocompleteInput.module.scss';
-
-export interface AutocompleteInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  suggestions: string[];
-  placeholder?: string;
-  required?: boolean;
-  disabled?: boolean;
-  onBlur?: () => void;
-}
+import { AutocompleteInputProps } from './types';
 
 function AutocompleteInput({
   value,
