@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
-import Button from 'atomic-components/Button';
-import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet';
+import Button from 'atomic-components/Button/Button';
+import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import { ROUTES } from 'utils/constants';
 import IndividualTab from './Individual';
 import ContactsTab from './Contacts';

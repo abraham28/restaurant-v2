@@ -1,10 +1,10 @@
 import React from 'react';
 import { Folder } from 'lucide-react';
-import TextInput from 'atomic-components/TextInput';
-import Radio from 'atomic-components/Radio';
-import Checkbox from 'atomic-components/Checkbox';
-import DatePicker from 'atomic-components/DatePicker';
-import Button from 'atomic-components/Button';
+import TextInput from 'atomic-components/TextInput/TextInput';
+import Radio from 'atomic-components/Radio/Radio';
+import Checkbox from 'atomic-components/Checkbox/Checkbox';
+import DatePicker from 'atomic-components/DatePicker/DatePicker';
+import Button from 'atomic-components/Button/Button';
 import styles from '../ClientInformationSystemInsert.module.scss';
 
 interface FormData {

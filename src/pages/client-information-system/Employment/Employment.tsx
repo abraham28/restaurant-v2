@@ -1,8 +1,8 @@
 import React from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
-import TextInput from 'atomic-components/TextInput';
-import DatePicker from 'atomic-components/DatePicker';
-import NumberInput from 'atomic-components/NumberInput';
+import TextInput from 'atomic-components/TextInput/TextInput';
+import DatePicker from 'atomic-components/DatePicker/DatePicker';
+import NumberInput from 'atomic-components/NumberInput/NumberInput';
 import styles from '../ClientInformationSystemInsert.module.scss';
 
 interface FormData {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from 'atomic-components/Button';
+import Button from 'atomic-components/Button/Button';
 import { ROUTES } from 'utils/constants';
 import styles from './ClientInformationSystem.module.scss';
 

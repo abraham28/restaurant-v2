@@ -1,8 +1,8 @@
 import React from 'react';
 import { FileText, Phone } from 'lucide-react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
-import TextInput from 'atomic-components/TextInput';
-import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet';
+import TextInput from 'atomic-components/TextInput/TextInput';
+import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import styles from '../ClientInformationSystemInsert.module.scss';
 
 interface FormData {

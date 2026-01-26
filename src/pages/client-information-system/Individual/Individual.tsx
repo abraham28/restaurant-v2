@@ -1,13 +1,13 @@
 import React from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
-import TextInput from 'atomic-components/TextInput';
-import NameInput from 'atomic-components/NameInput';
-import Radio from 'atomic-components/Radio';
-import Checkbox from 'atomic-components/Checkbox';
-import BirthdateInput from 'atomic-components/BirthdateInput';
-import NumberInput from 'atomic-components/NumberInput';
-import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet';
-import Button from 'atomic-components/Button';
+import TextInput from 'atomic-components/TextInput/TextInput';
+import NameInput from 'atomic-components/NameInput/NameInput';
+import Radio from 'atomic-components/Radio/Radio';
+import Checkbox from 'atomic-components/Checkbox/Checkbox';
+import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
+import NumberInput from 'atomic-components/NumberInput/NumberInput';
+import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
+import Button from 'atomic-components/Button/Button';
 import styles from '../ClientInformationSystemInsert.module.scss';
 
 interface FormData {

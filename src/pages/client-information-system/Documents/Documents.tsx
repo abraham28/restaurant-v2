@@ -1,6 +1,6 @@
 import React from 'react';
-import Checkbox from 'atomic-components/Checkbox';
-import Textarea from 'atomic-components/Textarea';
+import Checkbox from 'atomic-components/Checkbox/Checkbox';
+import Textarea from 'atomic-components/Textarea/Textarea';
 import styles from '../ClientInformationSystemInsert.module.scss';
 
 interface FormData {

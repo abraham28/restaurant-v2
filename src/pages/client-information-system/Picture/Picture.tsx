@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Camera, Upload } from 'lucide-react';
-import Button from 'atomic-components/Button';
+import Button from 'atomic-components/Button/Button';
 import styles from '../ClientInformationSystemInsert.module.scss';
 import PictureStyles from './Picture.module.scss';
 
