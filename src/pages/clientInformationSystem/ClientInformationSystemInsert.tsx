@@ -4,15 +4,15 @@ import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button/Button';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import { ROUTES } from 'utils/constants';
-import IndividualTab from './Individual';
-import ContactsTab from './Contacts';
-import DocumentsTab from './Documents';
-import EmploymentTab from './Employment';
-import BusinessTab from './Business';
-import FinancialTab from './Financial';
-import AmlaTab from './Amla';
-import RemarksTab from './Remarks';
-import PictureTab from './Picture';
+import IndividualTab from './Individual/Individual';
+import ContactsTab from './Contacts/Contacts';
+import DocumentsTab from './Documents/Documents';
+import EmploymentTab from './Employment/Employment';
+import BusinessTab from './Business/Business';
+import FinancialTab from './Financial/Financial';
+import AmlaTab from './Amla/Amla';
+import RemarksTab from './Remarks/Remarks';
+import PictureTab from './Picture/Picture';
 import styles from './ClientInformationSystemInsert.module.scss';
 
 type TabType =
