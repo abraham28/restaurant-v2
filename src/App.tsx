@@ -4,8 +4,8 @@ import PageTitle from 'atomic-components/PageTitle/PageTitle';
 import ServiceWorkerUpdatePrompt from 'atomic-components/ServiceWorkerUpdatePrompt/ServiceWorkerUpdatePrompt';
 import { useServiceWorker } from 'hooks/useServiceWorker';
 import Home from 'pages/home';
-import ClientInformationSystem from 'pages/client-information-system';
-import ClientInformationSystemInsert from 'pages/client-information-system/ClientInformationSystemInsert';
+import ClientInformationSystem from 'pages/clientInformationSystem';
+import ClientInformationSystemInsert from 'pages/clientInformationSystem/ClientInformationSystemInsert';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
 
