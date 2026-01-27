@@ -1,13 +1,13 @@
 import React from 'react';
-import ErrorBoundary from 'atomic-components/ErrorBoundary';
-import PageTitle from 'atomic-components/PageTitle';
-import ServiceWorkerUpdatePrompt from 'atomic-components/ServiceWorkerUpdatePrompt';
+import ErrorBoundary from 'atomic-components/ErrorBoundary/ErrorBoundary';
+import PageTitle from 'atomic-components/PageTitle/PageTitle';
+import ServiceWorkerUpdatePrompt from 'atomic-components/ServiceWorkerUpdatePrompt/ServiceWorkerUpdatePrompt';
 import { useServiceWorker } from 'hooks/useServiceWorker';
 import Home from 'pages/home';
-import ClientInformationSystem from 'pages/client-information-system';
-import ClientInformationSystemInsert from 'pages/client-information-system/ClientInformationSystemInsert';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
+import ClientInformationSystem from 'pages/ClientInformationSystem';
+import ClientInformationSystemInsert from 'pages/ClientInformationSystem/ClientInformationSystemInsert';
 
 function AppContent() {
   return (
