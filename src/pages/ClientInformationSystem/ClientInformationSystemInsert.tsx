@@ -4,6 +4,7 @@ import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button/Button';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import { ROUTES } from 'utils/constants';
+import { useClientFormStore, ClientFormData } from 'stores/clientFormStore';
 import IndividualTab from './Individual/Individual';
 import ContactsTab from './Contacts/Contacts';
 import DocumentsTab from './Documents/Documents';
@@ -26,323 +27,38 @@ type TabType =
   | 'remarks'
   | 'picture';
 
-interface FormData {
-  // Basic Information
-  title: string;
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  suffix: string;
-  gender: string;
-  maritalStatus: string;
-  birthDate: string;
-  age: number;
-  birthPlace: string;
-  nationality: string;
-  previousName: string;
-  nickName: string;
-  bloodType: string;
-  weight: number;
-  height: number;
-  isDeceased: boolean;
-  // Relationship
-  isBeneficiary: boolean;
-  primaryBeneficiary: string;
-  // Education
-  education: string;
-  schoolLevel: string;
-  // Dependents
-  elementaryDependents: number;
-  highSchoolDependents: number;
-  collegeDependents: number;
-  noOfDependents: number;
-  // Cars Owned
-  numberOfCarsOwned: number;
-  // Addresses
-  address1Used: string;
-  address2Used: string;
-  // Primary ID
-  primaryID1: string;
-  primaryID2: string;
-  primaryID3: string;
-  // Secondary ID
-  secondaryID1: string;
-  secondaryID2: string;
-  secondaryID3: string;
-  // Contacts
-  primaryContact: string;
-  secondaryContact: string;
-  // For AMLA
-  presentedIDType: string;
-  idNoPresentedForAMLA: string;
-  // Mobile Banking
-  countryCode: string;
-  mobileNumber: string;
-  emailAddress: string;
-  // Documents
-  insufficientInformation: boolean;
-  insufficientInformationRemarks: string;
-  insufficientDocuments: boolean;
-  insufficientDocumentsRemarks: string;
-  // Employment
-  employeeID: string;
-  occupation: string;
-  status: string;
-  position: string;
-  inclusiveDate: string;
-  startDate: string;
-  endDate: string;
-  lengthOfService: number;
-  companyEmployerName: string;
-  employerTIN: string;
-  employerAddress: string;
-  employerContactPerson: string;
-  employerContactNo: string;
-  businessActivities: string;
-  industry: string;
-  // Business Information
-  businessName: string;
-  businessActivity: string;
-  businessMainAddress: string;
-  businessAdditionalAddress: string;
-  businessID1: string;
-  businessID2: string;
-  businessPrimaryContact: string;
-  businessSecondaryContact: string;
-  // Other Business Information
-  otherBusinessName: string;
-  otherBusinessActivity: string;
-  otherBusinessMainAddress: string;
-  otherBusinessAdditionalAddress: string;
-  otherBusinessID1: string;
-  otherBusinessID2: string;
-  otherBusinessPrimaryContact: string;
-  otherBusinessSecondaryContact: string;
-  // Financial Information
-  salaryIndicator: string;
-  fundSource: string;
-  salary: number;
-  grossIncome: number;
-  otherIncome: number;
-  otherIncomeSource: string;
-  otherIncomeSourceAmount: number;
-  monthlyAverageIncome: number;
-  isLargeExposure: boolean;
-  // Loans
-  isMicrofinanceBorrower: boolean;
-  isRegularLoanBorrower: boolean;
-  isComaker: boolean;
-  // Savings
-  isSavingsAcctDepositor: boolean;
-  isCurrentAcctDepositor: boolean;
-  // Time Deposit
-  isTimeDepositDepositor: boolean;
-  isSpecialSavingsDepositor: boolean;
-  // Credit Line
-  enforceCreditLimit: boolean;
-  originalBalance: number;
-  outstandingBalance: number;
-  // Daily OTC IBFT Limit Amount
-  pesonet: number;
-  instapay: number;
-  mobileWallet: number;
-  // AMLA - Employee Related Account (ERA)
-  isBankEmployeeRelated: boolean;
-  bankEmployeeName: string;
-  relationship: string;
-  dosri: string;
-  isBankEmployee: boolean;
-  employeeType: string;
-  // AMLA - Politically Exposed Person
-  isPEP: boolean;
-  pepPosition: string;
-  pepPlace: string;
-  pepTerm: string;
-  // AMLA - Tagging
-  isWatchListed: boolean;
-  isLinkedAccount: boolean;
-  isPayee: boolean;
-  relatedParty: string;
-  // AMLA - Risk Assessment
-  overallScore: number;
-  classification: string;
-  customerDueDiligence: string;
-  // Remarks/Groupings
-  group1: string;
-  group2: string;
-  group3: string;
-  customUse1: string;
-  customUse2: string;
-  customUse3: string;
-  customUse4: string;
-  remarks: string;
-  clientStatus: string;
-  memberSinceDate: string;
-  lastClientUpdate: string;
-  // Picture/Signature
-  clientPicture1: string;
-  clientPicture2: string;
-  signaturePicture1: string;
-  signaturePicture2: string;
-}
-
 function ClientInformationSystemInsert() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabType>('individual');
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
-  const [formData, setFormData] = useState<FormData>({
-    title: '',
-    lastName: '',
-    firstName: '',
-    middleName: '',
-    suffix: '',
-    gender: '',
-    maritalStatus: '',
-    birthDate: '',
-    age: 0,
-    birthPlace: '',
-    nationality: '',
-    previousName: '',
-    nickName: '',
-    bloodType: '',
-    weight: 0,
-    height: 0,
-    isDeceased: false,
-    isBeneficiary: false,
-    primaryBeneficiary: '',
-    education: '',
-    schoolLevel: '',
-    elementaryDependents: 0,
-    highSchoolDependents: 0,
-    collegeDependents: 0,
-    noOfDependents: 0,
-    numberOfCarsOwned: 0,
-    address1Used: '',
-    address2Used: '',
-    primaryID1: '',
-    primaryID2: '',
-    primaryID3: '',
-    secondaryID1: '',
-    secondaryID2: '',
-    secondaryID3: '',
-    primaryContact: '',
-    secondaryContact: '',
-    presentedIDType: '',
-    idNoPresentedForAMLA: '',
-    countryCode: '+63',
-    mobileNumber: '',
-    emailAddress: '',
-    insufficientInformation: false,
-    insufficientInformationRemarks: '',
-    insufficientDocuments: false,
-    insufficientDocumentsRemarks: '',
-    employeeID: '',
-    occupation: '',
-    status: '',
-    position: '',
-    inclusiveDate: '',
-    startDate: '',
-    endDate: '',
-    lengthOfService: 0,
-    companyEmployerName: '',
-    employerTIN: '',
-    employerAddress: '',
-    employerContactPerson: '',
-    employerContactNo: '',
-    businessActivities: '',
-    industry: '',
-    // Business Information
-    businessName: '',
-    businessActivity: '',
-    businessMainAddress: '',
-    businessAdditionalAddress: '',
-    businessID1: '',
-    businessID2: '',
-    businessPrimaryContact: '',
-    businessSecondaryContact: '',
-    // Other Business Information
-    otherBusinessName: '',
-    otherBusinessActivity: '',
-    otherBusinessMainAddress: '',
-    otherBusinessAdditionalAddress: '',
-    otherBusinessID1: '',
-    otherBusinessID2: '',
-    otherBusinessPrimaryContact: '',
-    otherBusinessSecondaryContact: '',
-    // Financial Information
-    salaryIndicator: 'Monthly',
-    fundSource: '',
-    salary: 0,
-    grossIncome: 0,
-    otherIncome: 0,
-    otherIncomeSource: '',
-    otherIncomeSourceAmount: 0,
-    monthlyAverageIncome: 0,
-    isLargeExposure: false,
-    // Loans
-    isMicrofinanceBorrower: false,
-    isRegularLoanBorrower: false,
-    isComaker: false,
-    // Savings
-    isSavingsAcctDepositor: false,
-    isCurrentAcctDepositor: false,
-    // Time Deposit
-    isTimeDepositDepositor: false,
-    isSpecialSavingsDepositor: false,
-    // Credit Line
-    enforceCreditLimit: false,
-    originalBalance: 0,
-    outstandingBalance: 0,
-    // Daily OTC IBFT Limit Amount
-    pesonet: 0,
-    instapay: 0,
-    mobileWallet: 0,
-    // AMLA - Employee Related Account (ERA)
-    isBankEmployeeRelated: false,
-    bankEmployeeName: '',
-    relationship: '',
-    dosri: '',
-    isBankEmployee: false,
-    employeeType: '',
-    // AMLA - Politically Exposed Person
-    isPEP: false,
-    pepPosition: '',
-    pepPlace: '',
-    pepTerm: '1900-01-01',
-    // AMLA - Tagging
-    isWatchListed: false,
-    isLinkedAccount: false,
-    isPayee: false,
-    relatedParty: '',
-    // AMLA - Risk Assessment
-    overallScore: 0,
-    classification: 'None',
-    customerDueDiligence: 'None',
-    // Remarks/Groupings
-    group1: '',
-    group2: '',
-    group3: '',
-    customUse1: '',
-    customUse2: '',
-    customUse3: '',
-    customUse4: '',
-    remarks: '',
-    clientStatus: 'Active',
-    memberSinceDate: '',
-    lastClientUpdate: '1900-01-01',
-    // Picture/Signature
-    clientPicture1: '',
-    clientPicture2: '',
-    signaturePicture1: '',
-    signaturePicture2: '',
-  });
+  const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+
+  // Zustand store hooks
+  const formData = useClientFormStore((state) => state.formData);
+  const activeTab = useClientFormStore((state) => state.activeTab);
+  const isLoading = useClientFormStore((state) => state.isLoading);
+  const setFormData = useClientFormStore((state) => state.setFormData);
+  const setActiveTab = useClientFormStore((state) => state.setActiveTab);
+  const resetForm = useClientFormStore((state) => state.resetForm);
+  const loadFormFromIndexedDB = useClientFormStore(
+    (state) => state.loadFormFromIndexedDB,
+  );
+
+  // Load saved form data from IndexedDB on component mount
+  // Don't render until data is synced
+  useEffect(() => {
+    const loadData = async () => {
+      await loadFormFromIndexedDB();
+      setIsInitialLoadComplete(true);
+    };
+    void loadData();
+  }, [loadFormFromIndexedDB]);
 
   const handleInputChange = useCallback(
-    (field: keyof FormData, value: string | number | boolean) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+    (field: keyof ClientFormData, value: string | number | boolean) => {
+      setFormData({ [field]: value });
     },
-    [],
+    [setFormData],
   );
 
   // Auto-calculate noOfDependents when dependent fields change
@@ -351,11 +67,15 @@ function ClientInformationSystemInsert() {
       formData.elementaryDependents +
       formData.highSchoolDependents +
       formData.collegeDependents;
-    setFormData((prev) => ({ ...prev, noOfDependents: total }));
+    if (formData.noOfDependents !== total) {
+      setFormData({ noOfDependents: total });
+    }
   }, [
     formData.elementaryDependents,
     formData.highSchoolDependents,
     formData.collegeDependents,
+    formData.noOfDependents,
+    setFormData,
   ]);
 
   const handleSave = useCallback(() => {
@@ -364,8 +84,9 @@ function ClientInformationSystemInsert() {
   }, [formData]);
 
   const handleCancel = useCallback(() => {
+    resetForm(); // Clear form data and IndexedDB
     navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT);
-  }, [navigate]);
+  }, [navigate, resetForm]);
 
   const handleOpenModal = useCallback((title: string) => {
     setModalTitle(title);
@@ -405,6 +126,19 @@ function ClientInformationSystemInsert() {
     },
     [calculateAge, handleInputChange],
   );
+
+  // Don't render until initial data sync is complete
+  // This ensures form fields are populated with saved data before rendering
+  // IMPORTANT: This check must be AFTER all hooks are called
+  if (!isInitialLoadComplete || isLoading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.loadingState}>
+          <div>Loading form data...</div>
+        </div>
+      </div>
+    );
+  }
 
   // Mock data for dropdowns
   const titleOptions = ['MR', 'MRS', 'MS', 'DR', 'ENG', 'ATTY'];
