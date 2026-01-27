@@ -8,20 +8,20 @@
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 0.9375rem;
+  padding: var(--padding-medium) var(--padding-large);
+  font-size: var(--font-size-large);
   line-height: 1.5;
   
-  background-color: white;
+  background-color: var(--color-white);
   border: 1.5px solid hsl(0 0% 89%);
-  border-radius: 8px;
+  border-radius: var(--border-radius-medium);
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   user-select: none;
 
   &:hover {
     border-color: hsl(148, 100%, 25%);
-    background-color: hsl(0 0% 99%);
+    background-color: var(--color-hover-bg);
   }
 
   &:focus-within {
@@ -45,12 +45,12 @@
   top: calc(100% + 0.5rem);
   left: 0;
   right: 0;
-  background-color: white;
+  background-color: var(--color-white);
   border: 1.5px solid hsl(0 0% 89%);
-  border-radius: 12px;
+  border-radius: var(--border-radius-large);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  padding: 0.875rem;
+  padding: var(--padding-medium);
   min-width: 280px;
   max-width: 280px;
   animation: fadeIn 0.2s ease-in-out;
@@ -80,17 +80,17 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  padding: 0;
-  background-color: transparent;
+  padding: var(--padding-none);
+  background-color: var(--color-transparent);
   border: 1.5px solid hsl(0 0% 89%);
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
   
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   flex-shrink: 0;
 
   &:hover:not(:disabled) {
-    background-color: hsl(0 0% 96%);
+    background-color: var(--color-hover-bg);
     border-color: hsl(148, 100%, 25%);
   }
 
@@ -113,18 +113,18 @@
 }
 
 .calendarMonthYear {
-  font-size: 0.8125rem;
+  font-size: var(--font-size-small);
   font-weight: 600;
   
-  background-color: transparent;
+  background-color: var(--color-transparent);
   border: none;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  padding: var(--padding-small) var(--padding-medium);
+  border-radius: var(--border-radius-small);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background-color: hsl(0 0% 96%);
+    background-color: var(--color-hover-bg);
   }
 }
 
@@ -137,12 +137,12 @@
 
 .weekday {
   text-align: center;
-  font-size: 0.6875rem;
+  font-size: var(--font-size-x-small);
   font-weight: 600;
   color: hsl(0 0% 50%);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 0.25rem 0;
+  padding: var(--padding-small) var(--padding-none);
 }
 
 .calendarGrid {
@@ -157,17 +157,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   
-  background-color: transparent;
-  border-radius: 4px;
+  background-color: var(--color-transparent);
+  border-radius: var(--border-radius-small);
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   position: relative;
   min-height: 28px;
 
   &:hover:not(.emptyDay):not(.disabled) {
-    background-color: hsl(0 0% 96%);
+    background-color: var(--color-hover-bg);
   }
 
   &.emptyDay {
@@ -189,12 +189,12 @@
       position: absolute;
       inset: 2px;
       border: 1.5px solid #009245;
-      border-radius: 4px;
+      border-radius: var(--border-radius-small);
     }
   }
 
   &.selected {
-    background-color: #009245;
+    background-color: var(--color-primary);
     color: white;
     font-weight: 600;
 
@@ -203,7 +203,7 @@
     }
 
     &:hover {
-      background-color: hsl(148, 100%, 20%);
+      background-color: var(--color-primary-hover);
     }
   }
 }
@@ -215,28 +215,28 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.25rem;
   margin-bottom: 0.75rem;
-  padding: 0.5rem;
-  background-color: hsl(0 0% 98%);
-  border-radius: 8px;
+  padding: var(--padding-medium);
+  background-color: var(--color-disabled-bg);
+  border-radius: var(--border-radius-medium);
   max-height: 200px;
   overflow-y: auto;
 }
 
 .monthPickerItem,
 .yearPickerItem {
-  padding: 0.5rem 0.375rem;
-  font-size: 0.75rem;
+  padding: var(--padding-medium) var(--padding-small);
+  font-size: var(--font-size-small);
   font-weight: 500;
   
-  background-color: white;
+  background-color: var(--color-white);
   border: 1.5px solid hsl(0 0% 89%);
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   text-align: center;
 
   &:hover:not(.disabled):not(:disabled) {
-    background-color: hsl(0 0% 96%);
+    background-color: var(--color-hover-bg);
     border-color: hsl(148, 100%, 25%);
   }
 
@@ -254,12 +254,12 @@
 
 .monthPickerItemActive,
 .yearPickerItemActive {
-  background-color: #009245;
+  background-color: var(--color-primary);
   color: white;
-  border-color: #009245;
+  border-color: var(--color-primary);
 
   &:hover {
-    background-color: hsl(148, 100%, 20%);
+    background-color: var(--color-primary-hover);
     border-color: hsl(148, 100%, 20%);
   }
 }

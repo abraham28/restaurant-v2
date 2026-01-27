@@ -3,14 +3,14 @@
   flex-direction: column;
   gap: 1rem;
   height: 100%;
-  padding: 1rem;
+  padding: var(--padding-large);
 }
 
 .controlsSection {
-  background-color: hsl(0 0% 100%);
+  background-color: var(--color-white);
   border: 1px solid hsl(0 0% 90%);
-  border-radius: 0.375rem;
-  padding: 1rem;
+  border-radius: var(--border-radius-small);
+  padding: var(--padding-large);
 }
 
 .controlsRow {
@@ -21,18 +21,18 @@
 }
 
 .label {
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   font-weight: 500;
   color: hsl(222.2 47.4% 11.2%);
   white-space: nowrap;
 }
 
 .select {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  padding: var(--padding-medium) var(--padding-large);
+  font-size: var(--font-size-medium);
   border: 1px solid hsl(0 0% 85%);
-  border-radius: 0.25rem;
-  background-color: hsl(0 0% 100%);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-white);
   color: hsl(222.2 47.4% 11.2%);
   cursor: pointer;
   transition: all 0.2s;
@@ -58,10 +58,10 @@
 
 .imageDisplayArea {
   flex: 1;
-  background-color: hsl(0 0% 100%);
-  border: 1px solid hsl(0 0% 90%);
-  border-radius: 0.375rem;
-  padding: 1rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  padding: var(--padding-large);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,7 +79,7 @@
   color: hsl(222.2 47.4% 11.2%);
   opacity: 0.6;
   text-align: center;
-  padding: 2rem;
+  padding: var(--padding-large);
 }
 
 .placeholderIcon {
@@ -88,14 +88,14 @@
 }
 
 .placeholderText {
-  font-size: 1rem;
+  font-size: var(--font-size-medium);
   font-weight: 500;
-  margin: 0;
+  margin: var(--margin-none);
 }
 
 .placeholderSubtext {
-  font-size: 0.875rem;
-  margin: 0;
+  font-size: var(--font-size-medium);
+  margin: var(--margin-none);
   opacity: 0.7;
 }
 
@@ -112,7 +112,7 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius-small);
 }
 
 .removeButton {
@@ -121,11 +121,11 @@
   right: 0.5rem;
   width: 2rem;
   height: 2rem;
-  border-radius: 50%;
-  background-color: hsl(0 84.2% 60.2%);
-  color: hsl(0 0% 100%);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-error);
+  color: var(--color-white);
   border: none;
-  font-size: 1.5rem;
+  font-size: var(--font-size-large);
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -135,7 +135,7 @@
   box-shadow: 0 2px 4px hsl(0 0% 0% / 0.2);
 
   &:hover {
-    background-color: hsl(0 84.2% 55%);
+    background-color: var(--color-error-hover);
     transform: scale(1.1);
   }
 
@@ -153,7 +153,7 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 1rem;
+  padding: var(--padding-large);
 }
 
 .video {
@@ -161,8 +161,8 @@
   max-width: 640px;
   max-height: 480px;
   min-height: 300px;
-  border-radius: 0.375rem;
-  background-color: hsl(0 0% 0%);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-black);
   border: 2px solid hsl(0 0% 90%);
   object-fit: cover;
   display: block;

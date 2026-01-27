@@ -2,9 +2,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: var(--border-radius-medium);
   font-weight: 400;
-  font-size: 14px;
+  font-size: var(--font-size-medium);
   line-height: 1.5;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
@@ -21,7 +21,7 @@
 
   &:disabled {
     opacity: 0.6;
-    background-color: hsl(0 0% 90%);
+    background-color: var(--color-disabled-bg);
     color: hsl(0 0% 60%);
     border-color: hsl(0 0% 85%);
     cursor: not-allowed;
@@ -32,26 +32,26 @@
 // Size variants
 .sm {
   height: 32px;
-  padding: 0 12px;
-  font-size: 13px;
+  padding: var(--padding-none) var(--padding-x-large);
+  font-size: var(--font-size-small);
 }
 
 .md {
   height: 40px;
-  padding: 0 16px;
-  font-size: 14px;
+  padding: var(--padding-none) var(--padding-xx-large);
+  font-size: var(--font-size-medium);
 }
 
 .lg {
   height: 44px;
-  padding: 0 20px;
-  font-size: 15px;
+  padding: var(--padding-none) var(--padding-xx-large);
+  font-size: var(--font-size-small);
 }
 
 .iconOnly {
   width: 32px;
   height: 32px;
-  padding: 0;
+  padding: var(--padding-none);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -68,39 +68,39 @@
   color: white;
 
   &:hover:not(:disabled) {
-    background-color: hsl(148, 100%, 25%);
+    background-color: var(--color-primary-hover);
   }
 
   &:active:not(:disabled) {
-    background-color: hsl(148, 100%, 22%);
+    background-color: var(--color-primary-active);
   }
 }
 
 // Secondary variant
 .secondary {
-  background-color: hsl(0 0% 96%);
+  background-color: var(--color-disabled-bg);
   color: var(--color-text);
 
   &:hover:not(:disabled) {
-    background-color: hsl(0 0% 90%);
+    background-color: var(--color-hover-bg);
   }
 
   &:active:not(:disabled) {
-    background-color: hsl(0 0% 85%);
+    background-color: var(--color-disabled-bg);
   }
 }
 
 // Danger variant
 .danger {
-  background-color: hsl(0 72% 51%);
+  background-color: var(--color-error);
   color: white;
 
   &:hover:not(:disabled) {
-    background-color: hsl(0 72% 46%);
+    background-color: var(--color-error-hover);
   }
 
   &:active:not(:disabled) {
-    background-color: hsl(0 72% 41%);
+    background-color: var(--color-error-active);
   }
 }
 
@@ -108,28 +108,28 @@
 .outline {
   background-color: transparent;
   color: var(--color-text);
-  border-color: hsl(0 0% 89%);
+  border-color: var(--color-disabled-bg);
 
   &:hover:not(:disabled) {
-    background-color: hsl(148, 100%, 96%);
+    background-color: var(--color-hover-bg);
     border-color: var(--color-primary);
   }
 
   &:active:not(:disabled) {
-    background-color: hsl(0 0% 90%);
+    background-color: var(--color-disabled-bg);
   }
 }
 
 // Ghost variant
 .ghost {
-  background-color: transparent;
+  background-color: var(--color-transparent);
   color: var(--color-text);
 
   &:hover:not(:disabled) {
-    background-color: hsl(148, 100%, 96%);
+    background-color: var(--color-hover-bg);
   }
 
   &:active:not(:disabled) {
-    background-color: hsl(148, 100%, 90%);
+    background-color: var(--color-disabled-bg);
   }
 }

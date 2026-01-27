@@ -1,7 +1,7 @@
 .container {
-  padding: 2rem;
+  padding: var(--padding-large);
   max-width: 1200px;
-  margin: 0 auto;
+  margin: var(--margin-none) auto;
 }
 
 .header {
@@ -12,22 +12,22 @@
 }
 
 .title {
-  font-size: 1.5rem;
+  font-size: var(--font-size-large);
   font-weight: 600;
   color: hsl(222.2 47.4% 11.2%);
-  margin: 0;
+  margin: var(--margin-none);
 }
 
 .content {
-  padding: 1rem;
+  padding: var(--padding-large);
 }
 
 .helloWorld {
-  padding: 2rem;
-  background-color: hsl(0 0% 98%);
-  border: 1px solid hsl(0 0% 90%);
-  border-radius: 0.5rem;
+  padding: var(--padding-large);
+  background-color: var(--color-disabled-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
   text-align: center;
-  font-size: 1.25rem;
+  font-size: var(--font-size-medium);
   color: hsl(222.2 47.4% 11.2%);
 }

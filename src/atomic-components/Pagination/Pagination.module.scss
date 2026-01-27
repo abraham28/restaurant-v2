@@ -4,11 +4,11 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem;
-  border: 1px solid hsl(218 11% 65%);
-  border-radius: 0.75rem;
-  background-color: hsl(0 0% 100%);
-  box-shadow: 0 4px 8px hsla(220 13% 18% / 0.08);
+  padding: var(--padding-large);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-large);
+  background-color: var(--color-white);
+  box-shadow: 0 4px 8px var(--color-shadow);
 }
 
 .pageSize,
@@ -16,13 +16,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: hsl(222 47% 11%);
-  font-size: 0.875rem;
+  color: var(--color-text);
+  font-size: var(--font-size-medium);
 
   label {
-    font-size: 0.875rem;
-    color: hsl(222 47% 11%);
-    margin: 0;
+    font-size: var(--font-size-medium);
+    color: var(--color-text);
+    margin: var(--margin-none);
   }
 }
 
@@ -37,20 +37,20 @@
 .pageSizeSelect,
 .pageJumpInput {
   min-width: 4.5rem;
-  padding: 0.35rem 0.5rem;
-  border: 1px solid hsl(217 16% 84%);
-  border-radius: 0.5rem;
-  background-color: hsl(0 0% 100%);
-  font-size: 0.875rem;
-  color: hsl(222 47% 11%);
+  padding: var(--padding-small) var(--padding-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-white);
+  font-size: var(--font-size-medium);
+  color: var(--color-text);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .pageSizeSelect:focus,
 .pageJumpInput:focus {
   outline: none;
-  border-color: hsl(217 91% 60%);
-  box-shadow: 0 0 0 3px hsla(217 91% 60% / 0.2);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-hover);
 }
 
 .pageJumpInput {
@@ -78,9 +78,9 @@
 }
 
 .ellipsis {
-  padding: 0 0.5rem;
-  color: hsl(215 16% 47%);
-  font-size: 0.875rem;
+  padding: var(--padding-none) var(--padding-medium);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-medium);
 }
 
 @media (max-width: 768px) {

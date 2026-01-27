@@ -5,12 +5,12 @@
 
 .input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: var(--padding-medium) var(--padding-large);
   border: 1px solid hsl(0 0% 85%);
-  border-radius: 6px;
-  font-size: 0.875rem;
+  border-radius: var(--border-radius-medium);
+  font-size: var(--font-size-medium);
   line-height: normal;
-  background-color: white;
+  background-color: var(--color-white);
   transition: all 0.2s ease-in-out;
 
   &:focus {
@@ -21,11 +21,11 @@
 
   &:hover:not(:disabled) {
     border-color: hsl(148, 100%, 25%);
-    background-color: hsl(0 0% 99%);
+    background-color: var(--color-hover-bg);
   }
 
   &:disabled {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
     cursor: not-allowed;
     opacity: 0.6;
   }

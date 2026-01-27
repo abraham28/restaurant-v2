@@ -5,12 +5,12 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background-color: hsl(0 72% 51%);
+  padding: var(--padding-medium) var(--padding-large);
+  background-color: var(--color-error);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 0.875rem;
+  border-radius: var(--border-radius-medium);
+  font-size: var(--font-size-medium);
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -18,7 +18,7 @@
   transition: all 0.2s ease;
 
   &:hover {
-    background-color: hsl(0 72% 45%);
+    background-color: var(--color-error-hover);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   }
@@ -34,7 +34,7 @@
   @media (max-width: 768px) {
     bottom: 5rem;
     right: 1rem;
-    padding: 0.625rem 0.875rem;
-    font-size: 0.8125rem;
+    padding: var(--padding-small) var(--padding-medium);
+    font-size: var(--font-size-small);
   }
 }
