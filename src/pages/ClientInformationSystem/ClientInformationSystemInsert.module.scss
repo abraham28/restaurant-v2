@@ -6,6 +6,16 @@
   background-color: var(--color-disabled-bg);
 }
 
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: var(--font-size-medium);
+  color: hsl(222.2 47.4% 11.2%);
+  background-color: var(--color-white);
+}
+
 .header {
   display: flex;
   justify-content: space-between;
