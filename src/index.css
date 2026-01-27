@@ -7,7 +7,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 14px;
+  font-size: var(--font-size-small)var(--font-size-small)14px;
   color: var(--color-text);
 }
 
@@ -29,4 +29,50 @@ code {
   --color-hover-bg: #e9ecef;
   --color-sidebar-bg: #f5f6f8;
   --color-sidebar-text: #002d15;
+  /* font size */
+  --font-size-x-small: 10px;
+  --font-size-small: 12px;
+  --font-size-medium: 14px;
+  --font-size-large: 16px;
+  --font-size-x-large: 18px;
+  --font-size-xx-large: 20px;
+  --font-size-xxx-large: 22px;
+  --font-size-xxxx-large: 24px;
+  --font-size-xxxxx-large: 26px;
+  /*paddinmg*/
+  --padding-small: 4px;
+  --padding-medium: 8px;
+  --padding-large: 12px;
+  --padding-x-large: 16px;
+  --padding-xx-large: 20px;
+  --padding-xxx-large: 24px;
+  --padding-xxxx-large: 28px;
+  --padding-xxxxx-large: 32px;
+  /*margin*/
+  --margin-small: 4px;
+  --margin-medium: 8px;
+  --margin-large: 12px;
+  --margin-x-large: 16px;
+  --margin-xx-large: 20px;
+  --margin-xxx-large: 24px;
+  --margin-xxxx-large: 28px;
+  --margin-xxxxx-large: 32px;
+  /*border radius*/
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 12px;
+  --border-radius-x-large: 16px;
+  --border-radius-xx-large: 20px;
+  --border-radius-xxx-large: 24px;
+  --border-radius-xxxx-large: 28px;
+  --border-radius-xxxxx-large: 32px;
+  /*border width*/
+  --border-width-small: 1px;
+  --border-width-medium: 2px;
+  --border-width-large: 3px;
+  --border-width-x-large: 4px;
+  --border-width-xx-large: 5px;
+  --border-width-xxx-large: 6px;
+  --border-width-xxxx-large: 7px;
+  --border-width-xxxxx-large: 8px;
 }

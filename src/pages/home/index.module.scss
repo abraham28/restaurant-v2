@@ -126,7 +126,7 @@
 }
 
 .featureDescription {
-  font-size: 0.9375rem;
+  font-size: var(--font-size-large);
   color: hsl(0 0% 45%);
   margin: 0;
   line-height: 1.6;

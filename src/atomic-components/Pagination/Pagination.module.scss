@@ -17,10 +17,10 @@
   align-items: center;
   gap: 0.5rem;
   color: hsl(222 47% 11%);
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
 
   label {
-    font-size: 0.875rem;
+    font-size: var(--font-size-medium);
     color: hsl(222 47% 11%);
     margin: 0;
   }
@@ -41,7 +41,7 @@
   border: 1px solid hsl(217 16% 84%);
   border-radius: 0.5rem;
   background-color: hsl(0 0% 100%);
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   color: hsl(222 47% 11%);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -80,7 +80,7 @@
 .ellipsis {
   padding: 0 0.5rem;
   color: hsl(215 16% 47%);
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
 }
 
 @media (max-width: 768px) {

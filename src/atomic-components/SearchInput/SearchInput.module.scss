@@ -22,7 +22,7 @@
   padding: 0.5rem 0.75rem 0.5rem 2.5rem;
   border: 1px solid hsl(0 0% 85%);
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   transition: border-color 0.15s ease-in-out;
 
   &:focus {
@@ -95,14 +95,14 @@
 }
 
 .itemText {
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   color: hsl(0 0% 20%);
 }
 
 .emptyMessage {
   padding: 0.75rem;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   color: hsl(0 0% 50%);
 }
 

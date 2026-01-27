@@ -10,7 +10,7 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -35,6 +35,6 @@
     bottom: 5rem;
     right: 1rem;
     padding: 0.625rem 0.875rem;
-    font-size: 0.8125rem;
+    font-size: var(--font-size-small);
   }
 }

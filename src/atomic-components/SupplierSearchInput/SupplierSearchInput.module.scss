@@ -22,7 +22,7 @@
   padding: 0.5rem 0.75rem 0.5rem 2.5rem;
   border: 1px solid hsl(0 0% 85%);
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   transition: border-color 0.15s ease-in-out;
 
   &:focus {
@@ -102,12 +102,12 @@
 
 .supplierName {
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   color: hsl(0 0% 20%);
 }
 
 .supplierContact {
-  font-size: 0.8125rem;
+  font-size: var(--font-size-small);
   color: hsl(0 0% 50%);
 }
 
@@ -123,7 +123,7 @@
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   color: hsl(0 0% 45%);
-  font-size: 0.9375rem;
+  font-size: var(--font-size-large);
   text-align: center;
   z-index: 1000;
   display: flex;

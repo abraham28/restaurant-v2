@@ -9,7 +9,7 @@
   gap: 0.75rem;
   width: 100%;
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: var(--font-size-medium);
   line-height: normal;
   box-sizing: border-box;
   
@@ -109,7 +109,7 @@
 }
 
 .calendarMonthYear {
-  font-size: 0.8125rem;
+  font-size: var(--font-size-small);
   font-weight: 600;
   
   background-color: transparent;
@@ -133,7 +133,7 @@
 
 .weekday {
   text-align: center;
-  font-size: 0.6875rem;
+  font-size: var(--font-size-x-small);
   font-weight: 600;
   color: hsl(0 0% 50%);
   text-transform: uppercase;
@@ -153,7 +153,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   
   background-color: transparent;
   border-radius: 4px;
@@ -208,7 +208,7 @@
 
 .quickActionButton {
   padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   font-weight: 500;
   
   background-color: transparent;
@@ -244,7 +244,7 @@
 .monthPickerItem,
 .yearPickerItem {
   padding: 0.5rem 0.375rem;
-  font-size: 0.75rem;
+  font-size: var(--font-size-small);
   font-weight: 500;
   
   background-color: white;
