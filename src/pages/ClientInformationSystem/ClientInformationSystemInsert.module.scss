@@ -3,24 +3,24 @@
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  background-color: hsl(0 0% 98%);
+  background-color: var(--color-disabled-bg);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
-  background-color: hsl(0 0% 100%);
+  padding: var(--padding-medium) var(--padding-large);
+  background-color: var(--color-white);
   border-bottom: 1px solid hsl(0 0% 90%);
   flex-shrink: 0;
 }
 
 .title {
-  font-size: 1.125rem;
+  font-size: var(--font-size-medium);
   font-weight: 600;
   color: hsl(222.2 47.4% 11.2%);
-  margin: 0;
+  margin: var(--margin-none);
 }
 
 .headerActions {
@@ -53,9 +53,9 @@
 .tabs {
   display: flex;
   gap: 0;
-  background-color: hsl(0 0% 100%);
+  background-color: var(--color-white);
   border-bottom: 1px solid hsl(0 0% 90%);
-  padding: 0 0.5rem;
+  padding: var(--padding-none) var(--padding-medium);
   overflow-x: auto;
   flex-shrink: 0;
   scrollbar-width: none;
@@ -65,7 +65,7 @@
 }
 
 .tab {
-  padding: 0.625rem 1rem;
+  padding: var(--padding-medium) var(--padding-large);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -75,7 +75,7 @@
   white-space: nowrap;
   transition: all 0.2s;
   &:hover {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
   }
 }
 
@@ -88,8 +88,8 @@
 .content {
   flex: 1;
   overflow: hidden;
-  padding: 0.5rem;
-  background-color: hsl(0 0% 98%);
+  padding: var(--padding-medium);
+  background-color: var(--color-disabled-bg);
   min-height: 0;
 }
 
@@ -113,10 +113,10 @@
 }
 
 .section {
-  background-color: hsl(0 0% 100%);
-  border: 1px solid hsl(0 0% 90%);
-  border-radius: 0.375rem;
-  padding: 0.5rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  padding: var(--padding-medium);
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
@@ -136,7 +136,7 @@
   font-size: var(--font-size-small);
   font-weight: 600;
   color: hsl(222.2 47.4% 11.2%);
-  margin: 0;
+  margin: var(--margin-none);
 }
 
 .sectionTitleWithIcon {
@@ -170,16 +170,16 @@
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  padding: 0.25rem 0.5rem;
+  padding: var(--padding-small) var(--padding-medium);
   background: none;
   border: 1px solid hsl(0 0% 85%);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius-small);
   font-size: var(--font-size-x-small);
   color: hsl(222.2 47.4% 11.2%);
   cursor: pointer;
   transition: all 0.2s;
   &:hover {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
     border-color: hsl(221.2 83.2% 53.3%);
     color: hsl(221.2 83.2% 53.3%);
   }
@@ -276,11 +276,11 @@
   font-size: var(--font-size-x-small);
   font-weight: 600;
   color: hsl(222.2 47.4% 11.2%);
-  margin: 0;
+  margin: var(--margin-none);
 }
 
 .subsectionLabel {
-   0.625rem;
+  font-size: var(--font-size-x-small);
   color: hsl(222.2 47.4% 11.2%);
   opacity: 0.7;
 }
@@ -308,17 +308,17 @@
   justify-content: center;
   width: 1.5rem;
   height: 1.5rem;
-  padding: 0;
+  padding: var(--padding-none);
   background: none;
   border: 1px solid hsl(0 0% 85%);
-  border-radius: 0.25rem;
+  border-radius: var(--border-radius-small);
   color: hsl(222.2 47.4% 11.2%);
   cursor: pointer;
   transition: all 0.2s;
   flex-shrink: 0;
   
   &:hover {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
     border-color: hsl(221.2 83.2% 53.3%);
     color: hsl(221.2 83.2% 53.3%);
   }
@@ -355,11 +355,11 @@
 }
 
 .input {
-  padding: 0.25rem 0.375rem;
+  padding: var(--padding-small) var(--padding-small);
   font-size: var(--font-size-small);
   border: 1px solid hsl(0 0% 85%);
-  border-radius: 0.25rem;
-  background-color: hsl(0 0% 100%);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-white);
   color: hsl(222.2 47.4% 11.2%);
   &:focus {
     outline: none;
@@ -369,11 +369,11 @@
 }
 
 .readOnlyInput {
-  padding: 0.25rem 0.375rem;
+  padding: var(--padding-small) var(--padding-small);
   font-size: var(--font-size-small);
   border: 1px solid hsl(0 0% 85%);
-  border-radius: 0.25rem;
-  background-color: hsl(0 0% 95%);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-hover-bg);
   color: hsl(222.2 47.4% 11.2%);
   cursor: not-allowed;
 }

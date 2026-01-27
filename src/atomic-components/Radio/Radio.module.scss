@@ -9,19 +9,19 @@
   justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: var(--padding-medium) var(--padding-large);
   font-size: var(--font-size-medium);
   line-height: 1.5;
-  background-color: white;
-  border: 1px solid hsl(0 0% 85%);
-  border-radius: 6px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   user-select: none;
 
   &:hover:not(.disabled) {
-    border-color: hsl(148, 100%, 25%);
-    background-color: hsl(0 0% 99%);
+    border-color: var(--color-primary);
+    background-color: var(--color-hover-bg);
   }
 
   &.open {
@@ -32,7 +32,7 @@
   &.disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
   }
 }
 
@@ -42,12 +42,12 @@
   text-align: left;
 
   &.placeholder {
-    color: hsl(0 0% 60%);
+    color: var(--color-text-secondary);
   }
 }
 
 .chevron {
-  color: hsl(0 0% 50%);
+  color: var(--color-text-secondary);
   flex-shrink: 0;
   transition: transform 0.2s ease-in-out;
 
@@ -61,10 +61,10 @@
   top: calc(100% + 0.25rem);
   left: 0;
   right: 0;
-  background-color: white;
-  border: 1px solid hsl(0 0% 89%);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 4px 12px var(--color-shadow);
   z-index: 1000;
   max-height: 300px;
   overflow-y: auto;
@@ -86,11 +86,11 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0.75rem;
+  padding: var(--padding-medium);
   text-align: left;
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid hsl(0 0% 95%);
+  border-bottom: 1px solid var(--color-border);
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   font-size: var(--font-size-medium);
@@ -101,16 +101,16 @@
   }
 
   &:hover {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
   }
 
   &.selected {
-    background-color: hsl(148, 100%, 95%);
+    background-color: var(--color-hover-bg);
     color: var(--color-primary);
     font-weight: 500;
 
     &:hover {
-      background-color: hsl(148, 100%, 92%);
+      background-color: var(--color-hover-bg);
     }
   }
 }

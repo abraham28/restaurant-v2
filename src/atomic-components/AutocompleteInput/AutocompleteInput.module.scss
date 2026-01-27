@@ -19,9 +19,9 @@
 
 .input {
   width: 100%;
-  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  padding: var(--padding-small) var(--padding-medium) var(--padding-small) var(--padding-x-large);
   border: 1px solid hsl(0 0% 85%);
-  border-radius: 6px;
+  border-radius: var(--border-radius-medium);
   font-size: var(--font-size-medium);
   transition: border-color 0.15s ease-in-out;
 
@@ -31,7 +31,7 @@
   }
 
   &:disabled {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
     cursor: not-allowed;
     opacity: 0.6;
   }
@@ -45,16 +45,16 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  padding: 0;
+  padding: var(--padding-none);
   background-color: transparent;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
   color: hsl(0 0% 50%);
   cursor: pointer;
   transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
 
   &:hover {
-    background-color: hsl(0 0% 95%);
+    background-color: var(--color-hover-bg);
     color: hsl(0 0% 30%);
   }
 }
@@ -65,9 +65,9 @@
   left: 0;
   right: 0;
   margin-top: 0.25rem;
-  background-color: white;
+  background-color: var(--color-white);
   border: 1px solid hsl(0 0% 89%);
-  border-radius: 6px;
+  border-radius: var(--border-radius-medium);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-height: 300px;
   overflow-y: auto;
@@ -76,9 +76,9 @@
 
 .suggestionItem {
   width: 100%;
-  padding: 0.75rem;
+  padding: var(--padding-medium);
   text-align: left;
-  background-color: white;
+  background-color: var(--color-white);
   border: none;
   border-bottom: 1px solid hsl(0 0% 95%);
   cursor: pointer;
@@ -90,7 +90,7 @@
 
   &:hover,
   &.highlighted {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
   }
 }
 

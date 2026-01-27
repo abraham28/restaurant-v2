@@ -5,12 +5,12 @@
 
 .textarea {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: var(--padding-medium) var(--padding-large);
   border: 1.5px solid hsl(0 0% 89%);
-  border-radius: 8px;
+  border-radius: var(--border-radius-medium);
   font-size: var(--font-size-large);
   line-height: 1.5;
-  background-color: white;
+  background-color: var(--color-white);
   transition: all 0.2s ease-in-out;
   font-family: inherit;
   resize: vertical;
@@ -23,11 +23,11 @@
 
   &:hover:not(:disabled) {
     border-color: hsl(148, 100%, 25%);
-    background-color: hsl(0 0% 99%);
+    background-color: var(--color-hover-bg);
   }
 
   &:disabled {
-    background-color: hsl(0 0% 98%);
+    background-color: var(--color-disabled-bg);
     cursor: not-allowed;
     opacity: 0.6;
   }
