@@ -326,6 +326,7 @@ export interface DraftMetadata {
   createdAt: number;
   updatedAt: number;
   clientName: string; // Display name (e.g., "Juan Dela Cruz" or "Draft 1")
+  clientType?: string; // Client type: 'Individual', 'Company', 'Government', 'Organization'
 }
 
 /**
@@ -343,15 +344,17 @@ export interface DraftData<T> {
  * @param draftId - Unique identifier for the draft
  * @param formData - The form data to store
  * @param clientName - Display name for the draft (defaults to generated name)
+ * @param clientType - Client type: 'Individual', 'Company', 'Government', 'Organization' (optional, will be inferred if not provided)
  * @returns Promise that resolves when draft is stored
  *
  * @example
- * await storeDraft('draft_123', formData, 'Juan Dela Cruz');
+ * await storeDraft('draft_123', formData, 'Juan Dela Cruz', 'Individual');
  */
 export async function storeDraft<T>(
   draftId: string,
   formData: T,
   clientName?: string,
+  clientType?: string,
 ): Promise<void> {
   const db = await openDatabase();
   const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -365,12 +368,17 @@ export async function storeDraft<T>(
       const existing = getRequest.result as DataRecord | undefined;
       let createdAt = Date.now();
       let displayName = clientName || 'Untitled Draft';
+      let draftClientType = clientType;
 
       if (existing && existing.value) {
         try {
           const existingDraft = JSON.parse(existing.value) as DraftData<T>;
           createdAt = existingDraft.metadata.createdAt;
           displayName = clientName || existingDraft.metadata.clientName;
+          // Preserve existing clientType if not explicitly provided
+          if (!draftClientType && existingDraft.metadata.clientType) {
+            draftClientType = existingDraft.metadata.clientType;
+          }
         } catch {
           // If parsing fails, use defaults
         }
@@ -381,17 +389,42 @@ export async function storeDraft<T>(
           const data = formData as Record<string, unknown>;
           const firstName = data.firstName;
           const lastName = data.lastName;
+          const companyName = data.companyName;
+
+          // If companyName exists, it's likely a Company draft
+          if (
+            !draftClientType &&
+            companyName &&
+            typeof companyName === 'string' &&
+            companyName.trim()
+          ) {
+            draftClientType = 'Company';
+          }
+
           if (firstName && typeof firstName === 'string') {
             nameParts.push(firstName);
           }
           if (lastName && typeof lastName === 'string') {
             nameParts.push(lastName);
           }
+          // If no firstName/lastName but has companyName, use companyName
+          if (
+            nameParts.length === 0 &&
+            companyName &&
+            typeof companyName === 'string'
+          ) {
+            nameParts.push(companyName);
+          }
           displayName =
             nameParts.length > 0
               ? nameParts.join(' ')
               : `Draft ${new Date().toLocaleDateString()}`;
         }
+      }
+
+      // Default to 'Individual' if clientType is still not determined
+      if (!draftClientType) {
+        draftClientType = 'Individual';
       }
 
       const draftData: DraftData<T> = {
@@ -401,6 +434,7 @@ export async function storeDraft<T>(
           createdAt,
           updatedAt: Date.now(),
           clientName: displayName,
+          clientType: draftClientType,
         },
         formData,
       };

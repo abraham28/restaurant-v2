@@ -7,6 +7,7 @@ import { ROUTES } from 'utils/constants';
 import {
   getAllDrafts,
   deleteDraft,
+  getDraft,
   type DraftMetadata,
 } from 'utils/indexedDBUtils';
 import { useClientFormStore } from 'stores/clientFormStore';
@@ -74,8 +75,26 @@ function ClientInformationSystem() {
 
   const handleDraftClick = useCallback(
     async (draftId: string) => {
-      await loadDraft(draftId);
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+      try {
+        // Get draft to determine client type before loading
+        const draft = await getDraft(draftId);
+        const clientType = draft?.metadata.clientType || 'Individual';
+
+        // Load draft into store
+        await loadDraft(draftId);
+
+        // Navigate based on client type
+        if (clientType === 'Company') {
+          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
+        } else {
+          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+        }
+      } catch (error) {
+        console.error('Failed to load draft:', error);
+        // Fallback to Individual route
+        await loadDraft(draftId);
+        navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+      }
     },
     [loadDraft, navigate],
   );
@@ -135,7 +154,15 @@ function ClientInformationSystem() {
                   }}
                 >
                   <div className={styles.draftContent}>
-                    <span className={styles.draftName}>{draft.clientName}</span>
+                    <span className={styles.draftName}>
+                      {draft.clientName}
+                      {draft.clientType && (
+                        <span className={styles.clientTypeIndicator}>
+                          {' '}
+                          - {draft.clientType}
+                        </span>
+                      )}
+                    </span>
                     <span className={styles.draftDate}>
                       Updated: {formatDate(draft.updatedAt)}
                     </span>
