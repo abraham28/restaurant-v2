@@ -1,4 +1,5 @@
 import React, { forwardRef, useState, useEffect } from 'react';
+import styles from './NumberInput.module.scss';
 import { NumberInputProps } from './types';
 
 /**
@@ -81,19 +82,21 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       }
     };
 
-    // Merge form-control class with provided className
-    const inputClassName = `form-control ${className}`.trim();
+    // Merge styles with provided className
+    const inputClassName = `${styles.input} ${className}`.trim();
 
     return (
-      <input
-        ref={ref}
-        type="text"
-        value={displayValue}
-        onChange={handleChange}
-        placeholder={placeholder}
-        className={inputClassName}
-        {...restProps}
-      />
+      <div className={styles.container}>
+        <input
+          ref={ref}
+          type="text"
+          value={displayValue}
+          onChange={handleChange}
+          placeholder={placeholder}
+          className={inputClassName}
+          {...restProps}
+        />
+      </div>
     );
   },
 );
