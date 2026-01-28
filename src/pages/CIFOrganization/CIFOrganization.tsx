@@ -6,7 +6,7 @@ import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredF
 import { ROUTES } from 'utils/constants';
 import { useClientFormStore, ClientFormData } from 'stores/clientFormStore';
 import { generateDraftId } from 'utils/indexedDBUtils';
-import IndividualTab from './Government/Government';
+import OrganizationTab from './Organization/Organization';
 import ContactsTab from './Contacts/Contacts';
 import DocumentsTab from './Documents/Documents';
 import EmploymentTab from './Employment/Employment';
@@ -15,10 +15,10 @@ import FinancialTab from './Financial/Financial';
 import AmlaTab from './Amla/Amla';
 import RemarksTab from './Remarks/Remarks';
 import PictureTab from './Picture/Picture';
-import styles from './CIFGovernment.module.scss';
+import styles from './CIFOrganization.module.scss';
 
 type TabType =
-  | 'Government'
+  | 'Organization'
   | 'contacts'
   | 'documents'
   | 'employment'
@@ -55,13 +55,17 @@ function ClientInformationSystemInsert() {
     const loadData = async () => {
       hasLoadedRef.current = true;
 
-      // Set client type to Government for this page
-      setClientType('Government');
+      // Set client type to Organization for this page
+      setClientType('Organization');
 
-      // Set default active tab to Government if coming from other client types
+      // Set default active tab to Organization if coming from other client types
       const currentTab = useClientFormStore.getState().activeTab;
-      if (currentTab === 'individual' || currentTab === 'Company') {
-        setActiveTab('Government');
+      if (
+        currentTab === 'individual' ||
+        currentTab === 'Company' ||
+        currentTab === 'Government'
+      ) {
+        setActiveTab('Organization');
       }
 
       // Fetch all form data from IndexedDB in one go
@@ -127,14 +131,14 @@ function ClientInformationSystemInsert() {
     handleCloseModal();
   }, [handleCloseModal]);
 
-  const handleCompanyInputChange = useCallback(
+  const handleOrganizationInputChange = useCallback(
     (field: string, value: string | number) => {
       setFormData({ [field]: value } as Partial<ClientFormData>);
     },
     [setFormData],
   );
 
-  const handleCompanyDateChange = useCallback(
+  const handleOrganizationDateChange = useCallback(
     (field: string, date: string) => {
       setFormData({ [field]: date } as Partial<ClientFormData>);
     },
@@ -179,7 +183,7 @@ function ClientInformationSystemInsert() {
   const firmSizeOptions = ['None', 'Small', 'Medium', 'Large'];
 
   const tabs: { id: TabType; label: string }[] = [
-    { id: 'Government', label: 'Government' },
+    { id: 'Organization', label: 'Organization' },
     { id: 'contacts', label: 'Contacts/Addresses/IDs' },
     { id: 'documents', label: 'Documents' },
     { id: 'employment', label: 'Employment' },
@@ -229,21 +233,25 @@ function ClientInformationSystemInsert() {
       </div>
 
       <div className={styles.content}>
-        {activeTab === 'Government' && (
-          <IndividualTab
+        {activeTab === 'Organization' && (
+          <OrganizationTab
             formData={{
               companyName: formData.companyName || '',
+              tin: formData.tin || '',
               startOfBusiness: formData.startOfBusiness || '1900-01-01',
               contactPerson: formData.contactPerson || '',
               designation: formData.designation || '',
+              remarks: formData.remarks || '',
               countryOfOrigin: formData.countryOfOrigin || '',
-              originOfEntity: formData.originOfEntity || '',
-              placeOfRegistration: formData.placeOfRegistration || '',
+              entityLocation: formData.entityLocation || '',
               legalForm: formData.legalForm || '',
               businessActivity: formData.businessActivity || '',
+              nationality: formData.nationality || '',
+              originOfEntity: formData.originOfEntity || '',
+              placeOfRegistration: formData.placeOfRegistration || '',
             }}
-            onInputChange={handleCompanyInputChange}
-            onDateChange={handleCompanyDateChange}
+            onInputChange={handleOrganizationInputChange}
+            onDateChange={handleOrganizationDateChange}
             companyTypeOptions={companyTypeOptions}
             firmSizeOptions={firmSizeOptions}
           />

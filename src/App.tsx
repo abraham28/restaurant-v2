@@ -10,6 +10,7 @@ import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
 import ClientInformationSystemInsert from 'pages/CIFIndividual/CIFIndividual';
 import CIFCompany from 'pages/CIFCompany';
 import CIFGovernment from 'pages/CIFGovernment';
+import CIFOrganization from 'pages/CIFOrganization';
 
 function AppContent() {
   return (
@@ -30,6 +31,10 @@ function AppContent() {
       <Route
         path={ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT}
         element={<CIFGovernment />}
+      />
+      <Route
+        path={ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT}
+        element={<CIFOrganization />}
       />
     </Routes>
   );
