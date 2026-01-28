@@ -311,3 +311,234 @@ export async function clearDatabase(): Promise<void> {
     };
   });
 }
+
+/**
+ * ============================================================================
+ * DRAFT MANAGEMENT FUNCTIONS - For managing multiple client form drafts
+ * ============================================================================
+ */
+
+/**
+ * Draft metadata interface
+ */
+export interface DraftMetadata {
+  id: string;
+  createdAt: number;
+  updatedAt: number;
+  clientName: string; // Display name (e.g., "Juan Dela Cruz" or "Draft 1")
+}
+
+/**
+ * Draft data structure stored in IndexedDB
+ */
+export interface DraftData<T> {
+  id: string;
+  metadata: DraftMetadata;
+  formData: T;
+}
+
+/**
+ * Store a draft with unique ID
+ *
+ * @param draftId - Unique identifier for the draft
+ * @param formData - The form data to store
+ * @param clientName - Display name for the draft (defaults to generated name)
+ * @returns Promise that resolves when draft is stored
+ *
+ * @example
+ * await storeDraft('draft_123', formData, 'Juan Dela Cruz');
+ */
+export async function storeDraft<T>(
+  draftId: string,
+  formData: T,
+  clientName?: string,
+): Promise<void> {
+  const db = await openDatabase();
+  const transaction = db.transaction([STORE_NAME], 'readwrite');
+  const store = transaction.objectStore(STORE_NAME);
+
+  return new Promise((resolve, reject) => {
+    // Get existing draft if it exists to preserve createdAt
+    const getRequest = store.get(`draft_${draftId}`);
+
+    getRequest.onsuccess = () => {
+      const existing = getRequest.result as DataRecord | undefined;
+      let createdAt = Date.now();
+      let displayName = clientName || 'Untitled Draft';
+
+      if (existing && existing.value) {
+        try {
+          const existingDraft = JSON.parse(existing.value) as DraftData<T>;
+          createdAt = existingDraft.metadata.createdAt;
+          displayName = clientName || existingDraft.metadata.clientName;
+        } catch {
+          // If parsing fails, use defaults
+        }
+      } else {
+        // Generate display name if not provided and no existing draft
+        if (!clientName) {
+          const nameParts: string[] = [];
+          const data = formData as Record<string, unknown>;
+          const firstName = data.firstName;
+          const lastName = data.lastName;
+          if (firstName && typeof firstName === 'string') {
+            nameParts.push(firstName);
+          }
+          if (lastName && typeof lastName === 'string') {
+            nameParts.push(lastName);
+          }
+          displayName =
+            nameParts.length > 0
+              ? nameParts.join(' ')
+              : `Draft ${new Date().toLocaleDateString()}`;
+        }
+      }
+
+      const draftData: DraftData<T> = {
+        id: draftId,
+        metadata: {
+          id: draftId,
+          createdAt,
+          updatedAt: Date.now(),
+          clientName: displayName,
+        },
+        formData,
+      };
+
+      const value = JSON.stringify(draftData);
+      const request = store.put({
+        key: `draft_${draftId}`,
+        value,
+        updatedAt: Date.now(),
+      });
+
+      request.onsuccess = () => {
+        resolve();
+      };
+
+      request.onerror = () => {
+        reject(
+          new Error(`Failed to store draft with ID "${draftId}" in IndexedDB`),
+        );
+      };
+    };
+
+    getRequest.onerror = () => {
+      reject(new Error(`Failed to get existing draft "${draftId}"`));
+    };
+  });
+}
+
+/**
+ * Get a specific draft by ID
+ *
+ * @param draftId - Unique identifier for the draft
+ * @returns Promise that resolves with the draft data or null if not found
+ *
+ * @example
+ * const draft = await getDraft<FormData>('draft_123');
+ */
+export async function getDraft<T>(
+  draftId: string,
+): Promise<DraftData<T> | null> {
+  const db = await openDatabase();
+  const transaction = db.transaction([STORE_NAME], 'readonly');
+  const store = transaction.objectStore(STORE_NAME);
+
+  return new Promise<DraftData<T> | null>((resolve, reject) => {
+    const request = store.get(`draft_${draftId}`);
+
+    request.onsuccess = () => {
+      const result = request.result as DataRecord | undefined;
+      if (result && result.value) {
+        try {
+          const draftData = JSON.parse(result.value) as DraftData<T>;
+          resolve(draftData);
+        } catch {
+          reject(
+            new Error(
+              `Failed to parse draft with ID "${draftId}" from IndexedDB`,
+            ),
+          );
+        }
+      } else {
+        resolve(null);
+      }
+    };
+
+    request.onerror = () => {
+      reject(
+        new Error(`Failed to get draft with ID "${draftId}" from IndexedDB`),
+      );
+    };
+  });
+}
+
+/**
+ * Get all drafts
+ *
+ * @returns Promise that resolves with array of draft metadata
+ *
+ * @example
+ * const drafts = await getAllDrafts();
+ */
+export async function getAllDrafts(): Promise<DraftMetadata[]> {
+  const db = await openDatabase();
+  const transaction = db.transaction([STORE_NAME], 'readonly');
+  const store = transaction.objectStore(STORE_NAME);
+
+  return new Promise<DraftMetadata[]>((resolve, reject) => {
+    const request = store.getAll();
+
+    request.onsuccess = () => {
+      const results = request.result as DataRecord[];
+      const drafts: DraftMetadata[] = [];
+
+      for (const record of results) {
+        // Only process draft keys
+        if (record.key.startsWith('draft_')) {
+          try {
+            const draftData = JSON.parse(record.value) as DraftData<unknown>;
+            drafts.push(draftData.metadata);
+          } catch {
+            // Skip invalid drafts
+            continue;
+          }
+        }
+      }
+
+      // Sort by updatedAt descending (newest first)
+      drafts.sort((a, b) => b.updatedAt - a.updatedAt);
+      resolve(drafts);
+    };
+
+    request.onerror = () => {
+      reject(new Error('Failed to get all drafts from IndexedDB'));
+    };
+  });
+}
+
+/**
+ * Delete a draft by ID
+ *
+ * @param draftId - Unique identifier for the draft to delete
+ * @returns Promise that resolves when draft is deleted
+ *
+ * @example
+ * await deleteDraft('draft_123');
+ */
+export async function deleteDraft(draftId: string): Promise<void> {
+  return removeData(`draft_${draftId}`);
+}
+
+/**
+ * Generate a unique draft ID
+ *
+ * @returns A unique draft ID string
+ *
+ * @example
+ * const draftId = generateDraftId(); // Returns something like "draft_1704067200000_abc123"
+ */
+export function generateDraftId(): string {
+  return `draft_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+}
