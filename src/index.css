@@ -84,4 +84,10 @@ code {
   --border-width-xxx-large: 6px;
   --border-width-xxxx-large: 7px;
   --border-width-xxxxx-large: 8px;
+  /*input height*/
+  --input-height: 38px;
+  --input-padding-vertical: var(--padding-medium);
+  --input-padding-horizontal: var(--padding-large);
+  --input-font-size: var(--font-size-medium);
+  --input-line-height: 1.5;
 }

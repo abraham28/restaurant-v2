@@ -5,13 +5,15 @@
 
 .input {
   width: 100%;
-  padding: var(--padding-medium) var(--padding-large);
+  height: var(--input-height);
+  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
   border: 1px solid hsl(0 0% 85%);
   border-radius: var(--border-radius-medium);
-  font-size: var(--font-size-medium);
-  line-height: normal;
+  font-size: var(--input-font-size);
+  line-height: var(--input-line-height);
   background-color: var(--color-white);
   transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;

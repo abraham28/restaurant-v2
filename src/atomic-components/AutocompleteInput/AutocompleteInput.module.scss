@@ -19,11 +19,14 @@
 
 .input {
   width: 100%;
-  padding: var(--padding-small) var(--padding-medium) var(--padding-small) var(--padding-x-large);
+  height: var(--input-height);
+  padding: var(--input-padding-vertical) var(--input-padding-horizontal) var(--input-padding-vertical) calc(0.75rem + 16px + 0.5rem);
   border: 1px solid hsl(0 0% 85%);
   border-radius: var(--border-radius-medium);
-  font-size: var(--font-size-medium);
+  font-size: var(--input-font-size);
+  line-height: var(--input-line-height);
   transition: border-color 0.15s ease-in-out;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;

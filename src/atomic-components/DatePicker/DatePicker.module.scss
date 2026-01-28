@@ -8,9 +8,10 @@
   align-items: center;
   gap: 0.75rem;
   width: 100%;
-  padding: var(--padding-medium) var(--padding-large);
-  font-size: var(--font-size-medium);
-  line-height: normal;
+  height: var(--input-height);
+  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+  font-size: var(--input-font-size);
+  line-height: var(--input-line-height);
   box-sizing: border-box;
   
   background-color: var(--color-white);
