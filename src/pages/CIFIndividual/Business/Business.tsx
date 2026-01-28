@@ -3,7 +3,7 @@ import { FileText, Phone } from 'lucide-react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
   businessName: string;

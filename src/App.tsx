@@ -6,8 +6,8 @@ import { useServiceWorker } from 'hooks/useServiceWorker';
 import Home from 'pages/home';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
-import ClientInformationSystem from 'pages/ClientInformationSystem';
-import ClientInformationSystemInsert from 'pages/ClientInformationSystem/ClientInformationSystemInsert';
+import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
+import ClientInformationSystemInsert from 'pages/CIFIndividual/CIFIndividual';
 
 function AppContent() {
   return (
