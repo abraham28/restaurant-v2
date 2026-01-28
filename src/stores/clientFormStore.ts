@@ -372,9 +372,13 @@ interface ClientFormState {
   activeTab: string;
   isLoading: boolean;
   draftId: string | null; // Current draft ID being edited
+  clientType: 'Individual' | 'Company' | 'Government' | 'Organization' | null; // Current client type
   // Actions
   setFormData: (data: Partial<ClientFormData>) => void;
   setActiveTab: (tab: string) => void;
+  setClientType: (
+    type: 'Individual' | 'Company' | 'Government' | 'Organization' | null,
+  ) => void;
   resetForm: () => void;
   loadFormFromIndexedDB: () => Promise<void>;
   setDraftId: (draftId: string | null) => void;
@@ -396,6 +400,7 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
   activeTab: 'individual',
   isLoading: false,
   draftId: null,
+  clientType: null,
 
   /**
    * Update form data and auto-save to IndexedDB
@@ -419,6 +424,13 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
   },
 
   /**
+   * Set client type (Individual, Company, etc.)
+   */
+  setClientType: (type) => {
+    set({ clientType: type });
+  },
+
+  /**
    * Set draft ID (used when editing an existing draft or creating new one)
    */
   setDraftId: (draftId) => {
@@ -436,6 +448,13 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
         set({
           formData: draft.formData,
           draftId: draft.id,
+          // Set clientType from draft metadata if available
+          clientType:
+            (draft.metadata.clientType as
+              | 'Individual'
+              | 'Company'
+              | 'Government'
+              | 'Organization') || null,
         });
       }
     } catch (error) {
@@ -449,7 +468,12 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
    * Reset form to initial state and clear IndexedDB
    */
   resetForm: () => {
-    set({ formData: initialFormData, activeTab: 'individual', draftId: null });
+    set({
+      formData: initialFormData,
+      activeTab: 'individual',
+      draftId: null,
+      clientType: null,
+    });
     void removeClientFormData().catch((error) => {
       console.error('Failed to remove form data from IndexedDB:', error);
     });
@@ -482,14 +506,31 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
       const state = get();
       const currentDraftId = state.draftId || generateDraftId();
 
+      // Get client type from store state, or infer from form data if not set
+      let clientType = state.clientType;
+
+      // If clientType is not set in store, try to infer from form data
+      if (!clientType) {
+        const companyName = state.formData.companyName?.trim();
+        clientType = companyName ? 'Company' : 'Individual';
+      }
+
       // Generate client name from form data
-      const clientName =
-        state.formData.firstName || state.formData.lastName
+      // For Company, use companyName; for Individual, use firstName + lastName
+      const companyName = state.formData.companyName?.trim();
+      const clientName = companyName
+        ? companyName
+        : state.formData.firstName || state.formData.lastName
           ? `${state.formData.firstName || ''} ${state.formData.lastName || ''}`.trim()
           : undefined;
 
-      // Save as draft
-      await storeDraft(currentDraftId, state.formData, clientName);
+      // Save as draft with the determined client type
+      await storeDraft(
+        currentDraftId,
+        state.formData,
+        clientName,
+        clientType || 'Individual',
+      );
 
       // Update draftId if it was null (first save)
       if (!state.draftId) {

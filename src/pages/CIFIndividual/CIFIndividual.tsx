@@ -43,6 +43,7 @@ function ClientInformationSystemInsert() {
   const setActiveTab = useClientFormStore((state) => state.setActiveTab);
   const resetForm = useClientFormStore((state) => state.resetForm);
   const setDraftId = useClientFormStore((state) => state.setDraftId);
+  const setClientType = useClientFormStore((state) => state.setClientType);
   const loadFormFromIndexedDB = useClientFormStore(
     (state) => state.loadFormFromIndexedDB,
   );
@@ -51,6 +52,8 @@ function ClientInformationSystemInsert() {
   // Don't render until data is synced
   useEffect(() => {
     const loadData = async () => {
+      // Set client type to Individual for this page
+      setClientType('Individual');
       await loadFormFromIndexedDB();
       // Generate draft ID if not exists (for new forms)
       if (!draftId) {
@@ -59,7 +62,7 @@ function ClientInformationSystemInsert() {
       setIsInitialLoadComplete(true);
     };
     void loadData();
-  }, [loadFormFromIndexedDB, draftId, setDraftId]);
+  }, [loadFormFromIndexedDB, draftId, setDraftId, setClientType]);
 
   const handleInputChange = useCallback(
     (field: keyof ClientFormData, value: string | number | boolean) => {

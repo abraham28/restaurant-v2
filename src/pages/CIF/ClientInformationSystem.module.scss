@@ -82,6 +82,12 @@
   white-space: nowrap; // Keep name on one line
 }
 
+.clientTypeIndicator {
+  font-weight: 400;
+  color: hsl(222.2 47.4% 45%);
+  font-size: var(--font-size-medium);
+}
+
 .draftDate {
   font-size: var(--font-size-small);
   color: hsl(222.2 47.4% 45%);
