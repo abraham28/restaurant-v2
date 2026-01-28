@@ -51,9 +51,9 @@ export function useCsvToObj<T = Record<string, string>>(
         const cached = await getData<Record<string, string>[]>(cacheKey);
         if (cached && cached.length > 0 && isMounted) {
           const mapped = options?.mapData
-            ? cached
+            ? (cached
                 .map((row) => options.mapData?.(row))
-                .filter((item) => item !== undefined) as T[]
+                .filter((item) => item !== undefined) as T[])
             : (cached as unknown as T[]);
           setData(mapped);
         }
@@ -85,9 +85,9 @@ export function useCsvToObj<T = Record<string, string>>(
         }
 
         const mapped = options?.mapData
-          ? parsed
+          ? (parsed
               .map((row) => options.mapData?.(row))
-              .filter((item) => item !== undefined) as T[]
+              .filter((item) => item !== undefined) as T[])
           : (parsed as unknown as T[]);
 
         // Cache parsed data
@@ -124,4 +124,3 @@ export function useCsvToObj<T = Record<string, string>>(
 
   return { data, loading, error };
 }
-

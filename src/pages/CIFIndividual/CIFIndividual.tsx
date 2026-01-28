@@ -36,10 +36,7 @@ function ClientInformationSystemInsert() {
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
 
   // Load titles from CSV file using reusable hook
-  const {
-    data: titleOptions,
-    loading: isLoadingTitles,
-  } = useCsvToObj<string>(
+  const { data: titleOptions, loading: isLoadingTitles } = useCsvToObj<string>(
     '/data/cifTableOfRecord/cifTitle.csv',
     'cifTitles',
     {
