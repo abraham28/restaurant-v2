@@ -133,15 +133,15 @@ function ClientInformationSystem() {
                   }}
                 >
                   <div className={styles.draftContent}>
-                    <div className={styles.draftName}>{draft.clientName}</div>
-                    <div className={styles.draftMeta}>
+                    <span className={styles.draftName}>{draft.clientName}</span>
+                    <span className={styles.draftDate}>
+                      Updated: {formatDate(draft.updatedAt)}
+                    </span>
+                    {draft.createdAt !== draft.updatedAt && (
                       <span className={styles.draftDate}>
-                        Updated: {formatDate(draft.updatedAt)}
-                        {draft.createdAt !== draft.updatedAt && (
-                          <> • Created: {formatDate(draft.createdAt)}</>
-                        )}
+                        Created: {formatDate(draft.createdAt)}
                       </span>
-                    </div>
+                    )}
                   </div>
                   <Button
                     variant="outline"
