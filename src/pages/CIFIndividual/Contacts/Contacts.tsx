@@ -7,7 +7,7 @@ import NumberInput from 'atomic-components/NumberInput/NumberInput';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import ListButton from 'atomic-components/ListButton/ListButton';
 import Button from 'atomic-components/Button/Button';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
   address1Used: string;

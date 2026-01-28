@@ -3,7 +3,7 @@ import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
   employeeID: string;

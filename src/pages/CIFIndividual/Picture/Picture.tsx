@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Camera, Upload } from 'lucide-react';
 import Button from 'atomic-components/Button/Button';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 import PictureStyles from './Picture.module.scss';
 
 type ImageType = 'Picture1' | 'Picture2' | 'Signature1' | 'Signature2';

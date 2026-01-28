@@ -14,7 +14,7 @@ import FinancialTab from './Financial/Financial';
 import AmlaTab from './Amla/Amla';
 import RemarksTab from './Remarks/Remarks';
 import PictureTab from './Picture/Picture';
-import styles from './ClientInformationSystemInsert.module.scss';
+import styles from './CIFIndividual.module.scss';
 
 type TabType =
   | 'individual'

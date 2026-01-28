@@ -1,7 +1,7 @@
 import React from 'react';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import Textarea from 'atomic-components/Textarea/Textarea';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
   insufficientInformation: boolean;

@@ -5,7 +5,7 @@ import Radio from 'atomic-components/Radio/Radio';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
 import Button from 'atomic-components/Button/Button';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
   // Employee Related Account (ERA)

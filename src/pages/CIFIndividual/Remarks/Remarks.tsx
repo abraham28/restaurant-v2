@@ -3,7 +3,7 @@ import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
 import Radio from 'atomic-components/Radio/Radio';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 
 interface FormData {

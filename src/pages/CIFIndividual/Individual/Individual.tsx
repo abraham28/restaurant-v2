@@ -8,7 +8,7 @@ import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import Button from 'atomic-components/Button/Button';
-import styles from '../ClientInformationSystemInsert.module.scss';
+import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
   title: string;
