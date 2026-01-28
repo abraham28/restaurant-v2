@@ -5,7 +5,8 @@ import Button from 'atomic-components/Button/Button';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import { ROUTES } from 'utils/constants';
 import { useClientFormStore, ClientFormData } from 'stores/clientFormStore';
-import { generateDraftId } from 'utils/indexedDBUtils';
+import { generateDraftId, storeData, getData } from 'utils/indexedDBUtils';
+import { csvToObjects } from 'utils/csvUtils';
 import IndividualTab from './Individual/Individual';
 import ContactsTab from './Contacts/Contacts';
 import DocumentsTab from './Documents/Documents';
@@ -33,6 +34,8 @@ function ClientInformationSystemInsert() {
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+  const [titleOptions, setTitleOptions] = useState<string[]>([]);
+  const [isLoadingTitles, setIsLoadingTitles] = useState(true);
 
   // Zustand store hooks
   const formData = useClientFormStore((state) => state.formData);
@@ -63,6 +66,68 @@ function ClientInformationSystemInsert() {
     };
     void loadData();
   }, [loadFormFromIndexedDB, draftId, setDraftId, setClientType]);
+
+  // Load titles from CSV file
+  useEffect(() => {
+    const loadTitles = async () => {
+      setIsLoadingTitles(true);
+      try {
+        // Try to get from IndexedDB cache first
+        const cachedTitles =
+          await getData<Record<string, string>[]>('cifTitles');
+
+        if (cachedTitles && cachedTitles.length > 0) {
+          // Extract title descriptions from CSV objects and remove trailing periods
+          const titles = cachedTitles
+            .map(
+              (row: Record<string, string>) =>
+                row.Description?.replace(/\.$/, '') || '',
+            )
+            .filter((title) => title.length > 0);
+          setTitleOptions(titles);
+          setIsLoadingTitles(false);
+        }
+
+        // Try to fetch from CSV file
+        try {
+          const response = await fetch('/data/cifTableOfRecord/cifTitle.csv');
+          if (!response.ok) throw new Error('Failed to fetch titles CSV');
+          const csvText = await response.text();
+          const { data, errors } = csvToObjects(csvText, {
+            searchColumns: ['titleid', 'description'],
+          });
+
+          if (errors.length > 0) {
+            console.warn('CSV parsing errors:', errors);
+          }
+
+          // Extract title descriptions from CSV objects and remove trailing periods
+          const titles = data
+            .map(
+              (row: Record<string, string>) =>
+                row.Description?.replace(/\.$/, '') || '',
+            )
+            .filter((title) => title.length > 0);
+
+          // Cache in IndexedDB for offline access
+          await storeData('cifTitles', data);
+          setTitleOptions(titles);
+        } catch (networkError) {
+          // If fetch fails and we don't have cached data, use empty array
+          if (!cachedTitles || cachedTitles.length === 0) {
+            console.error('Failed to load titles:', networkError);
+            setTitleOptions([]);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading titles:', error);
+        setTitleOptions([]);
+      } finally {
+        setIsLoadingTitles(false);
+      }
+    };
+    void loadTitles();
+  }, []);
 
   const handleInputChange = useCallback(
     (field: keyof ClientFormData, value: string | number | boolean) => {
@@ -140,7 +205,7 @@ function ClientInformationSystemInsert() {
   // Don't render until initial data sync is complete
   // This ensures form fields are populated with saved data before rendering
   // IMPORTANT: This check must be AFTER all hooks are called
-  if (!isInitialLoadComplete || isLoading) {
+  if (!isInitialLoadComplete || isLoading || isLoadingTitles) {
     return (
       <div className={styles.container}>
         <div className={styles.loadingState}>
@@ -149,9 +214,6 @@ function ClientInformationSystemInsert() {
       </div>
     );
   }
-
-  // Mock data for dropdowns
-  const titleOptions = ['MR', 'MRS', 'MS', 'DR', 'ENG', 'ATTY'];
   const suffixOptions = ['JR', 'SR', 'II', 'III', 'IV', 'V', 'NONE'];
   const genderOptions = ['Male', 'Female', 'None'];
   const maritalStatusOptions = ['Single', 'Married', 'Divorced', 'Widowed'];

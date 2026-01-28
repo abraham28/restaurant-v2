@@ -93,6 +93,105 @@ export const findHeaderRow = (
   return 0;
 };
 
+/**
+ * Generic CSV to Objects converter
+ * Converts CSV text to an array of objects where keys are column names
+ *
+ * @param csvText - The CSV text content
+ * @param options - Optional configuration
+ * @param options.headerRowIndex - Explicit header row index (0-based). If not provided, will auto-detect
+ * @param options.searchColumns - Column names to search for when auto-detecting header row
+ * @param options.skipEmptyRows - Whether to skip empty rows (default: true)
+ * @returns Object with `data` array and `errors` array
+ *
+ * @example
+ * const result = csvToObjects(csvText);
+ * // result.data = [{ TitleID: '1', Description: 'MR.', ... }, ...]
+ * // result.errors = []
+ */
+export const csvToObjects = (
+  csvText: string,
+  options?: {
+    headerRowIndex?: number;
+    searchColumns?: string[];
+    skipEmptyRows?: boolean;
+  },
+): { data: Record<string, string>[]; errors: string[] } => {
+  const errors: string[] = [];
+  const data: Record<string, string>[] = [];
+  const skipEmptyRows = options?.skipEmptyRows ?? true;
+
+  try {
+    // Split into lines (respecting quoted fields)
+    const lines = splitCSVLines(csvText);
+
+    if (lines.length < 2) {
+      throw new Error(
+        'CSV file must have at least a header row and one data row',
+      );
+    }
+
+    // Determine header row index
+    let headerRowIndex: number;
+    if (options?.headerRowIndex !== undefined) {
+      headerRowIndex = options.headerRowIndex;
+    } else {
+      const searchColumns = options?.searchColumns || ['id', 'name'];
+      headerRowIndex = findHeaderRow(lines, searchColumns);
+    }
+
+    // Parse header
+    const headerLine = lines[headerRowIndex];
+    const headers = parseCSVLine(headerLine).map((h) =>
+      h.replace(/^"|"$/g, '').trim(),
+    );
+
+    if (headers.length === 0) {
+      throw new Error('No headers found in CSV file');
+    }
+
+    // Process data rows (skip header row and any rows before it)
+    for (let i = headerRowIndex + 1; i < lines.length; i++) {
+      const line = lines[i];
+      const cells = parseCSVLine(line).map((cell) =>
+        cell.replace(/^"|"$/g, '').replace(/""/g, '"'),
+      );
+
+      // Skip empty rows if option is enabled
+      if (skipEmptyRows) {
+        const isEmpty = cells.every((cell) => !cell.trim());
+        if (isEmpty) continue;
+      }
+
+      try {
+        // Create object with header names as keys
+        const rowObject: Record<string, string> = {};
+        headers.forEach((header, index) => {
+          rowObject[header] = cells[index]?.trim() || '';
+        });
+
+        data.push(rowObject);
+      } catch (err) {
+        errors.push(
+          `Row ${i + 1}: ${
+            err instanceof Error ? err.message : 'Unknown error'
+          }`,
+        );
+      }
+    }
+
+    if (data.length === 0 && errors.length === 0) {
+      throw new Error('No valid data rows found in CSV file');
+    }
+  } catch (err) {
+    errors.push(
+      err instanceof Error ? err.message : 'Failed to parse CSV file',
+    );
+  }
+
+  return { data, errors };
+};
+
 // Generic CSV export function
 export const exportToCSV = (
   headers: string[],
