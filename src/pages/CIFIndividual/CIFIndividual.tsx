@@ -6,6 +6,7 @@ import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredF
 import { ROUTES } from 'utils/constants';
 import { useClientFormStore, ClientFormData } from 'stores/clientFormStore';
 import { generateDraftId } from 'utils/indexedDBUtils';
+import { useCsvToObj } from 'hooks/useCsvToObj';
 import IndividualTab from './Individual/Individual';
 import ContactsTab from './Contacts/Contacts';
 import DocumentsTab from './Documents/Documents';
@@ -33,6 +34,19 @@ function ClientInformationSystemInsert() {
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+
+  // Load titles from CSV file using reusable hook
+  const { data: titleOptions, loading: isLoadingTitles } = useCsvToObj<string>(
+    '/data/cifTableOfRecord/cifTitle.csv',
+    'cifTitles',
+    {
+      searchColumns: ['titleid', 'description'],
+      mapData: (row) => {
+        const description = row.Description?.replace(/\.$/, '') || '';
+        return description.length > 0 ? description : undefined;
+      },
+    },
+  );
 
   // Zustand store hooks
   const formData = useClientFormStore((state) => state.formData);
@@ -140,7 +154,7 @@ function ClientInformationSystemInsert() {
   // Don't render until initial data sync is complete
   // This ensures form fields are populated with saved data before rendering
   // IMPORTANT: This check must be AFTER all hooks are called
-  if (!isInitialLoadComplete || isLoading) {
+  if (!isInitialLoadComplete || isLoading || isLoadingTitles) {
     return (
       <div className={styles.container}>
         <div className={styles.loadingState}>
@@ -149,9 +163,6 @@ function ClientInformationSystemInsert() {
       </div>
     );
   }
-
-  // Mock data for dropdowns
-  const titleOptions = ['MR', 'MRS', 'MS', 'DR', 'ENG', 'ATTY'];
   const suffixOptions = ['JR', 'SR', 'II', 'III', 'IV', 'V', 'NONE'];
   const genderOptions = ['Male', 'Female', 'None'];
   const maritalStatusOptions = ['Single', 'Married', 'Divorced', 'Widowed'];
