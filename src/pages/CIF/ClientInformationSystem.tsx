@@ -70,8 +70,9 @@ function ClientInformationSystem() {
       navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
     } else if (selectedClientType === 'Government') {
       navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT);
+    } else if (selectedClientType === 'Organization') {
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT);
     }
-    // TODO: Add navigation for Organization client type
     handleCloseModal();
   }, [navigate, handleCloseModal, selectedClientType]);
 
@@ -90,6 +91,8 @@ function ClientInformationSystem() {
           navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
         } else if (clientType === 'Government') {
           navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT);
+        } else if (clientType === 'Organization') {
+          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT);
         } else {
           navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
         }

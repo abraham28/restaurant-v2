@@ -15,6 +15,7 @@ export const ROUTES = {
     IDIVIDUAL_INSERT: '/client-information-system/individual/insert',
     COMPANY_INSERT: '/client-information-system/company/insert',
     GOVERNMENT_INSERT: '/client-information-system/government/insert',
+    ORGANIZATION_INSERT: '/client-information-system/organization/insert',
   },
 };
 
