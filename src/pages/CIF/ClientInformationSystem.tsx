@@ -65,8 +65,10 @@ function ClientInformationSystem() {
     // Navigate based on selected client type
     if (selectedClientType === 'Individual') {
       navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+    } else if (selectedClientType === 'Company') {
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
     }
-    // TODO: Add navigation for other client types (Company, Government, Organization)
+    // TODO: Add navigation for other client types (Government, Organization)
     handleCloseModal();
   }, [navigate, handleCloseModal, selectedClientType]);
 
