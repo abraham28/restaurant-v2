@@ -6,6 +6,7 @@ import Radio from 'atomic-components/Radio/Radio';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
+import AgeInput from 'atomic-components/AgeInput/AgeInput';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import Button from 'atomic-components/Button/Button';
 import styles from '../CIFIndividual.module.scss';
@@ -166,12 +167,7 @@ function IndividualTab({
 
             <div className={styles.field}>
               <label className={styles.label}>Age</label>
-              <input
-                type="text"
-                value={formData.age || ''}
-                readOnly
-                className={styles.readOnlyInput}
-              />
+              <AgeInput value={formData.age} placeholder="Age" />
             </div>
 
             <div className={styles.field}>

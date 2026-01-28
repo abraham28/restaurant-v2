@@ -163,7 +163,8 @@ function ClientInformationSystemInsert() {
     'Enhanced',
   ];
   const clientStatusOptions = ['Active', 'Inactive', 'Suspended', 'Closed'];
-  const companyTypeOptions = ['None',
+  const companyTypeOptions = [
+    'None',
     'Corporation and Partnerships',
     'One Person Corporation',
     'Sole or One Proprietorship',

@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  height: var(--input-height);
+  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+  border: 1px solid hsl(0 0% 85%);
+  border-radius: var(--border-radius-medium);
+  font-size: var(--input-font-size);
+  line-height: var(--input-line-height);
+  background-color: var(--color-disabled-bg);
+  color: var(--color-text);
+  cursor: not-allowed;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px hsla(222.2, 47.4%, 11.2%, 0.1);
+  }
+
+  &::placeholder {
+    color: hsl(0 0% 60%);
+  }
+}
