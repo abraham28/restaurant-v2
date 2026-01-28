@@ -183,6 +183,28 @@ export interface ClientFormData {
   clientPicture2: string;
   signaturePicture1: string;
   signaturePicture2: string;
+  // Company Information
+  companyType: string;
+  companyName: string;
+  registeredName: string;
+  tin: string;
+  startOfBusiness: string;
+  numberOfEmployees: number;
+  trader1: string;
+  trader2: string;
+  firmSize: string;
+  conglomerateDomain: string;
+  entityLocation: string;
+  countryOfOrigin: string;
+  placeOfRegistration: string;
+  legalForm: string;
+  originOfEntity: string;
+  netTaxableIncome: number;
+  monthlyExpenses: number;
+  parentClient: string;
+  roleOfParent: string;
+  contactPerson: string;
+  designation: string;
 }
 
 /**
@@ -319,6 +341,27 @@ const initialFormData: ClientFormData = {
   clientPicture2: '',
   signaturePicture1: '',
   signaturePicture2: '',
+  companyType: 'Corporation and Partnerships',
+  companyName: '',
+  registeredName: '',
+  tin: '',
+  startOfBusiness: '1900-01-01',
+  numberOfEmployees: 0,
+  trader1: '',
+  trader2: '',
+  firmSize: 'None',
+  conglomerateDomain: '',
+  entityLocation: '',
+  countryOfOrigin: '',
+  placeOfRegistration: '',
+  legalForm: '',
+  originOfEntity: '',
+  netTaxableIncome: 0,
+  monthlyExpenses: 0,
+  parentClient: '',
+  roleOfParent: '',
+  contactPerson: '',
+  designation: '',
 };
 
 /**

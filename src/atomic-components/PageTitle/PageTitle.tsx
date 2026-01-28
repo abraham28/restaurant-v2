@@ -7,7 +7,19 @@ const APP_NAME = 'core-banking';
 const routeTitles: Record<string, string> = {
   '/': 'Menu',
   '/client-information-system': 'Client Information System',
-  '/client-information-system/insert': 'Client Information System - Insert',
+  '/client-information-system/individual/insert':
+    'Client Information System - Individual - Insert',
+  '/client-information-system/company': 'Client Information System - Company',
+  '/client-information-system/company/insert':
+    'Client Information System - Company - Insert',
+  '/client-information-system/government':
+    'Client Information System - Government',
+  '/client-information-system/government/insert':
+    'Client Information System - Government - Insert',
+  '/client-information-system/organization':
+    'Client Information System - Organization',
+  '/client-information-system/organization/insert':
+    'Client Information System - Organization - Insert',
 };
 
 // Function to get title from path
