@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button/Button';
@@ -15,10 +15,10 @@ import FinancialTab from './Financial/Financial';
 import AmlaTab from './Amla/Amla';
 import RemarksTab from './Remarks/Remarks';
 import PictureTab from './Picture/Picture';
-import styles from './CIFCompany.module.scss';
+import styles from './CIFGovernment.module.scss';
 
 type TabType =
-  | 'Company'
+  | 'Government'
   | 'contacts'
   | 'documents'
   | 'employment'
@@ -32,13 +32,11 @@ function ClientInformationSystemInsert() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
-  const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
+  const hasLoadedRef = useRef(false);
 
   // Zustand store hooks
   const formData = useClientFormStore((state) => state.formData);
   const activeTab = useClientFormStore((state) => state.activeTab);
-  const isLoading = useClientFormStore((state) => state.isLoading);
-  const draftId = useClientFormStore((state) => state.draftId);
   const setFormData = useClientFormStore((state) => state.setFormData);
   const setActiveTab = useClientFormStore((state) => state.setActiveTab);
   const resetForm = useClientFormStore((state) => state.resetForm);
@@ -48,21 +46,37 @@ function ClientInformationSystemInsert() {
     (state) => state.loadFormFromIndexedDB,
   );
 
-  // Load saved form data from IndexedDB on component mount
-  // Don't render until data is synced
+  // Load saved form data from IndexedDB on component mount - ONLY ONCE
+  // Form renders immediately with cached data, updates when IndexedDB loads
   useEffect(() => {
+    // Prevent multiple fetches
+    if (hasLoadedRef.current) return;
+
     const loadData = async () => {
-      // Set client type to Company for this page
-      setClientType('Company');
+      hasLoadedRef.current = true;
+
+      // Set client type to Government for this page
+      setClientType('Government');
+
+      // Set default active tab to Government if coming from other client types
+      const currentTab = useClientFormStore.getState().activeTab;
+      if (currentTab === 'individual' || currentTab === 'Company') {
+        setActiveTab('Government');
+      }
+
+      // Fetch all form data from IndexedDB in one go
       await loadFormFromIndexedDB();
+
       // Generate draft ID if not exists (for new forms)
-      if (!draftId) {
+      const currentDraftId = useClientFormStore.getState().draftId;
+      if (!currentDraftId) {
         setDraftId(generateDraftId());
       }
-      setIsInitialLoadComplete(true);
     };
+
     void loadData();
-  }, [loadFormFromIndexedDB, draftId, setDraftId, setClientType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array - only run once on mount
 
   const handleInputChange = useCallback(
     (field: keyof ClientFormData, value: string | number | boolean) => {
@@ -127,18 +141,8 @@ function ClientInformationSystemInsert() {
     [setFormData],
   );
 
-  // Don't render until initial data sync is complete
-  // This ensures form fields are populated with saved data before rendering
-  // IMPORTANT: This check must be AFTER all hooks are called
-  if (!isInitialLoadComplete || isLoading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.loadingState}>
-          <div>Loading form data...</div>
-        </div>
-      </div>
-    );
-  }
+  // Render immediately with cached data - don't block UI while loading
+  // The form will update automatically when IndexedDB data loads
 
   // Mock data for dropdowns
   const countryCodeOptions = ['+63', '+1', '+44', '+61', '+65', '+66'];
@@ -175,7 +179,7 @@ function ClientInformationSystemInsert() {
   const firmSizeOptions = ['None', 'Small', 'Medium', 'Large'];
 
   const tabs: { id: TabType; label: string }[] = [
-    { id: 'Company', label: 'Company' },
+    { id: 'Government', label: 'Government' },
     { id: 'contacts', label: 'Contacts/Addresses/IDs' },
     { id: 'documents', label: 'Documents' },
     { id: 'employment', label: 'Employment' },
@@ -225,34 +229,18 @@ function ClientInformationSystemInsert() {
       </div>
 
       <div className={styles.content}>
-        {activeTab === 'individual' && (
+        {activeTab === 'Government' && (
           <IndividualTab
             formData={{
-              companyType:
-                formData.companyType || 'Corporation and Partnerships',
               companyName: formData.companyName || '',
-              registeredName: formData.registeredName || '',
-              tin: formData.tin || '',
               startOfBusiness: formData.startOfBusiness || '1900-01-01',
-              numberOfEmployees: formData.numberOfEmployees || 0,
-              trader1: formData.trader1 || '',
-              trader2: formData.trader2 || '',
-              firmSize: formData.firmSize || 'None',
-              conglomerateDomain: formData.conglomerateDomain || '',
-              entityLocation: formData.entityLocation || '',
-              countryOfOrigin: formData.countryOfOrigin || '',
-              placeOfRegistration: formData.placeOfRegistration || '',
-              legalForm: formData.legalForm || '',
-              industry: formData.industry || '',
-              originOfEntity: formData.originOfEntity || '',
-              businessActivity: formData.businessActivity || '',
-              netTaxableIncome: formData.netTaxableIncome || 0,
-              monthlyExpenses: formData.monthlyExpenses || 0,
-              parentClient: formData.parentClient || '',
-              roleOfParent: formData.roleOfParent || '',
               contactPerson: formData.contactPerson || '',
               designation: formData.designation || '',
-              nationality: formData.nationality || 'Filipino',
+              countryOfOrigin: formData.countryOfOrigin || '',
+              originOfEntity: formData.originOfEntity || '',
+              placeOfRegistration: formData.placeOfRegistration || '',
+              legalForm: formData.legalForm || '',
+              businessActivity: formData.businessActivity || '',
             }}
             onInputChange={handleCompanyInputChange}
             onDateChange={handleCompanyDateChange}

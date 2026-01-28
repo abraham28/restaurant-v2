@@ -9,6 +9,7 @@ import { ROUTES } from 'utils/constants';
 import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
 import ClientInformationSystemInsert from 'pages/CIFIndividual/CIFIndividual';
 import CIFCompany from 'pages/CIFCompany';
+import CIFGovernment from 'pages/CIFGovernment';
 
 function AppContent() {
   return (
@@ -19,12 +20,16 @@ function AppContent() {
         element={<ClientInformationSystem />}
       />
       <Route
-        path={ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT}
+        path={ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT}
         element={<ClientInformationSystemInsert />}
       />
       <Route
         path={ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT}
         element={<CIFCompany />}
+      />
+      <Route
+        path={ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT}
+        element={<CIFGovernment />}
       />
     </Routes>
   );

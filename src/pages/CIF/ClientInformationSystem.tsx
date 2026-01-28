@@ -65,11 +65,13 @@ function ClientInformationSystem() {
   const handleModalOk = useCallback(() => {
     // Navigate based on selected client type
     if (selectedClientType === 'Individual') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
     } else if (selectedClientType === 'Company') {
       navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
+    } else if (selectedClientType === 'Government') {
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT);
     }
-    // TODO: Add navigation for other client types (Government, Organization)
+    // TODO: Add navigation for Organization client type
     handleCloseModal();
   }, [navigate, handleCloseModal, selectedClientType]);
 
@@ -86,14 +88,16 @@ function ClientInformationSystem() {
         // Navigate based on client type
         if (clientType === 'Company') {
           navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
+        } else if (clientType === 'Government') {
+          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT);
         } else {
-          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
         }
       } catch (error) {
         console.error('Failed to load draft:', error);
         // Fallback to Individual route
         await loadDraft(draftId);
-        navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+        navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
       }
     },
     [loadDraft, navigate],
