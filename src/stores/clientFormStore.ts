@@ -17,6 +17,9 @@ import {
   storeClientFormData,
   getClientFormData,
   removeClientFormData,
+  storeDraft,
+  getDraft,
+  generateDraftId,
 } from 'utils/indexedDBUtils';
 
 /**
@@ -325,11 +328,14 @@ interface ClientFormState {
   formData: ClientFormData;
   activeTab: string;
   isLoading: boolean;
+  draftId: string | null; // Current draft ID being edited
   // Actions
   setFormData: (data: Partial<ClientFormData>) => void;
   setActiveTab: (tab: string) => void;
   resetForm: () => void;
   loadFormFromIndexedDB: () => Promise<void>;
+  setDraftId: (draftId: string | null) => void;
+  loadDraft: (draftId: string) => Promise<void>;
   // Internal: Auto-save function (called automatically on form data changes)
   _autoSave: () => Promise<void>;
 }
@@ -346,6 +352,7 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
   formData: initialFormData,
   activeTab: 'individual',
   isLoading: false,
+  draftId: null,
 
   /**
    * Update form data and auto-save to IndexedDB
@@ -369,10 +376,37 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
   },
 
   /**
+   * Set draft ID (used when editing an existing draft or creating new one)
+   */
+  setDraftId: (draftId) => {
+    set({ draftId });
+  },
+
+  /**
+   * Load a specific draft by ID
+   */
+  loadDraft: async (draftId: string) => {
+    set({ isLoading: true });
+    try {
+      const draft = await getDraft<ClientFormData>(draftId);
+      if (draft) {
+        set({
+          formData: draft.formData,
+          draftId: draft.id,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to load draft from IndexedDB:', error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  /**
    * Reset form to initial state and clear IndexedDB
    */
   resetForm: () => {
-    set({ formData: initialFormData, activeTab: 'individual' });
+    set({ formData: initialFormData, activeTab: 'individual', draftId: null });
     void removeClientFormData().catch((error) => {
       console.error('Failed to remove form data from IndexedDB:', error);
     });
@@ -397,12 +431,30 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
   },
 
   /**
-   * Internal: Auto-save form data to IndexedDB
+   * Internal: Auto-save form data to IndexedDB as draft
    * Called automatically whenever formData changes
    */
   _autoSave: async () => {
     try {
-      await storeClientFormData(get().formData);
+      const state = get();
+      const currentDraftId = state.draftId || generateDraftId();
+
+      // Generate client name from form data
+      const clientName =
+        state.formData.firstName || state.formData.lastName
+          ? `${state.formData.firstName || ''} ${state.formData.lastName || ''}`.trim()
+          : undefined;
+
+      // Save as draft
+      await storeDraft(currentDraftId, state.formData, clientName);
+
+      // Update draftId if it was null (first save)
+      if (!state.draftId) {
+        set({ draftId: currentDraftId });
+      }
+
+      // Also save to client_form_data for backward compatibility
+      await storeClientFormData(state.formData);
     } catch (error) {
       console.error('Failed to auto-save form data to IndexedDB:', error);
     }

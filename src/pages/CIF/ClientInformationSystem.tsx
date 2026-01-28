@@ -1,18 +1,30 @@
-import React, { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button/Button';
 import Radio from 'atomic-components/Radio/Radio';
 import { ROUTES } from 'utils/constants';
+import {
+  getAllDrafts,
+  deleteDraft,
+  type DraftMetadata,
+} from 'utils/indexedDBUtils';
+import { useClientFormStore } from 'stores/clientFormStore';
 import styles from './ClientInformationSystem.module.scss';
 
 type ClientType = 'Individual' | 'Company' | 'Government' | 'Organization';
 
 function ClientInformationSystem() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showModal, setShowModal] = useState(false);
   const [selectedClientType, setSelectedClientType] =
     useState<ClientType>('Individual');
+  const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadDraft = useClientFormStore((state) => state.loadDraft);
+  const resetForm = useClientFormStore((state) => state.resetForm);
 
   const clientTypeOptions: ClientType[] = [
     'Individual',
@@ -21,9 +33,28 @@ function ClientInformationSystem() {
     'Organization',
   ];
 
-  const handleAdd = useCallback(() => {
-    setShowModal(true);
+  // Load drafts function
+  const loadDrafts = useCallback(async () => {
+    setLoading(true);
+    try {
+      const allDrafts = await getAllDrafts();
+      setDrafts(allDrafts);
+    } catch (error) {
+      console.error('Failed to load drafts:', error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // Load drafts on component mount and when location changes (user navigates back)
+  useEffect(() => {
+    void loadDrafts();
+  }, [loadDrafts, location.pathname]);
+
+  const handleAdd = useCallback(() => {
+    resetForm(); // Clear any existing form data
+    setShowModal(true);
+  }, [resetForm]);
 
   const handleCloseModal = useCallback(() => {
     setShowModal(false);
@@ -39,6 +70,43 @@ function ClientInformationSystem() {
     handleCloseModal();
   }, [navigate, handleCloseModal, selectedClientType]);
 
+  const handleDraftClick = useCallback(
+    async (draftId: string) => {
+      await loadDraft(draftId);
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+    },
+    [loadDraft, navigate],
+  );
+
+  const handleDeleteDraft = useCallback(
+    async (draftId: string, e: React.MouseEvent) => {
+      e.stopPropagation(); // Prevent triggering draft click
+      if (window.confirm('Are you sure you want to delete this draft?')) {
+        try {
+          await deleteDraft(draftId);
+          // Reload drafts list
+          const allDrafts = await getAllDrafts();
+          setDrafts(allDrafts);
+        } catch (error) {
+          console.error('Failed to delete draft:', error);
+          alert('Failed to delete draft. Please try again.');
+        }
+      }
+    },
+    [],
+  );
+
+  const formatDate = useCallback((timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -48,7 +116,47 @@ function ClientInformationSystem() {
         </Button>
       </div>
       <div className={styles.content}>
-        <div className={styles.helloWorld}>Hello World</div>
+        <div className={styles.draftsSection}>
+          <h2 className={styles.draftsTitle}>Drafts</h2>
+          {loading ? (
+            <div className={styles.loadingState}>Loading drafts...</div>
+          ) : drafts.length === 0 ? (
+            <div className={styles.emptyState}>No drafts found</div>
+          ) : (
+            <div className={styles.draftsList}>
+              {drafts.map((draft) => (
+                <div
+                  key={draft.id}
+                  className={styles.draftItem}
+                  onClick={() => {
+                    void handleDraftClick(draft.id);
+                  }}
+                >
+                  <div className={styles.draftContent}>
+                    <div className={styles.draftName}>{draft.clientName}</div>
+                    <div className={styles.draftMeta}>
+                      <span className={styles.draftDate}>
+                        Updated: {formatDate(draft.updatedAt)}
+                        {draft.createdAt !== draft.updatedAt && (
+                          <> • Created: {formatDate(draft.createdAt)}</>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      void handleDeleteDraft(draft.id, e);
+                    }}
+                    className={styles.deleteButton}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <Modal show={showModal} onHide={handleCloseModal} centered>

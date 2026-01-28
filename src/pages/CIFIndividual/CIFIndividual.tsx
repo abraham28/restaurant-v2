@@ -5,6 +5,7 @@ import Button from 'atomic-components/Button/Button';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import { ROUTES } from 'utils/constants';
 import { useClientFormStore, ClientFormData } from 'stores/clientFormStore';
+import { generateDraftId } from 'utils/indexedDBUtils';
 import IndividualTab from './Individual/Individual';
 import ContactsTab from './Contacts/Contacts';
 import DocumentsTab from './Documents/Documents';
@@ -37,9 +38,11 @@ function ClientInformationSystemInsert() {
   const formData = useClientFormStore((state) => state.formData);
   const activeTab = useClientFormStore((state) => state.activeTab);
   const isLoading = useClientFormStore((state) => state.isLoading);
+  const draftId = useClientFormStore((state) => state.draftId);
   const setFormData = useClientFormStore((state) => state.setFormData);
   const setActiveTab = useClientFormStore((state) => state.setActiveTab);
   const resetForm = useClientFormStore((state) => state.resetForm);
+  const setDraftId = useClientFormStore((state) => state.setDraftId);
   const loadFormFromIndexedDB = useClientFormStore(
     (state) => state.loadFormFromIndexedDB,
   );
@@ -49,10 +52,14 @@ function ClientInformationSystemInsert() {
   useEffect(() => {
     const loadData = async () => {
       await loadFormFromIndexedDB();
+      // Generate draft ID if not exists (for new forms)
+      if (!draftId) {
+        setDraftId(generateDraftId());
+      }
       setIsInitialLoadComplete(true);
     };
     void loadData();
-  }, [loadFormFromIndexedDB]);
+  }, [loadFormFromIndexedDB, draftId, setDraftId]);
 
   const handleInputChange = useCallback(
     (field: keyof ClientFormData, value: string | number | boolean) => {
