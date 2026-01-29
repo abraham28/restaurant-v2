@@ -17,3 +17,9 @@ declare module '*.svg' {
   const src: string;
   export default src;
 }
+
+// Type declarations for JSON files
+declare module '*.json' {
+  const value: unknown;
+  export default value;
+}

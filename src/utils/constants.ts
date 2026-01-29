@@ -17,6 +17,9 @@ export const ROUTES = {
     GOVERNMENT_INSERT: '/client-information-system/government/insert',
     ORGANIZATION_INSERT: '/client-information-system/organization/insert',
   },
+  CSV_UTILS: {
+    CSV_TO_JSON: '/csvutils/csvtojson',
+  },
 };
 
 // Encryption Constants

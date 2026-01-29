@@ -6,7 +6,9 @@ import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredF
 import { ROUTES } from 'utils/constants';
 import { useClientFormStore, ClientFormData } from 'stores/clientFormStore';
 import { generateDraftId } from 'utils/indexedDBUtils';
-import { useCsvToObj } from 'hooks/useCsvToObj';
+import { useJsonToObj } from 'hooks/useJsonToObj';
+import cifTitleData from 'data/cifTableOfRecord/cifTitle.json';
+import cifClientNameSuffixData from 'data/cifTableOfRecord/cifClientNameSuffix.json';
 import IndividualTab from './Individual/Individual';
 import ContactsTab from './Contacts/Contacts';
 import DocumentsTab from './Documents/Documents';
@@ -35,18 +37,31 @@ function ClientInformationSystemInsert() {
   const [modalTitle, setModalTitle] = useState('');
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
 
-  // Load titles from CSV file using reusable hook
-  const { data: titleOptions, loading: isLoadingTitles } = useCsvToObj<string>(
-    '/data/cifTableOfRecord/cifTitle.csv',
+  // Load titles from JSON file using reusable hook
+  const { data: titleOptions, loading: isLoadingTitles } = useJsonToObj<string>(
+    cifTitleData,
     'cifTitles',
     {
-      searchColumns: ['titleid', 'description'],
-      mapData: (row) => {
-        const description = row.Description?.replace(/\.$/, '') || '';
+      mapData: (item) => {
+        const description =
+          (item.Description as string)?.replace(/\.$/, '') || '';
         return description.length > 0 ? description : undefined;
       },
     },
   );
+
+  // Load suffixes from JSON file using reusable hook
+  const { data: suffixOptions, loading: isLoadingSuffixes } =
+    useJsonToObj<string>(
+      cifClientNameSuffixData as unknown as Record<string, unknown>[],
+      'cifClientNameSuffixes',
+      {
+        mapData: (item) => {
+          const suffix = (item.Suffix as string)?.replace(/\.$/, '') || '';
+          return suffix.length > 0 ? suffix : undefined;
+        },
+      },
+    );
 
   // Zustand store hooks
   const formData = useClientFormStore((state) => state.formData);
@@ -154,7 +169,12 @@ function ClientInformationSystemInsert() {
   // Don't render until initial data sync is complete
   // This ensures form fields are populated with saved data before rendering
   // IMPORTANT: This check must be AFTER all hooks are called
-  if (!isInitialLoadComplete || isLoading || isLoadingTitles) {
+  if (
+    !isInitialLoadComplete ||
+    isLoading ||
+    isLoadingTitles ||
+    isLoadingSuffixes
+  ) {
     return (
       <div className={styles.container}>
         <div className={styles.loadingState}>
@@ -163,7 +183,6 @@ function ClientInformationSystemInsert() {
       </div>
     );
   }
-  const suffixOptions = ['JR', 'SR', 'II', 'III', 'IV', 'V', 'NONE'];
   const genderOptions = ['Male', 'Female', 'None'];
   const maritalStatusOptions = ['Single', 'Married', 'Divorced', 'Widowed'];
   const bloodTypeOptions = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
