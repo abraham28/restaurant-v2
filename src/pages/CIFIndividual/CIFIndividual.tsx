@@ -6,7 +6,8 @@ import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredF
 import { ROUTES } from 'utils/constants';
 import { useClientFormStore, ClientFormData } from 'stores/clientFormStore';
 import { generateDraftId } from 'utils/indexedDBUtils';
-import { useCsvToObj } from 'hooks/useCsvToObj';
+import { useJsonToObj } from 'hooks/useJsonToObj';
+import cifTitleData from 'data/cifTableOfRecord/cifTitle.json';
 import IndividualTab from './Individual/Individual';
 import ContactsTab from './Contacts/Contacts';
 import DocumentsTab from './Documents/Documents';
@@ -35,14 +36,14 @@ function ClientInformationSystemInsert() {
   const [modalTitle, setModalTitle] = useState('');
   const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
 
-  // Load titles from CSV file using reusable hook
-  const { data: titleOptions, loading: isLoadingTitles } = useCsvToObj<string>(
-    '/data/cifTableOfRecord/cifTitle.csv',
+  // Load titles from JSON file using reusable hook
+  const { data: titleOptions, loading: isLoadingTitles } = useJsonToObj<string>(
+    cifTitleData,
     'cifTitles',
     {
-      searchColumns: ['titleid', 'description'],
-      mapData: (row) => {
-        const description = row.Description?.replace(/\.$/, '') || '';
+      mapData: (item) => {
+        const description =
+          (item.Description as string)?.replace(/\.$/, '') || '';
         return description.length > 0 ? description : undefined;
       },
     },

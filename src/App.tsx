@@ -11,6 +11,7 @@ import ClientInformationSystemInsert from 'pages/CIFIndividual/CIFIndividual';
 import CIFCompany from 'pages/CIFCompany';
 import CIFGovernment from 'pages/CIFGovernment';
 import CIFOrganization from 'pages/CIFOrganization';
+import CsvToJson from 'pages/CsvToJson';
 
 function AppContent() {
   return (
@@ -36,6 +37,7 @@ function AppContent() {
         path={ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT}
         element={<CIFOrganization />}
       />
+      <Route path={ROUTES.CSV_UTILS.CSV_TO_JSON} element={<CsvToJson />} />
     </Routes>
   );
 }
