@@ -1,145 +1,165 @@
 .stepper {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  margin: 0;
-  padding: 0;
+  padding: var(--padding-large);
   gap: 0;
   flex-wrap: nowrap;
+  background-color: var(--color-white);
 }
 
 .step {
-  position: relative;
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  padding: var(--padding-medium) var(--padding-large);
-  padding-right: calc(var(--padding-large) + var(--padding-small));
   display: flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  flex-shrink: 0;
-  clip-path: polygon(
-    0% 0%,
-    calc(100% - 18px) 0%,
-    100% 50%,
-    calc(100% - 18px) 100%,
-    0% 100%
-  );
-  margin-right: 0;
+  position: relative;
   z-index: 1;
-  transition: all 0.2s ease;
-
-  &:first-child {
-    clip-path: polygon(
-      0% 0%,
-      calc(100% - 18px) 0%,
-      100% 50%,
-      calc(100% - 18px) 100%,
-      0% 100%
-    );
-    border-top-left-radius: var(--border-radius-small);
-    border-bottom-left-radius: var(--border-radius-small);
-  }
-
-  &:last-child {
-    clip-path: polygon(
-      0% 0%,
-      100% 0%,
-      100% 100%,
-      0% 100%
-    );
-    border-top-right-radius: var(--border-radius-small);
-    border-bottom-right-radius: var(--border-radius-small);
-    padding-right: calc(var(--padding-large) + var(--padding-small));
-    z-index: 0;
-  }
-
-  &:not(:first-child) {
-    padding-left: calc(var(--padding-large) + 18px);
-  }
+  cursor: default;
 }
 
-.completed {
-  background-color: var(--color-primary);
-}
-
-.current {
-  background-color: hsl(142 100% 50% / 0.2); // transparent green for current step
-  
-  .stepLabel {
-    color: var(--color-primary); // darker green text for visibility
-  }
-}
-
-.clickable {
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--color-primary-hover);
-  }
-  
-  &.current:hover {
-    background-color: hsl(142 100% 50% / 0.3); // slightly darker transparent green on hover
-  }
-}
-
-.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.stepContent {
-  display: flex;
-  align-items: center;
-  gap: var(--padding-small);
-  z-index: 2;
-}
-
-.step.disabled .stepContent {
-  gap: 0;
-}
-
-.stepIcon {
-  width: 24px;
-  height: 24px;
+.outerCircle {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  background-color: var(--color-primary); // primary color default
-  color: var(--color-white);
+  border: 2px solid var(--color-border);
+  background-color: transparent;
   transition: all 0.2s ease;
 }
 
-.iconCompleted {
-  background-color: var(--color-primary); // primary color for completed check circle
-  color: var(--color-white);
+.stepCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
 }
 
-.iconCurrent {
-  background-color: hsl(142 100% 90%); // very light green/white for current step circle
-  color: var(--color-primary); // primary color for checkmark in current step
-}
-
-.stepLabel {
+.stepNumber {
   font-size: var(--font-size-medium);
-  font-weight: 500;
-  color: var(--color-white);
-  white-space: nowrap;
+  font-weight: 600;
+  color: #a0a0a0;
+  transition: all 0.2s ease;
 }
 
+.step.active .outerCircle {
+  border-color: var(--color-border);
+}
 
-// White arrow separator between steps
-.arrow {
-  width: 0;
-  height: 0;
-  border-left: 18px solid var(--color-white);
-  border-top: 20px solid transparent;
-  border-bottom: 20px solid transparent;
-  margin-right: -18px;
-  z-index: 3;
+.step.active .stepCircle {
+  background-color: var(--color-primary);
+  border-color: var(--color-border);
+}
+
+.step.active .stepNumber {
+  color: var(--color-white);
+}
+
+.step.current .outerCircle {
+  border-color: var(--color-border);
+}
+
+.step.current .stepCircle {
+  background-color: var(--color-primary);
+  border-color: var(--color-border);
+}
+
+.step.current .stepNumber {
+  color: var(--color-white);
+}
+
+.step.clickable {
+  cursor: pointer;
+
+  &:hover:not(.disabled) .stepCircle {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 146, 69, 0.3);
+  }
+}
+
+.step.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.connector {
+  height: 6px;
+  flex: 1;
+  min-width: 40px;
+  max-width: 100px;
+  margin: 0;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border-top: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.connectorActive {
+  height: 6px;
+  background-color: var(--color-primary);
+  border-top: none;
+  border-bottom: none;
+}
+
+/* Above 360px when middle steps are collapsed (1..k, last) */
+.stepperCollapsed {
+  flex-wrap: nowrap;
+}
+
+/* Narrow viewport (≤360px): 3 steps + "and more" - design unchanged */
+.stepperNarrow {
+  flex-wrap: nowrap;
+  justify-content: center;
+  overflow: hidden;
+
+  .connector {
+    max-width: 40px;
+    min-width: 20px;
+  }
+
+  /* Lengthen the connector before "X and more" */
+  .connector:has(+ .andMore) {
+    min-width: 48px;
+    max-width: 80px;
+  }
+}
+
+.andMore {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background-color: transparent;
+  box-shadow: 0 1px 3px hsl(0 0% 0% / 0.06);
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+  color: #a0a0a0;
+  white-space: nowrap;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+  }
+}
+
+.andMoreNumber {
+  position: relative;
+  z-index: 1;
 }
