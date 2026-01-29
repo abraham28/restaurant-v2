@@ -7,6 +7,7 @@ import Home from 'pages/home';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
 import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
+import CIFInsert from 'pages/CIFInsert';
 import ClientInformationSystemInsert from 'pages/CIFIndividual/CIFIndividual';
 import CIFCompany from 'pages/CIFCompany';
 import CIFGovernment from 'pages/CIFGovernment';
@@ -20,6 +21,10 @@ function AppContent() {
       <Route
         path={ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT}
         element={<ClientInformationSystem />}
+      />
+      <Route
+        path={ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT}
+        element={<CIFInsert />}
       />
       <Route
         path={ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT}

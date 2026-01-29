@@ -1,0 +1,145 @@
+.stepper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+  flex-wrap: nowrap;
+}
+
+.step {
+  position: relative;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--padding-medium) var(--padding-large);
+  padding-right: calc(var(--padding-large) + var(--padding-small));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  flex-shrink: 0;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - 18px) 0%,
+    100% 50%,
+    calc(100% - 18px) 100%,
+    0% 100%
+  );
+  margin-right: 0;
+  z-index: 1;
+  transition: all 0.2s ease;
+
+  &:first-child {
+    clip-path: polygon(
+      0% 0%,
+      calc(100% - 18px) 0%,
+      100% 50%,
+      calc(100% - 18px) 100%,
+      0% 100%
+    );
+    border-top-left-radius: var(--border-radius-small);
+    border-bottom-left-radius: var(--border-radius-small);
+  }
+
+  &:last-child {
+    clip-path: polygon(
+      0% 0%,
+      100% 0%,
+      100% 100%,
+      0% 100%
+    );
+    border-top-right-radius: var(--border-radius-small);
+    border-bottom-right-radius: var(--border-radius-small);
+    padding-right: calc(var(--padding-large) + var(--padding-small));
+    z-index: 0;
+  }
+
+  &:not(:first-child) {
+    padding-left: calc(var(--padding-large) + 18px);
+  }
+}
+
+.completed {
+  background-color: var(--color-primary);
+}
+
+.current {
+  background-color: hsl(142 100% 50% / 0.2); // transparent green for current step
+  
+  .stepLabel {
+    color: var(--color-primary); // darker green text for visibility
+  }
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
+  
+  &.current:hover {
+    background-color: hsl(142 100% 50% / 0.3); // slightly darker transparent green on hover
+  }
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.stepContent {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-small);
+  z-index: 2;
+}
+
+.step.disabled .stepContent {
+  gap: 0;
+}
+
+.stepIcon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--color-primary); // primary color default
+  color: var(--color-white);
+  transition: all 0.2s ease;
+}
+
+.iconCompleted {
+  background-color: var(--color-primary); // primary color for completed check circle
+  color: var(--color-white);
+}
+
+.iconCurrent {
+  background-color: hsl(142 100% 90%); // very light green/white for current step circle
+  color: var(--color-primary); // primary color for checkmark in current step
+}
+
+.stepLabel {
+  font-size: var(--font-size-medium);
+  font-weight: 500;
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+
+// White arrow separator between steps
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 18px solid var(--color-white);
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  margin-right: -18px;
+  z-index: 3;
+  position: relative;
+  flex-shrink: 0;
+}
