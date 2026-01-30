@@ -2,36 +2,31 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './Stepper.module.scss';
 import { StepperProps } from './types';
 
-/** Below 360px: narrow mode (3 steps + "and more"). */
+/** At or below this width: narrow CSS (smaller connectors). */
 const NARROW_BREAKPOINT_PX = 360;
 
 /**
- * Breakpoint-based max middle index (0-based). Visible steps = [0..maxMiddleIndex, last].
- * - >= 960px: 1,2,3,4,5,6,7,8,9,10 (all steps)
- * - >= 720px: 1,2,3,4,5,6,7,8,10 → maxMiddleIndex = 7
- * - >= 640px: 1,2,3,4,5,6,7,10 → maxMiddleIndex = 6
- * - >= 480px: 1,2,3,4,5,10 → maxMiddleIndex = 4
- * - >= 360px (e.g. 479px): 1,2,3,4,10 → maxMiddleIndex = 3
+ * Max number of circles by breakpoint. When not full width, show (maxVisible - 1) sliding
+ * steps + last (10) so the "next" number stays hidden until you get there.
+ * - >= 960px: all steps
+ * - >= 720px: 8 circles (7 sliding + 10)
+ * - >= 640px: 7 circles (6 sliding + 10)
+ * - >= 480px: 5 circles (4 sliding + 10)
+ * - > 360px: 4 circles (3 sliding + 10)
+ * - <= 360px: 4 circles (3 sliding + 10) e.g. 1,2,3,10 → 2,3,4,10 → 3,4,5,10
  */
-function getMaxMiddleIndexForWidth(width: number, stepsLength: number): number {
-  const maxAllowed = Math.max(0, stepsLength - 2);
-  if (width >= 960) return maxAllowed; // show all 1..10
-  if (width >= 720) return Math.min(7, maxAllowed);
-  if (width >= 640) return Math.min(6, maxAllowed);
-  if (width >= 480) return Math.min(4, maxAllowed);
-  if (width >= 360) return Math.min(3, maxAllowed); // 1,2,3,4,10
-  return maxAllowed;
+function getMaxVisibleForWidth(width: number, stepsLength: number): number {
+  if (width >= 960) return stepsLength;
+  if (width >= 720) return Math.min(8, stepsLength);
+  if (width >= 640) return Math.min(7, stepsLength);
+  if (width >= 480) return Math.min(5, stepsLength);
+  return Math.min(4, stepsLength); // 360px and below: 4 circles (1,2,3,10 style)
 }
 
 function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
-  const [isNarrow, setIsNarrow] = useState(
-    () =>
-      typeof window !== 'undefined' && window.innerWidth < NARROW_BREAKPOINT_PX,
+  const [containerWidth, setContainerWidth] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth : 960,
   );
-  const [maxMiddleIndex, setMaxMiddleIndex] = useState(() => {
-    const w = typeof window !== 'undefined' ? window.innerWidth : 960;
-    return getMaxMiddleIndexForWidth(w, steps.length);
-  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,11 +36,7 @@ function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
     const checkWidth = () => {
       const parent = el.parentElement;
       const width = parent?.clientWidth ?? window.innerWidth;
-      const narrow = width < NARROW_BREAKPOINT_PX;
-      setIsNarrow(narrow);
-      if (!narrow) {
-        setMaxMiddleIndex(getMaxMiddleIndexForWidth(width, steps.length));
-      }
+      setContainerWidth(width);
     };
 
     checkWidth();
@@ -58,29 +49,42 @@ function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
     return () => ro.disconnect();
   }, [steps.length]);
 
-  // Narrow: sliding window of 3 steps + "and more". Wide: all or 1..k, last.
-  const isCollapsed = !isNarrow && maxMiddleIndex < steps.length - 2;
-  const visibleStart = isNarrow
-    ? Math.max(0, Math.min(currentStep - 1, steps.length - 3))
+  const maxVisible = getMaxVisibleForWidth(containerWidth, steps.length);
+  const useSlidingWindow = maxVisible < steps.length;
+  const isNarrow = containerWidth <= NARROW_BREAKPOINT_PX;
+  const lastStepIndex = steps.length - 1;
+
+  // Sliding + last(10): (maxVisible - 1) steps before current + step 10. Next number stays hidden.
+  const slidingCount = maxVisible - 1;
+  const visibleStart = useSlidingWindow
+    ? Math.max(
+        0,
+        Math.min(
+          currentStep - (slidingCount - 1),
+          lastStepIndex - (maxVisible - 1),
+        ),
+      )
     : 0;
-  const visibleEnd = isNarrow
-    ? Math.min(visibleStart + 3, steps.length)
-    : steps.length;
+  const visibleIndices = useSlidingWindow
+    ? (() => {
+        const sliding = Array.from(
+          { length: slidingCount },
+          (_, i) => visibleStart + i,
+        );
+        return sliding.includes(lastStepIndex)
+          ? sliding
+          : [...sliding, lastStepIndex];
+      })()
+    : [];
 
-  const visibleSteps = isNarrow
-    ? steps.slice(visibleStart, visibleEnd)
-    : isCollapsed
-      ? [...steps.slice(0, maxMiddleIndex + 1), steps[steps.length - 1]]
-      : steps;
+  const visibleSteps = useSlidingWindow
+    ? visibleIndices.map((i) => steps[i])
+    : steps;
 
-  const hasMoreAfter = isNarrow && visibleStart + 3 < steps.length;
+  const hasMoreAfter = false;
 
   const getActualIndex = (step: (typeof steps)[0], index: number) => {
-    if (isNarrow) return visibleStart + index;
-    if (isCollapsed) {
-      if (index <= maxMiddleIndex) return index;
-      return steps.length - 1;
-    }
+    if (useSlidingWindow) return visibleIndices[index];
     return index;
   };
 
@@ -124,7 +128,7 @@ function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
     <div
       ref={containerRef}
       className={`${styles.stepper} ${isNarrow ? styles.stepperNarrow : ''} ${
-        isCollapsed ? styles.stepperCollapsed : ''
+        useSlidingWindow ? styles.stepperCollapsed : ''
       }`}
     >
       {visibleSteps.map((step, index) => renderStep(step, index))}
