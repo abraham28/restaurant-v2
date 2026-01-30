@@ -1,0 +1,20 @@
+.navListGroup {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.navGroupLabel {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted, rgba(0, 0, 0, 0.6));
+}
+
+.navSubList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+

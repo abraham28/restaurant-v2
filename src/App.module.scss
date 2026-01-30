@@ -1,0 +1,40 @@
+.resetButton {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: var(--padding-medium) var(--padding-large);
+  background-color: var(--color-error);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-medium);
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-error-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    bottom: 5rem;
+    right: 1rem;
+    padding: var(--padding-small) var(--padding-medium);
+    font-size: var(--font-size-small);
+  }
+}

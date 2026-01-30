@@ -1,0 +1,121 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: var(--padding-medium) var(--padding-large);
+  font-size: var(--font-size-medium);
+  line-height: 1.5;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover:not(.disabled) {
+    border-color: var(--color-primary);
+    background-color: var(--color-hover-bg);
+  }
+
+  &.open {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--color-disabled-bg);
+  }
+}
+
+.displayValue {
+  flex: 1;
+  font-weight: 400;
+  text-align: left;
+
+  &.placeholder {
+    color: var(--color-text-secondary);
+  }
+}
+
+.chevron {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  transition: transform 0.2s ease-in-out;
+
+  &.rotated {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 4px 12px var(--color-shadow);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--padding-medium);
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  font-size: var(--font-size-medium);
+  font-family: inherit;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--color-disabled-bg);
+  }
+
+  &.selected {
+    background-color: var(--color-hover-bg);
+    color: var(--color-primary);
+    font-weight: 500;
+
+    &:hover {
+      background-color: var(--color-hover-bg);
+    }
+  }
+}
+
+.radioText {
+  width: 100%;
+  font-size: var(--font-size-medium);
+}

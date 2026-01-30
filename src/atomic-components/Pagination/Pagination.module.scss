@@ -1,0 +1,147 @@
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: var(--padding-large);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-large);
+  background-color: var(--color-white);
+  box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.pageSize,
+.pageJump {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text);
+  font-size: var(--font-size-medium);
+
+  label {
+    font-size: var(--font-size-medium);
+    color: var(--color-text);
+    margin: var(--margin-none);
+  }
+}
+
+.labelFull {
+  display: inline;
+}
+
+.labelShort {
+  display: none;
+}
+
+.pageSizeSelect,
+.pageJumpInput {
+  min-width: 4.5rem;
+  padding: var(--padding-small) var(--padding-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-small);
+  background-color: var(--color-white);
+  font-size: var(--font-size-medium);
+  color: var(--color-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pageSizeSelect:focus,
+.pageJumpInput:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.pageJumpInput {
+  width: 4.5rem;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pageButton {
+  min-width: 2rem;
+}
+
+.pageButtonActive {
+  pointer-events: none;
+}
+
+.ellipsis {
+  padding: var(--padding-none) var(--padding-medium);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-medium);
+}
+
+@media (max-width: 768px) {
+  .pagination {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .labelFull {
+    display: none;
+  }
+
+  .labelShort {
+    display: inline;
+  }
+
+  .pageSize {
+    justify-self: flex-start;
+    white-space: nowrap;
+  }
+
+  .controls {
+    justify-self: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pageJump {
+    justify-self: flex-end;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 538px) {
+  .pagination {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .controls {
+    order: 1;
+    flex-basis: 100%;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .pageSize {
+    order: 2;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+
+  .pageJump {
+    order: 2;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+}

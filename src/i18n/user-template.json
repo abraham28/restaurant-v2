@@ -1,0 +1,13 @@
+{
+  "_instructions": "This file contains user-specific translation overrides. You can customize any text by adding the translation key and your preferred text. Leave keys you don't want to change out of this file.",
+  "_example": "To change 'welcome' to 'kamusta', add: \"welcome\": \"kamusta\"",
+  "_note": "This file will be merged with base language translations. Only include keys you want to override. Missing keys will use the default translations.",
+  "_how_to_use": "1. Edit the values below to customize translations. 2. Only include keys you want to change. 3. Remove the _instruction lines before sending. 4. Send this JSON file back to be uploaded to your account.",
+  
+  "welcome": "kamusta",
+  "menu": "Menu",
+  "sample": "Your Custom Text Here",
+  "save": "Your Custom Text Here",
+  "cancel": "Your Custom Text Here"
+}
+
