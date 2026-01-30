@@ -1,9 +1,9 @@
 {
   "welcome": "Welcome",
   "menu": "Menu",
-  "sample": "Sample",
-  "sampleCreate": "Sample - Create",
-  "sampleEdit": "Sample - Edit",
+  "sample": "Products",
+  "sampleCreate": "Products - Create",
+  "sampleEdit": "Products - Edit",
   "restaurant": "Restaurant",
   "restaurantLogo": "Restaurant Logo",
   "csvToJson": "CSV to JSON",

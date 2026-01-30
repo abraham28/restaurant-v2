@@ -1,9 +1,9 @@
 {
   "welcome": "Maligayang pagdating",
   "menu": "Menu",
-  "sample": "Sample",
-  "sampleCreate": "Sample - Lumikha",
-  "sampleEdit": "Sample - I-edit",
+  "sample": "Products",
+  "sampleCreate": "Products - Lumikha",
+  "sampleEdit": "Products - I-edit",
   "restaurant": "Restaurant",
   "restaurantLogo": "Restaurant Logo",
   "csvToJson": "CSV to JSON",
