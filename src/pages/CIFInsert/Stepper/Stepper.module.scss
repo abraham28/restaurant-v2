@@ -1,0 +1,165 @@
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--padding-large);
+  gap: 0;
+  flex-wrap: nowrap;
+  background-color: var(--color-white);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  cursor: default;
+}
+
+.outerCircle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-border);
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.stepCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+}
+
+.stepNumber {
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+  color: #a0a0a0;
+  transition: all 0.2s ease;
+}
+
+.step.active .outerCircle {
+  border-color: var(--color-border);
+}
+
+.step.active .stepCircle {
+  background-color: var(--color-primary);
+  border-color: var(--color-border);
+}
+
+.step.active .stepNumber {
+  color: var(--color-white);
+}
+
+.step.current .outerCircle {
+  border-color: var(--color-border);
+}
+
+.step.current .stepCircle {
+  background-color: var(--color-primary);
+  border-color: var(--color-border);
+}
+
+.step.current .stepNumber {
+  color: var(--color-white);
+}
+
+.step.clickable {
+  cursor: pointer;
+
+  &:hover:not(.disabled) .stepCircle {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 146, 69, 0.3);
+  }
+}
+
+.step.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.connector {
+  height: 6px;
+  flex: 1;
+  min-width: 40px;
+  max-width: 100px;
+  margin: 0;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  border-top: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.connectorActive {
+  height: 6px;
+  background-color: var(--color-primary);
+  border-top: none;
+  border-bottom: none;
+}
+
+/* Above 360px when middle steps are collapsed (1..k, last) */
+.stepperCollapsed {
+  flex-wrap: nowrap;
+}
+
+/* Narrow viewport (≤360px): 3 steps + "and more" - design unchanged */
+.stepperNarrow {
+  flex-wrap: nowrap;
+  justify-content: center;
+  overflow: hidden;
+
+  .connector {
+    max-width: 40px;
+    min-width: 20px;
+  }
+
+  /* Lengthen the connector before "X and more" */
+  .connector:has(+ .andMore) {
+    min-width: 48px;
+    max-width: 80px;
+  }
+}
+
+.andMore {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background-color: transparent;
+  box-shadow: 0 1px 3px hsl(0 0% 0% / 0.06);
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+  color: #a0a0a0;
+  white-space: nowrap;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+  }
+}
+
+.andMoreNumber {
+  position: relative;
+  z-index: 1;
+}
