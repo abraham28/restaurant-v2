@@ -3,6 +3,10 @@ export const API_ROUTES = {
   AUTH: {
     LOGIN: '/auth/login',
   },
+  USERS: {
+    TRANSLATIONS: (userId: string, lang: string) =>
+      `/api/users/${userId}/translations?lang=${lang}`,
+  },
 };
 
 // UI Routes

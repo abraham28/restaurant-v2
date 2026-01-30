@@ -2,6 +2,7 @@ import React from 'react';
 import ErrorBoundary from 'atomic-components/ErrorBoundary/ErrorBoundary';
 import PageTitle from 'atomic-components/PageTitle/PageTitle';
 import ServiceWorkerUpdatePrompt from 'atomic-components/ServiceWorkerUpdatePrompt/ServiceWorkerUpdatePrompt';
+import LanguageSwitcher from 'atomic-components/LanguageSwitcher';
 import { useServiceWorker } from 'hooks/useServiceWorker';
 import Home from 'pages/home';
 import { Route, Routes } from 'react-router-dom';
@@ -10,6 +11,7 @@ import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
 import CIFInsert from 'pages/CIFInsert/CIFInsert';
 import CIFInsertReview from 'pages/CIFInsert/Review';
 import CsvToJson from 'pages/CsvToJson';
+import styles from './App.module.scss';
 
 function AppContent() {
   return (
@@ -38,6 +40,9 @@ function App() {
   return (
     <ErrorBoundary>
       <PageTitle />
+      <div className={styles.languageSwitcherContainer}>
+        <LanguageSwitcher />
+      </div>
       {registration && isUpdateAvailable && (
         <ServiceWorkerUpdatePrompt registration={registration} />
       )}
