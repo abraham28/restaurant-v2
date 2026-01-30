@@ -13,10 +13,6 @@ export const ROUTES = {
   CLIENT_INFORMATION_SYSTEM: {
     ROOT: '/client-information-system',
     INSERT: '/client-information-system/new',
-    IDIVIDUAL_INSERT: '/client-information-system/individual/insert',
-    COMPANY_INSERT: '/client-information-system/company/insert',
-    GOVERNMENT_INSERT: '/client-information-system/government/insert',
-    ORGANIZATION_INSERT: '/client-information-system/organization/insert',
   },
   CSV_UTILS: {
     CSV_TO_JSON: '/csvutils/csvtojson',

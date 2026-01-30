@@ -61,18 +61,9 @@ function ClientInformationSystem() {
   }, []);
 
   const handleModalOk = useCallback(() => {
-    // Navigate based on selected client type
-    if (selectedClientType === 'Individual') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
-    } else if (selectedClientType === 'Company') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
-    } else if (selectedClientType === 'Government') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT);
-    } else if (selectedClientType === 'Organization') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT);
-    }
+    navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
     handleCloseModal();
-  }, [navigate, handleCloseModal, selectedClientType]);
+  }, [navigate, handleCloseModal]);
 
   const handleDraftClick = useCallback(
     (draftId: string) => {

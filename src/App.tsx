@@ -8,10 +8,6 @@ import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
 import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
 import CIFInsert from 'pages/CIFInsert/CIFInsert';
-import ClientInformationSystemInsert from 'pages/CIFIndividual/CIFIndividual';
-import CIFCompany from 'pages/CIFCompany';
-import CIFGovernment from 'pages/CIFGovernment';
-import CIFOrganization from 'pages/CIFOrganization';
 import CsvToJson from 'pages/CsvToJson';
 
 function AppContent() {
@@ -25,22 +21,6 @@ function AppContent() {
       <Route
         path={ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT}
         element={<CIFInsert />}
-      />
-      <Route
-        path={ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT}
-        element={<ClientInformationSystemInsert />}
-      />
-      <Route
-        path={ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT}
-        element={<CIFCompany />}
-      />
-      <Route
-        path={ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT}
-        element={<CIFGovernment />}
-      />
-      <Route
-        path={ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT}
-        element={<CIFOrganization />}
       />
       <Route path={ROUTES.CSV_UTILS.CSV_TO_JSON} element={<CsvToJson />} />
     </Routes>
