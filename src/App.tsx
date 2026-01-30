@@ -7,7 +7,7 @@ import Home from 'pages/home';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
 import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
-import CIFInsert from 'pages/CIFInsert';
+import CIFInsert from 'pages/CIFInsert/CIFInsert';
 import ClientInformationSystemInsert from 'pages/CIFIndividual/CIFIndividual';
 import CIFCompany from 'pages/CIFCompany';
 import CIFGovernment from 'pages/CIFGovernment';

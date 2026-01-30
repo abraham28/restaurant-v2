@@ -16,7 +16,7 @@ import FinancialTab from './Financial/Financial';
 import AmlaTab from './Amla/Amla';
 import RemarksTab from './Remarks/Remarks';
 import PictureTab from './Picture/Picture';
-import Stepper from './Stepper/Stepper';
+import Stepper from 'atomic-components/Stepper';
 import styles from './CIFInsert.module.scss';
 
 type TabType =
