@@ -61,18 +61,9 @@ function ClientInformationSystem() {
   }, []);
 
   const handleModalOk = useCallback(() => {
-    // Navigate based on selected client type
-    if (selectedClientType === 'Individual') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
-    } else if (selectedClientType === 'Company') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
-    } else if (selectedClientType === 'Government') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT);
-    } else if (selectedClientType === 'Organization') {
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT);
-    }
+    navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
     handleCloseModal();
-  }, [navigate, handleCloseModal, selectedClientType]);
+  }, [navigate, handleCloseModal]);
 
   const handleDraftClick = useCallback(
     (draftId: string) => {
@@ -113,6 +104,15 @@ function ClientInformationSystem() {
     });
   }, []);
 
+  if (loading) {
+    return (
+      <div className={styles.pageLoading}>
+        <div className={styles.loadingSpinner} aria-hidden="true" />
+        <p className={styles.loadingText}>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -124,9 +124,7 @@ function ClientInformationSystem() {
       <div className={styles.content}>
         <div className={styles.draftsSection}>
           <h2 className={styles.draftsTitle}>Drafts</h2>
-          {loading ? (
-            <div className={styles.loadingState}>Loading drafts...</div>
-          ) : drafts.length === 0 ? (
+          {drafts.length === 0 ? (
             <div className={styles.emptyState}>No drafts found</div>
           ) : (
             <div className={styles.draftsList}>
