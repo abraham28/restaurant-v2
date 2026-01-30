@@ -336,23 +336,19 @@ function CIFInsert() {
     selectedTypes.government ||
     selectedTypes.organization;
 
-  // Ordered tabs for Next/Back and for determining which breadcrumbs are enabled
+  // Ordered tabs for Next/Back and for determining which breadcrumbs are enabled.
+  // When Company is selected, exclude Employment and Business tabs.
   const getOrderedTabs = useCallback((): TabType[] => {
     const base: TabType[] = ['clientType'];
     if (selectedTypes.individual) base.push('individual');
     else if (selectedTypes.company) base.push('company');
     else if (selectedTypes.government) base.push('government');
     else if (selectedTypes.organization) base.push('organization');
-    base.push(
-      'contacts',
-      'documents',
-      'employment',
-      'business',
-      'financial',
-      'amla',
-      'remarks',
-      'picture',
-    );
+    base.push('contacts', 'documents');
+    if (!selectedTypes.company) {
+      base.push('employment', 'business');
+    }
+    base.push('financial', 'amla', 'remarks', 'picture');
     return base;
   }, [selectedTypes]);
 
@@ -362,20 +358,21 @@ function CIFInsert() {
   const isLastTab =
     currentTabIndex < 0 || currentTabIndex >= orderedTabs.length - 1;
 
-  const getBreadcrumbIndex = useCallback((tabId: TabType): number => {
-    if (tabId === 'clientType') return 0;
-    if (['individual', 'company', 'government', 'organization'].includes(tabId))
-      return 1;
-    if (tabId === 'contacts') return 2;
-    if (tabId === 'documents') return 3;
-    if (tabId === 'employment') return 4;
-    if (tabId === 'business') return 5;
-    if (tabId === 'financial') return 6;
-    if (tabId === 'amla') return 7;
-    if (tabId === 'remarks') return 8;
-    if (tabId === 'picture') return 9;
-    return 0;
-  }, []);
+  // When Company is selected, Employment and Business are not in orderedTabs;
+  // if user was on one of those, move to a valid tab.
+  useEffect(() => {
+    if (selectedTypes.company && !orderedTabs.includes(activeTab)) {
+      setActiveTab(orderedTabs[1] ?? 'company');
+    }
+  }, [selectedTypes.company, orderedTabs, activeTab]);
+
+  const getBreadcrumbIndex = useCallback(
+    (tabId: TabType): number => {
+      const idx = orderedTabs.indexOf(tabId);
+      return idx >= 0 ? idx : 0;
+    },
+    [orderedTabs],
+  );
 
   useEffect(() => {
     const idx = getBreadcrumbIndex(activeTab);
@@ -488,8 +485,12 @@ function CIFInsert() {
       },
       { id: 'contacts', label: 'Contacts/Addresses/IDs' },
       { id: 'documents', label: 'Documents' },
-      { id: 'employment', label: 'Employment' },
-      { id: 'business', label: 'Business' },
+      ...(selectedTypes.company
+        ? []
+        : [
+            { id: 'employment' as const, label: 'Employment' },
+            { id: 'business' as const, label: 'Business' },
+          ]),
       { id: 'financial', label: 'Financial' },
       { id: 'amla', label: 'AMLA/Tags' },
       { id: 'remarks', label: 'Remarks/Groupings' },

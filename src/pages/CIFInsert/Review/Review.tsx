@@ -340,103 +340,113 @@ function Review({
           </div>
         </ReviewSection>
 
-        <ReviewSection title="Employment">
-          <div className={styles.grid}>
-            <ReviewRow label="Employee ID" value={formData.employeeID} />
-            <ReviewRow label="Occupation" value={formData.occupation} />
-            <ReviewRow label="Status" value={formData.status} />
-            <ReviewRow label="Position" value={formData.position} />
-            <ReviewRow label="Inclusive Date" value={formData.inclusiveDate} />
-            <ReviewRow label="Start Date" value={formData.startDate} />
-            <ReviewRow label="End Date" value={formData.endDate} />
-            <ReviewRow
-              label="Length of Service"
-              value={formData.lengthOfService}
-            />
-            <ReviewRow
-              label="Company / Employer Name"
-              value={formData.companyEmployerName}
-            />
-            <ReviewRow label="Employer TIN" value={formData.employerTIN} />
-            <ReviewRow
-              label="Employer Address"
-              value={formData.employerAddress}
-            />
-            <ReviewRow
-              label="Employer Contact Person"
-              value={formData.employerContactPerson}
-            />
-            <ReviewRow
-              label="Employer Contact No."
-              value={formData.employerContactNo}
-            />
-            <ReviewRow
-              label="Business Activities"
-              value={formData.businessActivities}
-            />
-            <ReviewRow label="Industry" value={formData.industry} />
-          </div>
-        </ReviewSection>
+        {!selectedTypes.company && (
+          <>
+            <ReviewSection title="Employment">
+              <div className={styles.grid}>
+                <ReviewRow label="Employee ID" value={formData.employeeID} />
+                <ReviewRow label="Occupation" value={formData.occupation} />
+                <ReviewRow label="Status" value={formData.status} />
+                <ReviewRow label="Position" value={formData.position} />
+                <ReviewRow
+                  label="Inclusive Date"
+                  value={formData.inclusiveDate}
+                />
+                <ReviewRow label="Start Date" value={formData.startDate} />
+                <ReviewRow label="End Date" value={formData.endDate} />
+                <ReviewRow
+                  label="Length of Service"
+                  value={formData.lengthOfService}
+                />
+                <ReviewRow
+                  label="Company / Employer Name"
+                  value={formData.companyEmployerName}
+                />
+                <ReviewRow label="Employer TIN" value={formData.employerTIN} />
+                <ReviewRow
+                  label="Employer Address"
+                  value={formData.employerAddress}
+                />
+                <ReviewRow
+                  label="Employer Contact Person"
+                  value={formData.employerContactPerson}
+                />
+                <ReviewRow
+                  label="Employer Contact No."
+                  value={formData.employerContactNo}
+                />
+                <ReviewRow
+                  label="Business Activities"
+                  value={formData.businessActivities}
+                />
+                <ReviewRow label="Industry" value={formData.industry} />
+              </div>
+            </ReviewSection>
 
-        <ReviewSection title="Business">
-          <div className={styles.grid}>
-            <ReviewRow label="Business Name" value={formData.businessName} />
-            <ReviewRow
-              label="Business Activity"
-              value={formData.businessActivity}
-            />
-            <ReviewRow
-              label="Main Address"
-              value={formData.businessMainAddress}
-            />
-            <ReviewRow
-              label="Additional Address"
-              value={formData.businessAdditionalAddress}
-            />
-            <ReviewRow label="Business ID 1" value={formData.businessID1} />
-            <ReviewRow label="Business ID 2" value={formData.businessID2} />
-            <ReviewRow
-              label="Primary Contact"
-              value={formData.businessPrimaryContact}
-            />
-            <ReviewRow
-              label="Secondary Contact"
-              value={formData.businessSecondaryContact}
-            />
-            <ReviewRow
-              label="Other Business Name"
-              value={formData.otherBusinessName}
-            />
-            <ReviewRow
-              label="Other Business Activity"
-              value={formData.otherBusinessActivity}
-            />
-            <ReviewRow
-              label="Other Main Address"
-              value={formData.otherBusinessMainAddress}
-            />
-            <ReviewRow
-              label="Other Additional Address"
-              value={formData.otherBusinessAdditionalAddress}
-            />
-            <ReviewRow
-              label="Other Business ID 1"
-              value={formData.otherBusinessID1}
-            />
-            <ReviewRow
-              label="Other Business ID 2"
-              value={formData.otherBusinessID2}
-            />
-            <ReviewRow
-              label="Other Primary Contact"
-              value={formData.otherBusinessPrimaryContact}
-            />
-            <ReviewRow
-              label="Other Secondary Contact"
-              value={formData.otherBusinessSecondaryContact}
-            />
-          </div>
-        </ReviewSection>
+            <ReviewSection title="Business">
+              <div className={styles.grid}>
+                <ReviewRow
+                  label="Business Name"
+                  value={formData.businessName}
+                />
+                <ReviewRow
+                  label="Business Activity"
+                  value={formData.businessActivity}
+                />
+                <ReviewRow
+                  label="Main Address"
+                  value={formData.businessMainAddress}
+                />
+                <ReviewRow
+                  label="Additional Address"
+                  value={formData.businessAdditionalAddress}
+                />
+                <ReviewRow label="Business ID 1" value={formData.businessID1} />
+                <ReviewRow label="Business ID 2" value={formData.businessID2} />
+                <ReviewRow
+                  label="Primary Contact"
+                  value={formData.businessPrimaryContact}
+                />
+                <ReviewRow
+                  label="Secondary Contact"
+                  value={formData.businessSecondaryContact}
+                />
+                <ReviewRow
+                  label="Other Business Name"
+                  value={formData.otherBusinessName}
+                />
+                <ReviewRow
+                  label="Other Business Activity"
+                  value={formData.otherBusinessActivity}
+                />
+                <ReviewRow
+                  label="Other Main Address"
+                  value={formData.otherBusinessMainAddress}
+                />
+                <ReviewRow
+                  label="Other Additional Address"
+                  value={formData.otherBusinessAdditionalAddress}
+                />
+                <ReviewRow
+                  label="Other Business ID 1"
+                  value={formData.otherBusinessID1}
+                />
+                <ReviewRow
+                  label="Other Business ID 2"
+                  value={formData.otherBusinessID2}
+                />
+                <ReviewRow
+                  label="Other Primary Contact"
+                  value={formData.otherBusinessPrimaryContact}
+                />
+                <ReviewRow
+                  label="Other Secondary Contact"
+                  value={formData.otherBusinessSecondaryContact}
+                />
+              </div>
+            </ReviewSection>
+          </>
+        )}
 
         <ReviewSection title="Financial">
           <div className={styles.grid}>
