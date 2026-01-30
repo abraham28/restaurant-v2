@@ -238,23 +238,42 @@ function CIFInsert() {
   // Mock form data - in real app, this would come from Zustand store
   const [formData, setFormData] = useState(initialFormData);
 
-  const handleTypeChange = useCallback((type: string, checked: boolean) => {
-    if (checked) {
-      // If checking a checkbox, uncheck all others (only one can be selected)
-      setSelectedTypes({
-        individual: type === 'individual',
-        company: type === 'company',
-        government: type === 'government',
-        organization: type === 'organization',
-      });
-    } else {
-      // If unchecking, just set that one to false
-      setSelectedTypes((prev) => ({
-        ...prev,
-        [type]: false,
-      }));
-    }
-  }, []);
+  const handleTypeChange = useCallback(
+    (type: string, checked: boolean) => {
+      if (checked) {
+        // If user is switching to a different client type, reset form and draft
+        // so the previous type's data (e.g. individual) is cleared
+        const currentType = selectedTypes.individual
+          ? 'individual'
+          : selectedTypes.company
+            ? 'company'
+            : selectedTypes.government
+              ? 'government'
+              : selectedTypes.organization
+                ? 'organization'
+                : null;
+        const isSwitchingType = currentType !== null && currentType !== type;
+        if (isSwitchingType) {
+          setFormData({ ...initialFormData });
+          setDraftId(null);
+        }
+        // If checking a checkbox, uncheck all others (only one can be selected)
+        setSelectedTypes({
+          individual: type === 'individual',
+          company: type === 'company',
+          government: type === 'government',
+          organization: type === 'organization',
+        });
+      } else {
+        // If unchecking, just set that one to false
+        setSelectedTypes((prev) => ({
+          ...prev,
+          [type]: false,
+        }));
+      }
+    },
+    [selectedTypes],
+  );
 
   const handleInputChange = useCallback(
     (field: string, value: string | number | boolean) => {
