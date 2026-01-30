@@ -9,6 +9,9 @@ export const API_ROUTES = {
   },
 };
 
+// App Constants
+export const DEFAULT_APP_NAME: string = 'Core Banking';
+
 // UI Routes
 export const ROUTES = {
   HOME: '/',
