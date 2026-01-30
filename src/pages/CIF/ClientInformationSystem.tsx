@@ -7,7 +7,6 @@ import { ROUTES } from 'utils/constants';
 import {
   getAllDrafts,
   deleteDraft,
-  getDraft,
   type DraftMetadata,
 } from 'utils/indexedDBUtils';
 import { useClientFormStore } from 'stores/clientFormStore';
@@ -24,7 +23,6 @@ function ClientInformationSystem() {
   const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadDraft = useClientFormStore((state) => state.loadDraft);
   const resetForm = useClientFormStore((state) => state.resetForm);
 
   const clientTypeOptions: ClientType[] = [
@@ -77,33 +75,13 @@ function ClientInformationSystem() {
   }, [navigate, handleCloseModal, selectedClientType]);
 
   const handleDraftClick = useCallback(
-    async (draftId: string) => {
-      try {
-        // Get draft to determine client type before loading
-        const draft = await getDraft(draftId);
-        const clientType = draft?.metadata.clientType || 'Individual';
-
-        // Load draft into store
-        await loadDraft(draftId);
-
-        // Navigate based on client type
-        if (clientType === 'Company') {
-          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.COMPANY_INSERT);
-        } else if (clientType === 'Government') {
-          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.GOVERNMENT_INSERT);
-        } else if (clientType === 'Organization') {
-          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ORGANIZATION_INSERT);
-        } else {
-          navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
-        }
-      } catch (error) {
-        console.error('Failed to load draft:', error);
-        // Fallback to Individual route
-        await loadDraft(draftId);
-        navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.IDIVIDUAL_INSERT);
-      }
+    (draftId: string) => {
+      // Navigate to /client-information-system/new with draftId so CIFInsert restores the draft
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT, {
+        state: { draftId },
+      });
     },
-    [loadDraft, navigate],
+    [navigate],
   );
 
   const handleDeleteDraft = useCallback(

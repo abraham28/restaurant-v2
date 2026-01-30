@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button';
 import { ROUTES } from 'utils/constants';
+import { getDraft, storeDraft, generateDraftId } from 'utils/indexedDBUtils';
 import ClientType from './ClientType/ClientType';
 import IndividualTab from './Individual/Individual';
 import CompanyTab from './Company/Company';
@@ -34,11 +35,196 @@ type TabType =
   | 'remarks'
   | 'picture';
 
+/** Draft payload saved from CIFInsert (Cancel) - includes full form state */
+interface CIFInsertDraftPayload {
+  formData: typeof initialFormData;
+  selectedTypes: {
+    individual: boolean;
+    company: boolean;
+    government: boolean;
+    organization: boolean;
+  };
+  activeTab: TabType;
+}
+
+const initialFormData = {
+  // Individual
+  title: '',
+  lastName: '',
+  firstName: '',
+  middleName: '',
+  suffix: '',
+  gender: '',
+  maritalStatus: '',
+  birthDate: '',
+  age: 0,
+  birthPlace: '',
+  nationality: '',
+  previousName: '',
+  nickName: '',
+  bloodType: '',
+  weight: 0,
+  height: 0,
+  isDeceased: false,
+  isBeneficiary: false,
+  primaryBeneficiary: '',
+  education: '',
+  schoolLevel: '',
+  elementaryDependents: 0,
+  highSchoolDependents: 0,
+  collegeDependents: 0,
+  noOfDependents: 0,
+  numberOfCarsOwned: 0,
+  // Company
+  companyType: '',
+  companyName: '',
+  registeredName: '',
+  tin: '',
+  startOfBusiness: '',
+  numberOfEmployees: 0,
+  trader1: '',
+  trader2: '',
+  firmSize: '',
+  conglomerateDomain: '',
+  entityLocation: '',
+  countryOfOrigin: '',
+  placeOfRegistration: '',
+  legalForm: '',
+  companyIndustry: '',
+  originOfEntity: '',
+  companyBusinessActivity: '',
+  netTaxableIncome: 0,
+  monthlyExpenses: 0,
+  parentClient: '',
+  roleOfParent: '',
+  contactPerson: '',
+  designation: '',
+  // Government
+  // Organization
+  organizationRemarks: '',
+  organizationBusinessActivity: '',
+  organizationNationality: '',
+  // Contacts
+  address1Used: '',
+  address2Used: '',
+  primaryID1: '',
+  primaryID2: '',
+  primaryID3: '',
+  secondaryID1: '',
+  secondaryID2: '',
+  secondaryID3: '',
+  primaryContact: '',
+  secondaryContact: '',
+  presentedIDType: '',
+  idNoPresentedForAMLA: '',
+  countryCode: '',
+  mobileNumber: '',
+  emailAddress: '',
+  // Documents
+  insufficientInformation: false,
+  insufficientInformationRemarks: '',
+  insufficientDocuments: false,
+  insufficientDocumentsRemarks: '',
+  // Employment
+  employeeID: '',
+  occupation: '',
+  status: '',
+  position: '',
+  inclusiveDate: '',
+  startDate: '',
+  endDate: '',
+  lengthOfService: 0,
+  companyEmployerName: '',
+  employerTIN: '',
+  employerAddress: '',
+  employerContactPerson: '',
+  employerContactNo: '',
+  businessActivities: '',
+  industry: '',
+  // Business
+  businessName: '',
+  businessActivity: '',
+  businessMainAddress: '',
+  businessAdditionalAddress: '',
+  businessID1: '',
+  businessID2: '',
+  businessPrimaryContact: '',
+  businessSecondaryContact: '',
+  otherBusinessName: '',
+  otherBusinessActivity: '',
+  otherBusinessMainAddress: '',
+  otherBusinessAdditionalAddress: '',
+  otherBusinessID1: '',
+  otherBusinessID2: '',
+  otherBusinessPrimaryContact: '',
+  otherBusinessSecondaryContact: '',
+  // Financial
+  salaryIndicator: '',
+  fundSource: '',
+  salary: 0,
+  grossIncome: 0,
+  otherIncome: 0,
+  otherIncomeSource: '',
+  otherIncomeSourceAmount: 0,
+  monthlyAverageIncome: 0,
+  isLargeExposure: false,
+  isMicrofinanceBorrower: false,
+  isRegularLoanBorrower: false,
+  isComaker: false,
+  isSavingsAcctDepositor: false,
+  isCurrentAcctDepositor: false,
+  isTimeDepositDepositor: false,
+  isSpecialSavingsDepositor: false,
+  enforceCreditLimit: false,
+  originalBalance: 0,
+  outstandingBalance: 0,
+  pesonet: 0,
+  instapay: 0,
+  mobileWallet: 0,
+  // AMLA
+  isBankEmployeeRelated: false,
+  bankEmployeeName: '',
+  relationship: '',
+  dosri: '',
+  isBankEmployee: false,
+  employeeType: '',
+  isPEP: false,
+  pepPosition: '',
+  pepPlace: '',
+  pepTerm: '',
+  isWatchListed: false,
+  isLinkedAccount: false,
+  isPayee: false,
+  relatedParty: '',
+  overallScore: 0,
+  classification: '',
+  customerDueDiligence: '',
+  // Remarks
+  group1: '',
+  group2: '',
+  group3: '',
+  customUse1: '',
+  customUse2: '',
+  customUse3: '',
+  customUse4: '',
+  remarks: '',
+  clientStatus: '',
+  memberSinceDate: '',
+  lastClientUpdate: '',
+  // Picture
+  clientPicture1: '',
+  clientPicture2: '',
+  signaturePicture1: '',
+  signaturePicture2: '',
+};
+
 function CIFInsert() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState<TabType>('clientType');
   const [maxTabIndexReached, setMaxTabIndexReached] = useState(0);
   const [showSaveModal, setShowSaveModal] = useState(false);
+  const [draftId, setDraftId] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState({
     individual: false,
     company: false,
@@ -47,176 +233,7 @@ function CIFInsert() {
   });
 
   // Mock form data - in real app, this would come from Zustand store
-  const [formData, setFormData] = useState({
-    // Individual
-    title: '',
-    lastName: '',
-    firstName: '',
-    middleName: '',
-    suffix: '',
-    gender: '',
-    maritalStatus: '',
-    birthDate: '',
-    age: 0,
-    birthPlace: '',
-    nationality: '',
-    previousName: '',
-    nickName: '',
-    bloodType: '',
-    weight: 0,
-    height: 0,
-    isDeceased: false,
-    isBeneficiary: false,
-    primaryBeneficiary: '',
-    education: '',
-    schoolLevel: '',
-    elementaryDependents: 0,
-    highSchoolDependents: 0,
-    collegeDependents: 0,
-    noOfDependents: 0,
-    numberOfCarsOwned: 0,
-    // Company
-    companyType: '',
-    companyName: '',
-    registeredName: '',
-    tin: '',
-    startOfBusiness: '',
-    numberOfEmployees: 0,
-    trader1: '',
-    trader2: '',
-    firmSize: '',
-    conglomerateDomain: '',
-    entityLocation: '',
-    countryOfOrigin: '',
-    placeOfRegistration: '',
-    legalForm: '',
-    companyIndustry: '',
-    originOfEntity: '',
-    companyBusinessActivity: '',
-    netTaxableIncome: 0,
-    monthlyExpenses: 0,
-    parentClient: '',
-    roleOfParent: '',
-    contactPerson: '',
-    designation: '',
-    // Government
-    // Organization
-    organizationRemarks: '',
-    organizationBusinessActivity: '',
-    organizationNationality: '',
-    // Contacts
-    address1Used: '',
-    address2Used: '',
-    primaryID1: '',
-    primaryID2: '',
-    primaryID3: '',
-    secondaryID1: '',
-    secondaryID2: '',
-    secondaryID3: '',
-    primaryContact: '',
-    secondaryContact: '',
-    presentedIDType: '',
-    idNoPresentedForAMLA: '',
-    countryCode: '',
-    mobileNumber: '',
-    emailAddress: '',
-    // Documents
-    insufficientInformation: false,
-    insufficientInformationRemarks: '',
-    insufficientDocuments: false,
-    insufficientDocumentsRemarks: '',
-    // Employment
-    employeeID: '',
-    occupation: '',
-    status: '',
-    position: '',
-    inclusiveDate: '',
-    startDate: '',
-    endDate: '',
-    lengthOfService: 0,
-    companyEmployerName: '',
-    employerTIN: '',
-    employerAddress: '',
-    employerContactPerson: '',
-    employerContactNo: '',
-    businessActivities: '',
-    industry: '',
-    // Business
-    businessName: '',
-    businessActivity: '',
-    businessMainAddress: '',
-    businessAdditionalAddress: '',
-    businessID1: '',
-    businessID2: '',
-    businessPrimaryContact: '',
-    businessSecondaryContact: '',
-    otherBusinessName: '',
-    otherBusinessActivity: '',
-    otherBusinessMainAddress: '',
-    otherBusinessAdditionalAddress: '',
-    otherBusinessID1: '',
-    otherBusinessID2: '',
-    otherBusinessPrimaryContact: '',
-    otherBusinessSecondaryContact: '',
-    // Financial
-    salaryIndicator: '',
-    fundSource: '',
-    salary: 0,
-    grossIncome: 0,
-    otherIncome: 0,
-    otherIncomeSource: '',
-    otherIncomeSourceAmount: 0,
-    monthlyAverageIncome: 0,
-    isLargeExposure: false,
-    isMicrofinanceBorrower: false,
-    isRegularLoanBorrower: false,
-    isComaker: false,
-    isSavingsAcctDepositor: false,
-    isCurrentAcctDepositor: false,
-    isTimeDepositDepositor: false,
-    isSpecialSavingsDepositor: false,
-    enforceCreditLimit: false,
-    originalBalance: 0,
-    outstandingBalance: 0,
-    pesonet: 0,
-    instapay: 0,
-    mobileWallet: 0,
-    // AMLA
-    isBankEmployeeRelated: false,
-    bankEmployeeName: '',
-    relationship: '',
-    dosri: '',
-    isBankEmployee: false,
-    employeeType: '',
-    isPEP: false,
-    pepPosition: '',
-    pepPlace: '',
-    pepTerm: '',
-    isWatchListed: false,
-    isLinkedAccount: false,
-    isPayee: false,
-    relatedParty: '',
-    overallScore: 0,
-    classification: '',
-    customerDueDiligence: '',
-    // Remarks
-    group1: '',
-    group2: '',
-    group3: '',
-    customUse1: '',
-    customUse2: '',
-    customUse3: '',
-    customUse4: '',
-    remarks: '',
-    clientStatus: '',
-    memberSinceDate: '',
-    lastClientUpdate: '',
-    // Picture
-    clientPicture1: '',
-    clientPicture2: '',
-    signaturePicture1: '',
-    signaturePicture2: '',
-  });
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleTypeChange = useCallback((type: string, checked: boolean) => {
     if (checked) {
@@ -317,6 +334,65 @@ function CIFInsert() {
     const idx = getBreadcrumbIndex(activeTab);
     setMaxTabIndexReached((prev) => Math.max(prev, idx));
   }, [activeTab, getBreadcrumbIndex]);
+
+  // Restore draft when opening from list (draft click)
+  useEffect(() => {
+    const state = location.state as { draftId?: string } | null;
+    const stateDraftId = state?.draftId;
+    if (!stateDraftId) return;
+
+    let cancelled = false;
+    void getDraft<CIFInsertDraftPayload | Record<string, unknown>>(
+      stateDraftId,
+    ).then((draft) => {
+      if (cancelled || !draft) return;
+      const payload = draft.formData;
+
+      // Draft saved from CIFInsert has formData, selectedTypes, activeTab
+      if (
+        payload &&
+        typeof payload === 'object' &&
+        'formData' in payload &&
+        'selectedTypes' in payload &&
+        'activeTab' in payload
+      ) {
+        const fullPayload = payload as CIFInsertDraftPayload;
+        const {
+          formData: draftFormData,
+          selectedTypes: draftTypes,
+          activeTab: draftTab,
+        } = fullPayload;
+        setFormData(draftFormData);
+        setSelectedTypes(draftTypes);
+        setActiveTab(draftTab);
+        setDraftId(draft.id);
+      } else {
+        // Draft from type-specific pages: formData is the raw form, use metadata.clientType
+        setFormData({ ...initialFormData, ...payload });
+        const clientType = draft.metadata.clientType;
+        const types = {
+          individual: clientType === 'Individual',
+          company: clientType === 'Company',
+          government: clientType === 'Government',
+          organization: clientType === 'Organization',
+        };
+        setSelectedTypes(types);
+        const firstTab: TabType =
+          clientType === 'Individual'
+            ? 'individual'
+            : clientType === 'Company'
+              ? 'company'
+              : clientType === 'Government'
+                ? 'government'
+                : 'organization';
+        setActiveTab(firstTab);
+        setDraftId(draft.id);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [location.state]);
 
   const getStepperSteps = useCallback(() => {
     const secondLabel = hasSelectedType
@@ -425,9 +501,41 @@ function CIFInsert() {
     setShowSaveModal(false);
   }, []);
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = useCallback(async () => {
+    // Don't save draft if user is still on client type step only
+    if (activeTab === 'clientType') {
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT);
+      return;
+    }
+
+    const id = draftId || generateDraftId();
+    const clientName =
+      formData.companyName?.trim() ||
+      (formData.firstName || formData.lastName
+        ? `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
+        : undefined) ||
+      'Untitled Draft';
+    const clientType = selectedTypes.individual
+      ? 'Individual'
+      : selectedTypes.company
+        ? 'Company'
+        : selectedTypes.government
+          ? 'Government'
+          : selectedTypes.organization
+            ? 'Organization'
+            : 'Individual';
+    const payload: CIFInsertDraftPayload = {
+      formData,
+      selectedTypes,
+      activeTab,
+    };
+    try {
+      await storeDraft(id, payload, clientName, clientType);
+    } catch (error) {
+      console.error('Failed to save draft:', error);
+    }
     navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT);
-  }, [navigate]);
+  }, [navigate, draftId, formData, selectedTypes, activeTab]);
 
   // Mock options for dropdowns
   const idTypeOptions = [
@@ -459,7 +567,12 @@ function CIFInsert() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Client Information System - Insert</h1>
-        <Button variant="outline" onClick={handleCancel}>
+        <Button
+          variant="outline"
+          onClick={() => {
+            void handleCancel();
+          }}
+        >
           Cancel
         </Button>
       </div>
