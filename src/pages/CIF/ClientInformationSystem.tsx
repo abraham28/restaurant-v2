@@ -54,8 +54,8 @@ function ClientInformationSystem() {
 
   const handleAdd = useCallback(() => {
     resetForm(); // Clear any existing form data
-    setShowModal(true);
-  }, [resetForm]);
+    navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+  }, [resetForm, navigate]);
 
   const handleCloseModal = useCallback(() => {
     setShowModal(false);
