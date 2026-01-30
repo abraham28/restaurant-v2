@@ -253,7 +253,8 @@ function CIFInsert() {
         const isSwitchingType = currentType !== null && currentType !== type;
         if (isSwitchingType) {
           setFormData({ ...initialFormData });
-          setDraftId(null);
+          // Keep draftId so the same draft is updated when user saves/cancels
+          // (e.g. draft was Company, user reopens and switches to Individual → update that draft to Individual)
         }
         // If checking a checkbox, uncheck all others (only one can be selected)
         setSelectedTypes({
