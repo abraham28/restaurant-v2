@@ -1,9 +1,12 @@
 import React, { Component, ErrorInfo } from 'react';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import styles from './ErrorBoundary.module.scss';
 import { Props, State } from './types';
 
-class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+interface ErrorBoundaryProps extends Props, WithTranslation {}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, State> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
   }
@@ -17,13 +20,14 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   render() {
+    const { t } = this.props;
     if (this.state.hasError) {
       return (
         <div className={styles.container}>
           <div className={styles.errorCard}>
-            <h1 className={styles.errorTitle}>Something went wrong</h1>
+            <h1 className={styles.errorTitle}>{t('somethingWentWrong')}</h1>
             <p className={styles.errorMessage}>
-              {this.state.error?.message || 'An unexpected error occurred'}
+              {this.state.error?.message || t('unexpectedError')}
             </p>
             <button
               className={styles.resetButton}
@@ -32,7 +36,7 @@ class ErrorBoundary extends Component<Props, State> {
                 window.location.reload();
               }}
             >
-              Reload Page
+              {t('reloadPage')}
             </button>
           </div>
         </div>
@@ -43,4 +47,8 @@ class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-export default ErrorBoundary;
+// Export the class component for proper TypeScript recognition
+export { ErrorBoundary };
+
+// Export the wrapped component as default
+export default withTranslation('common')(ErrorBoundary);

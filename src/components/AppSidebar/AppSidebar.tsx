@@ -39,12 +39,12 @@ function AppSidebar() {
       onClose={handleClose}
       onToggle={handleToggle}
       logo="/android-chrome-192x192.png"
-      logoAlt="Core Banking Logo"
-      title="Core Banking"
+      logoAlt={t('coreBankingLogo')}
+      title={t('coreBanking')}
     >
-      <NavListGroup label="Client Information">
+      <NavListGroup label={t('clientInformation')}>
         <NavListItem
-          label="Client Information System"
+          label={t('clientInformationSystem')}
           icon={FileText}
           to={ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT}
           active={location.pathname.startsWith(
@@ -54,7 +54,7 @@ function AppSidebar() {
         />
       </NavListGroup>
 
-      <NavListGroup label={t('language') || 'Language'}>
+      <NavListGroup label={t('language')}>
         {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
           <NavListItem
             key={code}

@@ -1,32 +1,33 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const APP_NAME = 'core-banking';
 
-// Map routes to page titles
-const routeTitles: Record<string, string> = {
-  '/': 'Menu',
-  '/client-information-system': 'Client Information System',
+// Map routes to translation keys for page titles
+const routeTitleKeys: Record<string, string> = {
+  '/': 'menu',
+  '/client-information-system': 'clientInformationSystem',
   '/client-information-system/individual/insert':
-    'Client Information System - Individual - Insert',
-  '/client-information-system/company': 'Client Information System - Company',
-  '/client-information-system/company/insert':
-    'Client Information System - Company - Insert',
-  '/client-information-system/government':
-    'Client Information System - Government',
+    'clientInformationSystemInsert',
+  '/client-information-system/company': 'clientInformationSystem',
+  '/client-information-system/company/insert': 'clientInformationSystemInsert',
+  '/client-information-system/government': 'clientInformationSystem',
   '/client-information-system/government/insert':
-    'Client Information System - Government - Insert',
-  '/client-information-system/organization':
-    'Client Information System - Organization',
+    'clientInformationSystemInsert',
+  '/client-information-system/organization': 'clientInformationSystem',
   '/client-information-system/organization/insert':
-    'Client Information System - Organization - Insert',
+    'clientInformationSystemInsert',
 };
 
 // Function to get title from path
-function getTitleFromPath(pathname: string): string {
+function getTitleFromPath(
+  pathname: string,
+  t: (key: string) => string,
+): string {
   // Check exact match first
-  if (routeTitles[pathname]) {
-    return routeTitles[pathname];
+  if (routeTitleKeys[pathname]) {
+    return t(routeTitleKeys[pathname]);
   }
 
   // Default: use the last segment of the path
@@ -40,16 +41,17 @@ function getTitleFromPath(pathname: string): string {
     );
   }
 
-  return 'Page Not Found';
+  return t('pageNotFound');
 }
 
 function PageTitle() {
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    const title = getTitleFromPath(location.pathname);
+    const title = getTitleFromPath(location.pathname, t);
     document.title = title ? `${title} | ${APP_NAME}` : APP_NAME;
-  }, [location.pathname]);
+  }, [location.pathname, t]);
 
   return null; // This component doesn't render anything
 }

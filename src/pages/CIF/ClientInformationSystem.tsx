@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button/Button';
 import Radio from 'atomic-components/Radio/Radio';
@@ -16,6 +17,7 @@ type ClientType = 'Individual' | 'Company' | 'Government' | 'Organization';
 function ClientInformationSystem() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   const [showModal, setShowModal] = useState(false);
   const [selectedClientType, setSelectedClientType] =
     useState<ClientType>('Individual');
@@ -80,7 +82,7 @@ function ClientInformationSystem() {
   const handleDeleteDraft = useCallback(
     async (draftId: string, e: React.MouseEvent) => {
       e.stopPropagation(); // Prevent triggering draft click
-      if (window.confirm('Are you sure you want to delete this draft?')) {
+      if (window.confirm(t('confirmDeleteDraft'))) {
         try {
           await localDB.deleteDraft(draftId);
           // Reload drafts list
@@ -88,11 +90,11 @@ function ClientInformationSystem() {
           setDrafts(allDrafts);
         } catch (error) {
           console.error('Failed to delete draft:', error);
-          alert('Failed to delete draft. Please try again.');
+          alert(t('failedToDeleteDraft'));
         }
       }
     },
-    [],
+    [t],
   );
 
   const formatDate = useCallback((timestamp: number) => {
@@ -110,7 +112,7 @@ function ClientInformationSystem() {
     return (
       <div className={styles.pageLoading}>
         <div className={styles.loadingSpinner} aria-hidden="true" />
-        <p className={styles.loadingText}>Loading...</p>
+        <p className={styles.loadingText}>{t('loading')}</p>
       </div>
     );
   }
@@ -118,16 +120,16 @@ function ClientInformationSystem() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Client Information System</h1>
+        <h1 className={styles.title}>{t('clientInformationSystem')}</h1>
         <Button variant="primary" onClick={handleAdd}>
-          Add
+          {t('add')}
         </Button>
       </div>
       <div className={styles.content}>
         <div className={styles.draftsSection}>
-          <h2 className={styles.draftsTitle}>Drafts</h2>
+          <h2 className={styles.draftsTitle}>{t('drafts')}</h2>
           {drafts.length === 0 ? (
-            <div className={styles.emptyState}>No drafts found</div>
+            <div className={styles.emptyState}>{t('noDraftsFound')}</div>
           ) : (
             <div className={styles.draftsList}>
               {drafts.map((draft) => (
@@ -149,11 +151,11 @@ function ClientInformationSystem() {
                       )}
                     </span>
                     <span className={styles.draftDate}>
-                      Updated: {formatDate(draft.updatedAt)}
+                      {t('updated')}: {formatDate(draft.updatedAt)}
                     </span>
                     {draft.createdAt !== draft.updatedAt && (
                       <span className={styles.draftDate}>
-                        Created: {formatDate(draft.createdAt)}
+                        {t('created')}: {formatDate(draft.createdAt)}
                       </span>
                     )}
                   </div>
@@ -164,7 +166,7 @@ function ClientInformationSystem() {
                     }}
                     className={styles.deleteButton}
                   >
-                    Delete
+                    {t('delete')}
                   </Button>
                 </div>
               ))}
@@ -175,25 +177,25 @@ function ClientInformationSystem() {
 
       <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Select Client Type</Modal.Title>
+          <Modal.Title>{t('selectClientType')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className={styles.modalContent}>
-            <label className={styles.label}>Client Type:</label>
+            <label className={styles.label}>{t('clientType')}:</label>
             <Radio
               value={selectedClientType}
               onChange={(value) => setSelectedClientType(value as ClientType)}
               options={clientTypeOptions}
-              placeholder="Select client type"
+              placeholder={t('selectClientTypePlaceholder')}
             />
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline" onClick={handleCloseModal}>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button variant="primary" onClick={handleModalOk}>
-            OK
+            {t('ok')}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from 'atomic-components/Button/Button';
 import Textarea from 'atomic-components/Textarea/Textarea';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
@@ -6,6 +7,7 @@ import { csvToObjects } from 'utils/csvUtils';
 import styles from './CsvToJson.module.scss';
 
 function CsvToJson() {
+  const { t } = useTranslation();
   const [csvInput, setCsvInput] = useState('');
   const [jsonData, setJsonData] = useState<Record<string, string>[] | null>(
     null,
@@ -27,7 +29,7 @@ function CsvToJson() {
     setJsonData(null);
 
     if (!csvInput.trim()) {
-      setError('Please enter CSV data');
+      setError(t('pleaseEnterCsvData'));
       return;
     }
 
@@ -40,17 +42,17 @@ function CsvToJson() {
       }
 
       if (result.data.length === 0) {
-        setError('No data found in CSV');
+        setError(t('noDataFoundInCsv'));
         return;
       }
 
       setJsonData(result.data);
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : 'Failed to convert CSV to JSON';
+        err instanceof Error ? err.message : t('failedToConvertCsvToJson');
       setError(errorMessage);
     }
-  }, [csvInput]);
+  }, [csvInput, t]);
 
   const handleFileUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,13 +71,13 @@ function CsvToJson() {
         file.name.toLowerCase().endsWith('.csv');
 
       if (!isValidType) {
-        setError('Please select a valid CSV file.');
+        setError(t('pleaseSelectValidCsvFile'));
         return;
       }
 
       // Validate file size (max 10MB)
       if (file.size > 10 * 1024 * 1024) {
-        setError('File size must be less than 10MB.');
+        setError(t('fileSizeMustBeLessThan10mb'));
         return;
       }
 
@@ -88,7 +90,7 @@ function CsvToJson() {
         setJsonData(null);
       };
       reader.onerror = () => {
-        setError('Failed to read the CSV file.');
+        setError(t('failedToReadCsvFile'));
       };
       reader.readAsText(file);
 
@@ -97,7 +99,7 @@ function CsvToJson() {
         fileInputRef.current.value = '';
       }
     },
-    [],
+    [t],
   );
 
   const handleFileButtonClick = useCallback(() => {
@@ -123,17 +125,14 @@ function CsvToJson() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>CSV to JSON Converter</h1>
-        <p className={styles.description}>
-          Upload a CSV file or paste your CSV data below and convert it to JSON
-          format
-        </p>
+        <h1 className={styles.title}>{t('csvToJsonConverter')}</h1>
+        <p className={styles.description}>{t('csvToJsonDescription')}</p>
       </div>
 
       <div className={styles.content}>
         <div className={styles.inputSection}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>CSV Input</h2>
+            <h2 className={styles.sectionTitle}>{t('csvInput')}</h2>
             <div className={styles.headerActions}>
               <input
                 ref={fileInputRef}
@@ -141,30 +140,30 @@ function CsvToJson() {
                 accept=".csv,text/csv,application/vnd.ms-excel"
                 onChange={handleFileUpload}
                 className={styles.fileInput}
-                aria-label="Upload CSV file"
+                aria-label={t('uploadCsvFile')}
               />
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleFileButtonClick}
               >
-                Upload File
+                {t('uploadFile')}
               </Button>
               <Button variant="outline" size="sm" onClick={handleClear}>
-                Clear
+                {t('clear')}
               </Button>
             </div>
           </div>
           {fileName && (
             <div className={styles.fileName}>
-              <span className={styles.fileNameLabel}>File:</span>
+              <span className={styles.fileNameLabel}>{t('file')}:</span>
               <span className={styles.fileNameValue}>{fileName}</span>
             </div>
           )}
           <Textarea
             value={csvInput}
             onChange={setCsvInput}
-            placeholder="Paste your CSV data here or upload a CSV file..."
+            placeholder={t('pasteCsvDataPlaceholder')}
             rows={15}
             className={styles.textarea}
           />
@@ -172,25 +171,25 @@ function CsvToJson() {
 
         <div className={styles.buttonSection}>
           <Button variant="primary" onClick={handleConvert}>
-            Convert to JSON
+            {t('convertToJson')}
           </Button>
         </div>
 
         <div className={styles.outputSection}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>JSON Output</h2>
+            <h2 className={styles.sectionTitle}>{t('jsonOutput')}</h2>
             <div className={styles.outputActions}>
               {jsonData && (
                 <Checkbox
                   checked={isMinified}
                   onChange={setIsMinified}
-                  label="Minified"
+                  label={t('minified')}
                   className={styles.minifiedCheckbox}
                 />
               )}
               {jsonOutput && (
                 <Button variant="outline" size="sm" onClick={handleCopyJson}>
-                  Copy JSON
+                  {t('copyJson')}
                 </Button>
               )}
             </div>
@@ -205,7 +204,7 @@ function CsvToJson() {
               onChange={() => {
                 // Output is read-only, computed from jsonData
               }}
-              placeholder="JSON output will appear here..."
+              placeholder={t('jsonOutputPlaceholder')}
               rows={15}
               className={styles.textarea}
               disabled={!jsonOutput}

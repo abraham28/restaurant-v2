@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
 import type { HeaderProps } from './types';
 import styles from './Header.module.scss';
@@ -16,6 +17,7 @@ function Header({
   dropdownSections = [],
   className = '',
 }: HeaderProps) {
+  const { t } = useTranslation();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -64,8 +66,8 @@ function Header({
             <button
               className={styles.profileButton}
               onClick={onProfileClick}
-              aria-label="Profile menu"
-              title={profileTitle || 'Profile'}
+              aria-label={t('profileMenu')}
+              title={profileTitle || t('profile')}
               disabled={!onProfileClick}
             >
               {profileContent}
