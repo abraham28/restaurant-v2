@@ -1,20 +1,37 @@
-import React, { useLayoutEffect, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './Stepper.module.scss';
 import { StepperProps } from './types';
 
-/** 360px design stays as-is (narrow: 3 steps + "and more"). Above this we collapse middle. */
+/** Below 360px: narrow mode (3 steps + "and more"). */
 const NARROW_BREAKPOINT_PX = 360;
+
+/**
+ * Breakpoint-based max middle index (0-based). Visible steps = [0..maxMiddleIndex, last].
+ * - >= 960px: 1,2,3,4,5,6,7,8,9,10 (all steps)
+ * - >= 720px: 1,2,3,4,5,6,7,8,10 → maxMiddleIndex = 7
+ * - >= 640px: 1,2,3,4,5,6,7,10 → maxMiddleIndex = 6
+ * - >= 480px: 1,2,3,4,5,10 → maxMiddleIndex = 4
+ * - >= 360px (e.g. 479px): 1,2,3,4,10 → maxMiddleIndex = 3
+ */
+function getMaxMiddleIndexForWidth(width: number, stepsLength: number): number {
+  const maxAllowed = Math.max(0, stepsLength - 2);
+  if (width >= 960) return maxAllowed; // show all 1..10
+  if (width >= 720) return Math.min(7, maxAllowed);
+  if (width >= 640) return Math.min(6, maxAllowed);
+  if (width >= 480) return Math.min(4, maxAllowed);
+  if (width >= 360) return Math.min(3, maxAllowed); // 1,2,3,4,10
+  return maxAllowed;
+}
 
 function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
   const [isNarrow, setIsNarrow] = useState(
     () =>
-      typeof window !== 'undefined' &&
-      window.innerWidth <= NARROW_BREAKPOINT_PX,
+      typeof window !== 'undefined' && window.innerWidth < NARROW_BREAKPOINT_PX,
   );
-  /** Above 360px: max index to show before last step (length-2 = show all). */
-  const [maxMiddleIndex, setMaxMiddleIndex] = useState(() =>
-    Math.max(0, steps.length - 2),
-  );
+  const [maxMiddleIndex, setMaxMiddleIndex] = useState(() => {
+    const w = typeof window !== 'undefined' ? window.innerWidth : 960;
+    return getMaxMiddleIndexForWidth(w, steps.length);
+  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -24,10 +41,10 @@ function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
     const checkWidth = () => {
       const parent = el.parentElement;
       const width = parent?.clientWidth ?? window.innerWidth;
-      const narrow = width <= NARROW_BREAKPOINT_PX;
+      const narrow = width < NARROW_BREAKPOINT_PX;
       setIsNarrow(narrow);
       if (!narrow) {
-        setMaxMiddleIndex(Math.max(0, steps.length - 2));
+        setMaxMiddleIndex(getMaxMiddleIndexForWidth(width, steps.length));
       }
     };
 
@@ -40,20 +57,6 @@ function Stepper({ steps, currentStep, onStepClick }: StepperProps) {
 
     return () => ro.disconnect();
   }, [steps.length]);
-
-  // Above 360px: if content overflows, hide one more middle step (show 1..k, last).
-  useLayoutEffect(() => {
-    if (isNarrow || steps.length <= 2) return;
-
-    const el = containerRef.current;
-    const parent = el?.parentElement;
-    if (!el || !parent) return;
-
-    const overflow = el.scrollWidth > parent.clientWidth;
-    if (overflow && maxMiddleIndex > 0) {
-      setMaxMiddleIndex((prev) => Math.max(0, prev - 1));
-    }
-  }, [isNarrow, steps.length, maxMiddleIndex]);
 
   // Narrow: sliding window of 3 steps + "and more". Wide: all or 1..k, last.
   const isCollapsed = !isNarrow && maxMiddleIndex < steps.length - 2;
