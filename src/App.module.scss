@@ -38,15 +38,3 @@
     font-size: var(--font-size-small);
   }
 }
-
-.languageSwitcherContainer {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
-
-  @media (max-width: 768px) {
-    top: 0.5rem;
-    right: 0.5rem;
-  }
-}

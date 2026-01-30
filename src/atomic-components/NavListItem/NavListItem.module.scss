@@ -1,0 +1,41 @@
+.navListItem {
+  list-style: none;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  color: var(--color-text);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 0.375rem;
+
+  &:hover {
+    background-color: var(--color-hover, rgba(0, 0, 0, 0.05));
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  &.active {
+    background-color: var(--color-active-bg);
+    color: var(--color-primary);
+    font-weight: 500;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+}
+

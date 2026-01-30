@@ -17,25 +17,26 @@ code {
 }
 
 :root {
-  --color-primary: #009245ff;
+  --color-primary: #1e3a8a;
   --color-error: #e91a1a;
   --color-border: #e0e0e0;
-  --color-text: #002d15;
+  --color-text: #0f172a;
   --color-text-secondary: #6c757d;
   --color-disabled-bg: #f8f9fa;
   --color-transparent: transparent;
   --color-white: #ffffff;
   --color-black: #000000;
   --color-shadow: #000000;
-  --color-primary-hover: #007a3a;
-  --color-primary-active: #00622e;
+  --color-primary-hover: #1e293b;
+  --color-primary-active: #0f172a;
   --color-error-hover: #d41414;
   --color-error-active: #b01212;
 
-  --color-header-bg: #009245ff;
+  --color-header-bg: #1e3a8a;
   --color-hover-bg: #e9ecef;
   --color-sidebar-bg: #f5f6f8;
-  --color-sidebar-text: #002d15;
+  --color-sidebar-text: #0f172a;
+  --color-active-bg: rgba(30, 58, 138, 0.1);
   /* font size */
   --font-size-x-small: 10px;
   --font-size-small: 12px;
