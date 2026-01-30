@@ -4,7 +4,13 @@
  * Functions for reading and retrieving drafts
  */
 
-import { openDatabase, getStoreName, type DataRecord } from '../base';
+import {
+  openDatabase,
+  getPrefixedKey,
+  keyStartsWith,
+  STORE_NAMES,
+  type DataRecord,
+} from '../base';
 import { type DraftData, type DraftMetadata } from './types';
 
 /**
@@ -20,12 +26,12 @@ export async function getDraft<T>(
   draftId: string,
 ): Promise<DraftData<T> | null> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.DRAFT;
   const transaction = db.transaction([storeName], 'readonly');
   const store = transaction.objectStore(storeName);
 
   return new Promise<DraftData<T> | null>((resolve, reject) => {
-    const request = store.get(`draft_${draftId}`);
+    const request = store.get(getPrefixedKey(STORE_NAMES.DRAFT, draftId));
 
     request.onsuccess = () => {
       const result = request.result as DataRecord | undefined;
@@ -63,7 +69,7 @@ export async function getDraft<T>(
  */
 export async function getAllDrafts(): Promise<DraftMetadata[]> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.DRAFT;
   const transaction = db.transaction([storeName], 'readonly');
   const store = transaction.objectStore(storeName);
 
@@ -76,7 +82,7 @@ export async function getAllDrafts(): Promise<DraftMetadata[]> {
 
       for (const record of results) {
         // Only process draft keys
-        if (record.key.startsWith('draft_')) {
+        if (keyStartsWith(record.key, STORE_NAMES.DRAFT)) {
           try {
             const draftData = JSON.parse(record.value) as DraftData<unknown>;
             drafts.push(draftData.metadata);

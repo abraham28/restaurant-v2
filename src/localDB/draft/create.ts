@@ -4,7 +4,12 @@
  * Functions for creating and storing drafts
  */
 
-import { openDatabase, getStoreName, type DataRecord } from '../base';
+import {
+  openDatabase,
+  getPrefixedKey,
+  STORE_NAMES,
+  type DataRecord,
+} from '../base';
 import { type DraftData } from './types';
 
 /**
@@ -26,13 +31,19 @@ export async function storeDraft<T>(
   clientType?: string,
 ): Promise<void> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.DRAFT;
   const transaction = db.transaction([storeName], 'readwrite');
   const store = transaction.objectStore(storeName);
 
   return new Promise((resolve, reject) => {
-    // Get existing draft if it exists to preserve createdAt
-    const getRequest = store.get(`draft_${draftId}`);
+    // Normalize the key: getPrefixedKey handles both prefixed and non-prefixed IDs
+    const prefixedKey = getPrefixedKey(STORE_NAMES.DRAFT, draftId);
+    // Extract the raw ID for metadata (remove prefix if present)
+    const prefix = `${STORE_NAMES.DRAFT}_`;
+    const rawDraftId = draftId.startsWith(prefix)
+      ? draftId.substring(prefix.length)
+      : draftId;
+    const getRequest = store.get(prefixedKey);
 
     getRequest.onsuccess = () => {
       const existing = getRequest.result as DataRecord | undefined;
@@ -98,9 +109,9 @@ export async function storeDraft<T>(
       }
 
       const draftData: DraftData<T> = {
-        id: draftId,
+        id: rawDraftId,
         metadata: {
-          id: draftId,
+          id: rawDraftId,
           createdAt,
           updatedAt: Date.now(),
           clientName: displayName,
@@ -111,7 +122,7 @@ export async function storeDraft<T>(
 
       const value = JSON.stringify(draftData);
       const request = store.put({
-        key: `draft_${draftId}`,
+        key: prefixedKey,
         value,
         updatedAt: Date.now(),
       });
@@ -142,5 +153,8 @@ export async function storeDraft<T>(
  * const draftId = generateDraftId(); // Returns something like "draft_1704067200000_abc123"
  */
 export function generateDraftId(): string {
-  return `draft_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  return getPrefixedKey(
+    STORE_NAMES.DRAFT,
+    `${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+  );
 }

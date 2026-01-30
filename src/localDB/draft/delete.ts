@@ -4,7 +4,7 @@
  * Functions for deleting drafts
  */
 
-import { openDatabase, getStoreName } from '../base';
+import { openDatabase, getPrefixedKey, STORE_NAMES } from '../base';
 
 /**
  * Delete a draft by ID
@@ -17,12 +17,12 @@ import { openDatabase, getStoreName } from '../base';
  */
 export async function deleteDraft(draftId: string): Promise<void> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.DRAFT;
   const transaction = db.transaction([storeName], 'readwrite');
   const store = transaction.objectStore(storeName);
 
   return new Promise((resolve, reject) => {
-    const request = store.delete(`draft_${draftId}`);
+    const request = store.delete(getPrefixedKey(STORE_NAMES.DRAFT, draftId));
 
     request.onsuccess = () => {
       resolve();

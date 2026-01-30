@@ -32,7 +32,7 @@
  * For string values, they are stored as-is without double-encoding.
  */
 
-import { openDatabase, getStoreName, type DataRecord } from './base';
+import { openDatabase, STORE_NAMES, type DataRecord } from './base';
 
 /**
  * Store data in IndexedDB with a given key
@@ -47,7 +47,7 @@ import { openDatabase, getStoreName, type DataRecord } from './base';
  */
 export async function storeData<T>(key: string, data: T): Promise<void> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.TOKENS;
   const transaction = db.transaction([storeName], 'readwrite');
   const store = transaction.objectStore(storeName);
 
@@ -84,7 +84,7 @@ export async function storeData<T>(key: string, data: T): Promise<void> {
  */
 export async function getData<T>(key: string): Promise<T | null> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.TOKENS;
   const transaction = db.transaction([storeName], 'readonly');
   const store = transaction.objectStore(storeName);
 
@@ -132,7 +132,7 @@ export async function getData<T>(key: string): Promise<T | null> {
  */
 export async function removeData(key: string): Promise<void> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.TOKENS;
   const transaction = db.transaction([storeName], 'readwrite');
   const store = transaction.objectStore(storeName);
 

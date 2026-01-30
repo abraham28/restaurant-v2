@@ -29,8 +29,18 @@ export const ENCRYPTION_CONSTANTS = {
 };
 
 // IndexedDB Constants
+// Store names - centralized location for all IndexedDB store names
+// Add new store names here as needed
+const STORE_NAMES = {
+  DRAFT: 'draft', // Store for draft operations
+  CACHE: 'cache', // Store for cache operations
+  TOKENS: 'tokens', // Store for tokens and general purpose storage
+};
+
 export const INDEXED_DB_CONSTANTS = {
   DB_NAME: 'abrasoft_db',
   DB_VERSION: 1,
-  STORE_NAME: 'tokens',
+  STORE_NAMES,
+  // Backward compatibility - references STORE_NAMES.TOKENS
+  STORE_NAME: STORE_NAMES.TOKENS,
 };

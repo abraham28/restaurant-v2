@@ -5,7 +5,12 @@
  * Used for caching CSV/JSON data and other cacheable resources.
  */
 
-import { openDatabase, getStoreName, type DataRecord } from '../base';
+import {
+  openDatabase,
+  getPrefixedKey,
+  STORE_NAMES,
+  type DataRecord,
+} from '../base';
 
 /**
  * Store data in cache by key
@@ -20,7 +25,7 @@ import { openDatabase, getStoreName, type DataRecord } from '../base';
  */
 export async function storeCache<T>(key: string, data: T): Promise<void> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.CACHE;
   const transaction = db.transaction([storeName], 'readwrite');
   const store = transaction.objectStore(storeName);
 
@@ -30,7 +35,7 @@ export async function storeCache<T>(key: string, data: T): Promise<void> {
     const value = typeof data === 'string' ? data : JSON.stringify(data);
 
     const request = store.put({
-      key: `cache_${key}`,
+      key: getPrefixedKey(STORE_NAMES.CACHE, key),
       value,
       updatedAt: Date.now(),
     });
@@ -57,12 +62,12 @@ export async function storeCache<T>(key: string, data: T): Promise<void> {
  */
 export async function getCache<T>(key: string): Promise<T | null> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.CACHE;
   const transaction = db.transaction([storeName], 'readonly');
   const store = transaction.objectStore(storeName);
 
   return new Promise<T | null>((resolve, reject) => {
-    const request = store.get(`cache_${key}`);
+    const request = store.get(getPrefixedKey(STORE_NAMES.CACHE, key));
 
     request.onsuccess = () => {
       const result = request.result as DataRecord | undefined;
@@ -105,12 +110,12 @@ export async function getCache<T>(key: string): Promise<T | null> {
  */
 export async function removeCache(key: string): Promise<void> {
   const db = await openDatabase();
-  const storeName = getStoreName();
+  const storeName = STORE_NAMES.CACHE;
   const transaction = db.transaction([storeName], 'readwrite');
   const store = transaction.objectStore(storeName);
 
   return new Promise((resolve, reject) => {
-    const request = store.delete(`cache_${key}`);
+    const request = store.delete(getPrefixedKey(STORE_NAMES.CACHE, key));
 
     request.onsuccess = () => {
       resolve();
