@@ -67,7 +67,9 @@
   justify-content: center;
   min-height: 500px;
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Avoid clipping Take Photo / Cancel buttons */
+  width: 100%;
+  max-width: 100%;
 }
 
 .placeholder {
@@ -103,14 +105,19 @@
   position: relative;
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .image {
-  max-width: 100%;
-  max-height: 100%;
+  /* Same size as video preview (capture) so photo displays at same dimensions */
+  max-width: 400px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
   object-fit: contain;
   border-radius: var(--border-radius-small);
 }
@@ -147,20 +154,21 @@
 
 .cameraContainer {
   width: 100%;
-  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   padding: var(--padding-large);
+  padding-bottom: 2rem; /* Space so Take Photo / Cancel stay visible */
 }
 
 .video {
   width: 100%;
-  max-width: 640px;
-  max-height: 480px;
-  min-height: 300px;
+  max-width: 400px;
+  max-height: 300px;
+  min-height: 200px;
   border-radius: var(--border-radius-small);
   background-color: var(--color-black);
   border: 2px solid hsl(0 0% 90%);
@@ -191,5 +199,17 @@
 
   .imageDisplayArea {
     min-height: 300px;
+    padding: var(--padding-medium);
+  }
+
+  .imageWrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
   }
 }

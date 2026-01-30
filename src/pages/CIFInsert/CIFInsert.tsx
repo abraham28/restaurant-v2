@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button';
 import { ROUTES } from 'utils/constants';
 import { getDraft, storeDraft, generateDraftId } from 'utils/indexedDBUtils';
@@ -226,7 +225,6 @@ function CIFInsert() {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<TabType>('clientType');
   const [maxTabIndexReached, setMaxTabIndexReached] = useState(0);
-  const [showSaveModal, setShowSaveModal] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState({
     individual: false,
@@ -294,9 +292,36 @@ function CIFInsert() {
   }, []);
 
   const handleBirthDateChange = useCallback((date: string) => {
+    // Calculate age from birthdate
+    let calculatedAge = 0;
+    if (date) {
+      try {
+        // Parse YYYY-MM-DD format
+        const [year, month, day] = date.split('-').map(Number);
+        const birthDate = new Date(year, month - 1, day);
+        const today = new Date();
+
+        // Calculate age
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+
+        // Adjust if birthday hasn't occurred this year
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+        }
+
+        calculatedAge = age > 0 ? age : 0;
+      } catch (error) {
+        console.error('Error calculating age:', error);
+        calculatedAge = 0;
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
       birthDate: date,
+      age: calculatedAge,
     }));
   }, []);
 
@@ -356,6 +381,26 @@ function CIFInsert() {
     const idx = getBreadcrumbIndex(activeTab);
     setMaxTabIndexReached((prev) => Math.max(prev, idx));
   }, [activeTab, getBreadcrumbIndex]);
+
+  // Restore form when returning from Review page (Back to Edit)
+  useEffect(() => {
+    const state = location.state as {
+      draftId?: string;
+      formData?: typeof initialFormData;
+      selectedTypes?: typeof selectedTypes;
+    } | null;
+    if (state?.draftId) return;
+    if (
+      state?.formData &&
+      state?.selectedTypes &&
+      typeof state.formData === 'object' &&
+      typeof state.selectedTypes === 'object'
+    ) {
+      setFormData(state.formData);
+      setSelectedTypes(state.selectedTypes);
+      setActiveTab('picture');
+    }
+  }, [location.state]);
 
   // Restore draft when opening from list (draft click)
   useEffect(() => {
@@ -508,20 +553,6 @@ function CIFInsert() {
       setActiveTab(orderedTabs[prevIndex]);
     }
   }, [currentTabIndex, isFirstTab, orderedTabs]);
-
-  const handleSave = useCallback(() => {
-    setShowSaveModal(true);
-  }, []);
-
-  const handleCloseSaveModal = useCallback(() => {
-    setShowSaveModal(false);
-  }, []);
-
-  const handleSaveConfirm = useCallback(() => {
-    // Save function will be implemented later
-    console.log('Save confirmed');
-    setShowSaveModal(false);
-  }, []);
 
   const handleCancel = useCallback(async () => {
     // Don't save draft if user is still on client type step only
@@ -797,8 +828,15 @@ function CIFInsert() {
             </Button>
           )}
           {isLastTab ? (
-            <Button variant="primary" onClick={handleSave}>
-              Save
+            <Button
+              variant="primary"
+              onClick={() => {
+                navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.REVIEW, {
+                  state: { formData, selectedTypes },
+                });
+              }}
+            >
+              Review
             </Button>
           ) : (
             <Button variant="primary" onClick={handleNext}>
@@ -807,24 +845,6 @@ function CIFInsert() {
           )}
         </div>
       )}
-
-      {/* Save Confirmation Modal */}
-      <Modal show={showSaveModal} onHide={handleCloseSaveModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Save Client Information</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to save this client information?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline" onClick={handleCloseSaveModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleSaveConfirm}>
-            OK
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 }
