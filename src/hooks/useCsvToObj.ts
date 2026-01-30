@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { csvToObjects } from 'utils/csvUtils';
-import { getData, storeData } from 'utils/indexedDBUtils';
+import localDB from 'localDB';
 
 interface UseCsvToObjOptions<T> {
   /**
@@ -48,7 +48,8 @@ export function useCsvToObj<T = Record<string, string>>(
 
       // 1) Try cached data first (for quick render/offline)
       try {
-        const cached = await getData<Record<string, string>[]>(cacheKey);
+        const cached =
+          await localDB.getCache<Record<string, string>[]>(cacheKey);
         if (cached && cached.length > 0 && isMounted) {
           const mapped = options?.mapData
             ? (cached
@@ -91,7 +92,7 @@ export function useCsvToObj<T = Record<string, string>>(
           : (parsed as unknown as T[]);
 
         // Cache parsed data
-        await storeData(cacheKey, parsed);
+        await localDB.storeCache(cacheKey, parsed);
 
         if (isMounted) {
           setData(mapped);

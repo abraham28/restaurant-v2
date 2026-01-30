@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getData, storeData } from 'utils/indexedDBUtils';
+import localDB from 'localDB';
 
 interface UseJsonToObjOptions<T> {
   /**
@@ -41,7 +41,8 @@ export function useJsonToObj<T = Record<string, unknown>>(
 
       // 1) Try cached data first (for quick render/offline)
       try {
-        const cached = await getData<Record<string, unknown>[]>(cacheKey);
+        const cached =
+          await localDB.getCache<Record<string, unknown>[]>(cacheKey);
         if (cached && cached.length > 0 && isMounted) {
           const mapped = options?.mapData
             ? (cached
@@ -88,7 +89,7 @@ export function useJsonToObj<T = Record<string, unknown>>(
           : (parsed as unknown as T[]);
 
         // Cache parsed data
-        await storeData(cacheKey, parsed);
+        await localDB.storeCache(cacheKey, parsed);
 
         if (isMounted) {
           setData(mapped);

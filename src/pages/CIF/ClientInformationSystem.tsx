@@ -4,12 +4,11 @@ import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button/Button';
 import Radio from 'atomic-components/Radio/Radio';
 import { ROUTES } from 'utils/constants';
+import localDB, { type DraftMetadata } from 'localDB';
 import {
-  getAllDrafts,
-  deleteDraft,
-  type DraftMetadata,
-} from 'utils/indexedDBUtils';
-import { useClientFormStore } from 'stores/clientFormStore';
+  useClientFormStore,
+  type ClientFormState,
+} from 'stores/clientFormStore';
 import styles from './ClientInformationSystem.module.scss';
 
 type ClientType = 'Individual' | 'Company' | 'Government' | 'Organization';
@@ -23,7 +22,10 @@ function ClientInformationSystem() {
   const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const resetForm = useClientFormStore((state) => state.resetForm);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+  const resetForm: () => void = useClientFormStore(
+    (state: ClientFormState): ClientFormState['resetForm'] => state.resetForm,
+  ) as () => void;
 
   const clientTypeOptions: ClientType[] = [
     'Individual',
@@ -36,7 +38,7 @@ function ClientInformationSystem() {
   const loadDrafts = useCallback(async () => {
     setLoading(true);
     try {
-      const allDrafts = await getAllDrafts();
+      const allDrafts = await localDB.getAllDrafts();
       setDrafts(allDrafts);
     } catch (error) {
       console.error('Failed to load drafts:', error);
@@ -80,9 +82,9 @@ function ClientInformationSystem() {
       e.stopPropagation(); // Prevent triggering draft click
       if (window.confirm('Are you sure you want to delete this draft?')) {
         try {
-          await deleteDraft(draftId);
+          await localDB.deleteDraft(draftId);
           // Reload drafts list
-          const allDrafts = await getAllDrafts();
+          const allDrafts = await localDB.getAllDrafts();
           setDrafts(allDrafts);
         } catch (error) {
           console.error('Failed to delete draft:', error);

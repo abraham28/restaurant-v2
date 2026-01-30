@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Button from 'atomic-components/Button';
 import { ROUTES } from 'utils/constants';
-import { getDraft, storeDraft, generateDraftId } from 'utils/indexedDBUtils';
+import localDB from 'localDB';
 import cifTitleData from 'data/cifTableOfRecord/cifTitle.json';
 import cifClientNameSuffixData from 'data/cifTableOfRecord/cifClientNameSuffix.json';
 import ClientType from './ClientType/ClientType';
@@ -407,53 +407,53 @@ function CIFInsert() {
     if (!stateDraftId) return;
 
     let cancelled = false;
-    void getDraft<CIFInsertDraftPayload | Record<string, unknown>>(
-      stateDraftId,
-    ).then((draft) => {
-      if (cancelled || !draft) return;
-      const payload = draft.formData;
+    void localDB
+      .getDraft<CIFInsertDraftPayload | Record<string, unknown>>(stateDraftId)
+      .then((draft) => {
+        if (cancelled || !draft) return;
+        const payload = draft.formData;
 
-      // Draft saved from CIFInsert has formData, selectedTypes, activeTab
-      if (
-        payload &&
-        typeof payload === 'object' &&
-        'formData' in payload &&
-        'selectedTypes' in payload &&
-        'activeTab' in payload
-      ) {
-        const fullPayload = payload as CIFInsertDraftPayload;
-        const {
-          formData: draftFormData,
-          selectedTypes: draftTypes,
-          activeTab: draftTab,
-        } = fullPayload;
-        setFormData(draftFormData);
-        setSelectedTypes(draftTypes);
-        setActiveTab(draftTab);
-        setDraftId(draft.id);
-      } else {
-        // Draft from type-specific pages: formData is the raw form, use metadata.clientType
-        setFormData({ ...initialFormData, ...payload });
-        const clientType = draft.metadata.clientType;
-        const types = {
-          individual: clientType === 'Individual',
-          company: clientType === 'Company',
-          government: clientType === 'Government',
-          organization: clientType === 'Organization',
-        };
-        setSelectedTypes(types);
-        const firstTab: TabType =
-          clientType === 'Individual'
-            ? 'individual'
-            : clientType === 'Company'
-              ? 'company'
-              : clientType === 'Government'
-                ? 'government'
-                : 'organization';
-        setActiveTab(firstTab);
-        setDraftId(draft.id);
-      }
-    });
+        // Draft saved from CIFInsert has formData, selectedTypes, activeTab
+        if (
+          payload &&
+          typeof payload === 'object' &&
+          'formData' in payload &&
+          'selectedTypes' in payload &&
+          'activeTab' in payload
+        ) {
+          const fullPayload = payload as CIFInsertDraftPayload;
+          const {
+            formData: draftFormData,
+            selectedTypes: draftTypes,
+            activeTab: draftTab,
+          } = fullPayload;
+          setFormData(draftFormData);
+          setSelectedTypes(draftTypes);
+          setActiveTab(draftTab);
+          setDraftId(draft.id);
+        } else {
+          // Draft from type-specific pages: formData is the raw form, use metadata.clientType
+          setFormData({ ...initialFormData, ...payload });
+          const clientType = draft.metadata.clientType;
+          const types = {
+            individual: clientType === 'Individual',
+            company: clientType === 'Company',
+            government: clientType === 'Government',
+            organization: clientType === 'Organization',
+          };
+          setSelectedTypes(types);
+          const firstTab: TabType =
+            clientType === 'Individual'
+              ? 'individual'
+              : clientType === 'Company'
+                ? 'company'
+                : clientType === 'Government'
+                  ? 'government'
+                  : 'organization';
+          setActiveTab(firstTab);
+          setDraftId(draft.id);
+        }
+      });
     return () => {
       cancelled = true;
     };
@@ -563,7 +563,7 @@ function CIFInsert() {
       return;
     }
 
-    const id = draftId || generateDraftId();
+    const id = draftId || localDB.generateDraftId();
     const clientName =
       formData.companyName?.trim() ||
       (formData.firstName || formData.lastName
@@ -585,7 +585,7 @@ function CIFInsert() {
       activeTab,
     };
     try {
-      await storeDraft(id, payload, clientName, clientType);
+      await localDB.storeDraft(id, payload, clientName, clientType);
     } catch (error) {
       console.error('Failed to save draft:', error);
     }

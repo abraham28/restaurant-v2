@@ -37,9 +37,18 @@
 
 - **Utils**: Utility functions in `src/utils/`
   - `constants.ts`: API routes and UI routes
-  - `indexedDBUtils.ts`: IndexedDB operations for offline storage
   - `cacheUtils.ts`: Cache key management utilities
   - Other utility files as needed
+
+- **LocalDB**: Local database operations in `src/localDB/`
+  - Domain-specific modules organized by feature (mirrors backend API structure)
+  - `base.ts`: Base utilities (openDatabase, getStoreName, DataRecord)
+  - `store.ts`: Generic storage functions (storeData, getData, removeData, client form functions)
+  - `cache/`: Cache operations (storeCache, getCache, removeCache)
+  - `draft/`: Draft management (create, read, update, delete)
+  - `index.ts`: Re-exports all modules (export-only, no logic)
+  - `namespace.ts`: Namespace object for default import
+  - **Import pattern**: Use namespace import `import localDB from 'localDB'` and access via `localDB.getCache()`, `localDB.storeDraft()`, etc.
 
 ### File Naming
 - Components: PascalCase (e.g., `AddCustomerModal.tsx`, `ClientInformationSystem.tsx`)
@@ -52,12 +61,13 @@
 
 ### Imports
 - Use absolute imports with `baseUrl: "src"` (e.g., `import Button from "atomic-components/Button"`)
-- Group imports: React → third-party → atomic-components → components → utils → types → styles
+- Group imports: React → third-party → atomic-components → components → localDB → utils → types → styles
 - Example:
   ```typescript
   import React, { useEffect, useState, useCallback } from "react";
   import { Modal, Form } from "react-bootstrap";
   import Button from "atomic-components/Button";
+  import localDB from "localDB";
   import { API_ROUTES } from "utils/constants";
   import styles from "./ComponentName.module.scss";
   import { Preference } from "types/preferences";
@@ -219,7 +229,7 @@
 ```typescript
 import { useQuery } from "@tanstack/react-query";
 import { API_ROUTES } from "utils/constants";
-import { getFromIndexedDB, saveToIndexedDB } from "utils/indexedDBUtils";
+import localDB from "localDB";
 
 const { data, isLoading, error } = useQuery<DataType[]>({
   queryKey: ["dataKey"],
@@ -231,11 +241,11 @@ const { data, isLoading, error } = useQuery<DataType[]>({
       const data = await response.json();
       
       // Cache in IndexedDB for offline access
-      await saveToIndexedDB("dataKey", data);
+      await localDB.storeCache("dataKey", data);
       return data;
     } catch (networkError) {
       // If offline, try to get from IndexedDB cache
-      const cachedData = await getFromIndexedDB("dataKey");
+      const cachedData = await localDB.getCache<DataType[]>("dataKey");
       if (cachedData) {
         return cachedData;
       }
@@ -244,7 +254,7 @@ const { data, isLoading, error } = useQuery<DataType[]>({
   },
   // Use cached data as initial data while fetching
   placeholderData: async () => {
-    return await getFromIndexedDB("dataKey");
+    return await localDB.getCache<DataType[]>("dataKey");
   },
 });
 
@@ -255,7 +265,7 @@ if (error) return <div>Error: {error.message}</div>;
 ### Success/Error Handling Pattern with Tanstack Query (Offline-First)
 ```typescript
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { saveToIndexedDB } from "utils/indexedDBUtils";
+import localDB from "localDB";
 
 const queryClient = useQueryClient();
 
@@ -271,7 +281,7 @@ const mutation = useMutation({
       const newItem = await response.json();
       
       // Cache in IndexedDB
-      await saveToIndexedDB("dataKey", newItem);
+      await localDB.storeCache("dataKey", newItem);
       return newItem;
     } catch (error) {
       // If offline, queue for sync later or save to IndexedDB as pending
@@ -324,10 +334,68 @@ const mutation = useMutation({
 
 **Guidelines:**
 - **Default to IndexedDB** for this offline-first application
-- Use `indexedDBUtils.ts` utilities for IndexedDB operations
+- Use `localDB` module for all IndexedDB operations
+- **Import pattern**: Use namespace import `import localDB from 'localDB'` and access functions via `localDB.getCache()`, `localDB.storeDraft()`, etc.
+- **Module structure**: Domain-specific modules in `src/localDB/` (e.g., `draft/`, `cache/`, `store/`)
 - Always cache API responses in IndexedDB for offline access
 - Implement sync strategies: fetch from API when online, read from IndexedDB when offline
 - Use cache keys with company/user context when needed (see `cacheUtils.ts`)
+
+### LocalDB Module Structure
+
+The `localDB` module is organized by domain/feature, mirroring backend API structure:
+
+```
+src/localDB/
+  ├── base.ts          # Base utilities (openDatabase, getStoreName, DataRecord)
+  ├── store.ts         # Generic storage (storeData, getData, removeData, client form functions)
+  ├── cache/           # Cache operations
+  │   ├── cache.ts     # storeCache, getCache, removeCache
+  │   └── index.ts
+  ├── draft/           # Draft management
+  │   ├── create.ts    # storeDraft, generateDraftId
+  │   ├── read.ts      # getDraft, getAllDrafts
+  │   ├── update.ts    # updateDraft, updateDraftMetadata
+  │   ├── delete.ts    # deleteDraft
+  │   ├── types.ts     # DraftMetadata, DraftData
+  │   └── index.ts
+  ├── index.ts         # Re-exports all modules (export-only)
+  └── namespace.ts    # Namespace object for default import
+```
+
+**Usage Examples:**
+
+```typescript
+// Namespace import (recommended)
+import localDB from 'localDB';
+
+// Cache operations
+await localDB.storeCache('csv_barangay', parsedData);
+const cached = await localDB.getCache<MyType[]>('csv_barangay');
+await localDB.removeCache('csv_barangay');
+
+// Draft operations
+const draftId = localDB.generateDraftId();
+await localDB.storeDraft(draftId, formData, 'Client Name', 'Individual');
+const draft = await localDB.getDraft<FormData>(draftId);
+const allDrafts = await localDB.getAllDrafts();
+await localDB.deleteDraft(draftId);
+
+// Client form data operations
+await localDB.storeClientFormData(formData);
+const formData = await localDB.getClientFormData<FormData>();
+await localDB.removeClientFormData();
+
+// Named imports (also supported)
+import { getCache, storeDraft } from 'localDB';
+await getCache('key');
+await storeDraft(id, data);
+```
+
+**Important:**
+- **Never import directly from sub-modules** (e.g., `from 'localDB/cache'`) - always use `from 'localDB'`
+- **Use namespace pattern** (`import localDB from 'localDB'`) for consistency
+- Each domain module (draft, cache) has its own CRUD operations following backend API patterns
 
 ## Best Practices
 

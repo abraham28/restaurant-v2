@@ -13,14 +13,7 @@
  */
 
 import { create } from 'zustand';
-import {
-  storeClientFormData,
-  getClientFormData,
-  removeClientFormData,
-  storeDraft,
-  getDraft,
-  generateDraftId,
-} from 'utils/indexedDBUtils';
+import localDB from 'localDB';
 
 /**
  * Form Data Interface - matches the FormData interface in ClientInformationSystemInsert.tsx
@@ -367,7 +360,7 @@ const initialFormData: ClientFormData = {
 /**
  * Store state interface
  */
-interface ClientFormState {
+export interface ClientFormState {
   formData: ClientFormData;
   activeTab: string;
   isLoading: boolean;
@@ -443,7 +436,7 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
   loadDraft: async (draftId: string) => {
     set({ isLoading: true });
     try {
-      const draft = await getDraft<ClientFormData>(draftId);
+      const draft = await localDB.getDraft<ClientFormData>(draftId);
       if (draft) {
         set({
           formData: draft.formData,
@@ -474,7 +467,7 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
       draftId: null,
       clientType: null,
     });
-    void removeClientFormData().catch((error) => {
+    void localDB.removeClientFormData().catch((error) => {
       console.error('Failed to remove form data from IndexedDB:', error);
     });
   },
@@ -483,16 +476,20 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
    * Load form data from IndexedDB
    * Call this on component mount to restore saved data
    */
-  loadFormFromIndexedDB: async () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+  loadFormFromIndexedDB: async (): Promise<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     set({ isLoading: true });
     try {
-      const savedData = await getClientFormData<ClientFormData>();
+      const savedData = await localDB.getClientFormData<ClientFormData>();
       if (savedData) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         set({ formData: savedData });
       }
     } catch (error) {
       console.error('Failed to load form data from IndexedDB:', error);
     } finally {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       set({ isLoading: false });
     }
   },
@@ -504,7 +501,7 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
   _autoSave: async () => {
     try {
       const state = get();
-      const currentDraftId = state.draftId || generateDraftId();
+      const currentDraftId = state.draftId || localDB.generateDraftId();
 
       // Get client type from store state, or infer from form data if not set
       let clientType = state.clientType;
@@ -525,7 +522,7 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
           : undefined;
 
       // Save as draft with the determined client type
-      await storeDraft(
+      await localDB.storeDraft(
         currentDraftId,
         state.formData,
         clientName,
@@ -538,7 +535,7 @@ export const useClientFormStore = create<ClientFormState>((set, get) => ({
       }
 
       // Also save to client_form_data for backward compatibility
-      await storeClientFormData(state.formData);
+      await localDB.storeClientFormData(state.formData);
     } catch (error) {
       console.error('Failed to auto-save form data to IndexedDB:', error);
     }
