@@ -18,6 +18,7 @@ import AmlaTab from './Amla/Amla';
 import RemarksTab from './Remarks/Remarks';
 import PictureTab from './Picture/Picture';
 import Stepper from 'atomic-components/Stepper';
+import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet';
 import styles from './CIFInsert.module.scss';
 
 type TabType =
@@ -567,14 +568,24 @@ function CIFInsert() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Client Information System - Insert</h1>
-        <Button
-          variant="outline"
-          onClick={() => {
-            void handleCancel();
-          }}
-        >
-          Cancel
-        </Button>
+        <div className={styles.headerLegend}>
+          <span className={styles.legendItem}>
+            CIC
+            <RequiredFieldBullet type="cic" />
+          </span>
+          <span className={styles.legendItem}>
+            ALMA
+            <RequiredFieldBullet type="amla" />
+          </span>
+          <Button
+            variant="outline"
+            onClick={() => {
+              void handleCancel();
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
 
       <div className={styles.stepperContainer}>

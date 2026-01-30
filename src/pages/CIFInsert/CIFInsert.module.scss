@@ -23,6 +23,19 @@
   margin: var(--margin-none);
 }
 
+.headerLegend {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-large);
+}
+
+.legendItem {
+  font-size: var(--font-size-small);
+  color: hsl(222.2 47.4% 11.2%);
+  display: inline-flex;
+  align-items: center;
+}
+
 .stepperContainer {
   background-color: var(--color-white);
   border-bottom: 1px solid hsl(0 0% 90%);
