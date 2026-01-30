@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button';
 import { ROUTES } from 'utils/constants';
 import { getDraft, storeDraft, generateDraftId } from 'utils/indexedDBUtils';
+import cifTitleData from 'data/cifTableOfRecord/cifTitle.json';
+import cifClientNameSuffixData from 'data/cifTableOfRecord/cifClientNameSuffix.json';
 import ClientType from './ClientType/ClientType';
 import IndividualTab from './Individual/Individual';
 import CompanyTab from './Company/Company';
@@ -224,7 +225,6 @@ function CIFInsert() {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<TabType>('clientType');
   const [maxTabIndexReached, setMaxTabIndexReached] = useState(0);
-  const [showSaveModal, setShowSaveModal] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [selectedTypes, setSelectedTypes] = useState({
     individual: false,
@@ -236,23 +236,43 @@ function CIFInsert() {
   // Mock form data - in real app, this would come from Zustand store
   const [formData, setFormData] = useState(initialFormData);
 
-  const handleTypeChange = useCallback((type: string, checked: boolean) => {
-    if (checked) {
-      // If checking a checkbox, uncheck all others (only one can be selected)
-      setSelectedTypes({
-        individual: type === 'individual',
-        company: type === 'company',
-        government: type === 'government',
-        organization: type === 'organization',
-      });
-    } else {
-      // If unchecking, just set that one to false
-      setSelectedTypes((prev) => ({
-        ...prev,
-        [type]: false,
-      }));
-    }
-  }, []);
+  const handleTypeChange = useCallback(
+    (type: string, checked: boolean) => {
+      if (checked) {
+        // If user is switching to a different client type, reset form and draft
+        // so the previous type's data (e.g. individual) is cleared
+        const currentType = selectedTypes.individual
+          ? 'individual'
+          : selectedTypes.company
+            ? 'company'
+            : selectedTypes.government
+              ? 'government'
+              : selectedTypes.organization
+                ? 'organization'
+                : null;
+        const isSwitchingType = currentType !== null && currentType !== type;
+        if (isSwitchingType) {
+          setFormData({ ...initialFormData });
+          // Keep draftId so the same draft is updated when user saves/cancels
+          // (e.g. draft was Company, user reopens and switches to Individual → update that draft to Individual)
+        }
+        // If checking a checkbox, uncheck all others (only one can be selected)
+        setSelectedTypes({
+          individual: type === 'individual',
+          company: type === 'company',
+          government: type === 'government',
+          organization: type === 'organization',
+        });
+      } else {
+        // If unchecking, just set that one to false
+        setSelectedTypes((prev) => ({
+          ...prev,
+          [type]: false,
+        }));
+      }
+    },
+    [selectedTypes],
+  );
 
   const handleInputChange = useCallback(
     (field: string, value: string | number | boolean) => {
@@ -273,9 +293,36 @@ function CIFInsert() {
   }, []);
 
   const handleBirthDateChange = useCallback((date: string) => {
+    // Calculate age from birthdate
+    let calculatedAge = 0;
+    if (date) {
+      try {
+        // Parse YYYY-MM-DD format
+        const [year, month, day] = date.split('-').map(Number);
+        const birthDate = new Date(year, month - 1, day);
+        const today = new Date();
+
+        // Calculate age
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+        const dayDiff = today.getDate() - birthDate.getDate();
+
+        // Adjust if birthday hasn't occurred this year
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          age--;
+        }
+
+        calculatedAge = age > 0 ? age : 0;
+      } catch (error) {
+        console.error('Error calculating age:', error);
+        calculatedAge = 0;
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
       birthDate: date,
+      age: calculatedAge,
     }));
   }, []);
 
@@ -290,23 +337,19 @@ function CIFInsert() {
     selectedTypes.government ||
     selectedTypes.organization;
 
-  // Ordered tabs for Next/Back and for determining which breadcrumbs are enabled
+  // Ordered tabs for Next/Back and for determining which breadcrumbs are enabled.
+  // When Company is selected, exclude Employment and Business tabs.
   const getOrderedTabs = useCallback((): TabType[] => {
     const base: TabType[] = ['clientType'];
     if (selectedTypes.individual) base.push('individual');
     else if (selectedTypes.company) base.push('company');
     else if (selectedTypes.government) base.push('government');
     else if (selectedTypes.organization) base.push('organization');
-    base.push(
-      'contacts',
-      'documents',
-      'employment',
-      'business',
-      'financial',
-      'amla',
-      'remarks',
-      'picture',
-    );
+    base.push('contacts', 'documents');
+    if (!selectedTypes.company) {
+      base.push('employment', 'business');
+    }
+    base.push('financial', 'amla', 'remarks', 'picture');
     return base;
   }, [selectedTypes]);
 
@@ -316,25 +359,46 @@ function CIFInsert() {
   const isLastTab =
     currentTabIndex < 0 || currentTabIndex >= orderedTabs.length - 1;
 
-  const getBreadcrumbIndex = useCallback((tabId: TabType): number => {
-    if (tabId === 'clientType') return 0;
-    if (['individual', 'company', 'government', 'organization'].includes(tabId))
-      return 1;
-    if (tabId === 'contacts') return 2;
-    if (tabId === 'documents') return 3;
-    if (tabId === 'employment') return 4;
-    if (tabId === 'business') return 5;
-    if (tabId === 'financial') return 6;
-    if (tabId === 'amla') return 7;
-    if (tabId === 'remarks') return 8;
-    if (tabId === 'picture') return 9;
-    return 0;
-  }, []);
+  // When Company is selected, Employment and Business are not in orderedTabs;
+  // if user was on one of those, move to a valid tab.
+  useEffect(() => {
+    if (selectedTypes.company && !orderedTabs.includes(activeTab)) {
+      setActiveTab(orderedTabs[1] ?? 'company');
+    }
+  }, [selectedTypes.company, orderedTabs, activeTab]);
+
+  const getBreadcrumbIndex = useCallback(
+    (tabId: TabType): number => {
+      const idx = orderedTabs.indexOf(tabId);
+      return idx >= 0 ? idx : 0;
+    },
+    [orderedTabs],
+  );
 
   useEffect(() => {
     const idx = getBreadcrumbIndex(activeTab);
     setMaxTabIndexReached((prev) => Math.max(prev, idx));
   }, [activeTab, getBreadcrumbIndex]);
+
+  // Restore form when returning from Review page (Back to Edit)
+  useEffect(() => {
+    const state = location.state as {
+      draftId?: string;
+      formData?: typeof initialFormData;
+      selectedTypes?: typeof selectedTypes;
+    } | null;
+    if (state?.draftId) return;
+    if (
+      state?.formData &&
+      state?.selectedTypes &&
+      typeof state.formData === 'object' &&
+      typeof state.selectedTypes === 'object'
+    ) {
+      setFormData(state.formData);
+      setSelectedTypes(state.selectedTypes);
+      setActiveTab('picture');
+    }
+  }, [location.state]);
 
   // Restore draft when opening from list (draft click)
   useEffect(() => {
@@ -422,8 +486,12 @@ function CIFInsert() {
       },
       { id: 'contacts', label: 'Contacts/Addresses/IDs' },
       { id: 'documents', label: 'Documents' },
-      { id: 'employment', label: 'Employment' },
-      { id: 'business', label: 'Business' },
+      ...(selectedTypes.company
+        ? []
+        : [
+            { id: 'employment' as const, label: 'Employment' },
+            { id: 'business' as const, label: 'Business' },
+          ]),
       { id: 'financial', label: 'Financial' },
       { id: 'amla', label: 'AMLA/Tags' },
       { id: 'remarks', label: 'Remarks/Groupings' },
@@ -488,20 +556,6 @@ function CIFInsert() {
     }
   }, [currentTabIndex, isFirstTab, orderedTabs]);
 
-  const handleSave = useCallback(() => {
-    setShowSaveModal(true);
-  }, []);
-
-  const handleCloseSaveModal = useCallback(() => {
-    setShowSaveModal(false);
-  }, []);
-
-  const handleSaveConfirm = useCallback(() => {
-    // Save function will be implemented later
-    console.log('Save confirmed');
-    setShowSaveModal(false);
-  }, []);
-
   const handleCancel = useCallback(async () => {
     // Don't save draft if user is still on client type step only
     if (activeTab === 'clientType') {
@@ -564,6 +618,24 @@ function CIFInsert() {
   ];
   const salaryIndicatorOptions = ['Monthly', 'Weekly', 'Bi-weekly', 'Yearly'];
 
+  const titleOptions = useMemo(
+    () =>
+      (cifTitleData as Array<{ TitleID: string; Description: string }>).map(
+        (t) => t.Description,
+      ),
+    [],
+  );
+  const suffixOptions = useMemo(
+    () =>
+      (
+        cifClientNameSuffixData as Array<{
+          SuffixID: string;
+          Suffix: string;
+        }>
+      ).map((s) => s.Suffix),
+    [],
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -613,8 +685,8 @@ function CIFInsert() {
             formData={formData}
             onInputChange={handleInputChange}
             onBirthDateChange={handleBirthDateChange}
-            titleOptions={['Mr', 'Mrs', 'Ms', 'Dr', 'Eng', 'Atty']}
-            suffixOptions={['Jr', 'Sr', 'II', 'III', 'IV']}
+            titleOptions={titleOptions}
+            suffixOptions={suffixOptions}
             genderOptions={['Male', 'Female']}
             maritalStatusOptions={['Single', 'Married', 'Divorced', 'Widowed']}
             bloodTypeOptions={[
@@ -758,8 +830,15 @@ function CIFInsert() {
             </Button>
           )}
           {isLastTab ? (
-            <Button variant="primary" onClick={handleSave}>
-              Save
+            <Button
+              variant="primary"
+              onClick={() => {
+                navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.REVIEW, {
+                  state: { formData, selectedTypes },
+                });
+              }}
+            >
+              Review
             </Button>
           ) : (
             <Button variant="primary" onClick={handleNext}>
@@ -768,24 +847,6 @@ function CIFInsert() {
           )}
         </div>
       )}
-
-      {/* Save Confirmation Modal */}
-      <Modal show={showSaveModal} onHide={handleCloseSaveModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Save Client Information</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to save this client information?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline" onClick={handleCloseSaveModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleSaveConfirm}>
-            OK
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 }

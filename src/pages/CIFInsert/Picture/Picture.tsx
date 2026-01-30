@@ -174,9 +174,12 @@ function PictureTab({ formData, onInputChange }: PictureTabProps) {
     if (!videoRef.current) return;
 
     const video = videoRef.current;
+    // Use displayed size (same as preview) so captured image matches "ganto lang sukat"
+    const width = video.clientWidth;
+    const height = video.clientHeight;
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext('2d');
 
     if (ctx) {
@@ -184,7 +187,7 @@ function PictureTab({ formData, onInputChange }: PictureTabProps) {
       ctx.save();
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
-      ctx.drawImage(video, 0, 0);
+      ctx.drawImage(video, 0, 0, width, height);
       ctx.restore();
       const base64String = canvas.toDataURL('image/jpeg', 0.9);
       setCurrentImage(base64String);

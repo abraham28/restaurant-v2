@@ -51,6 +51,7 @@
   flex: 1;
   overflow-y: auto;
   padding: var(--padding-medium);
+  padding-bottom: 5rem; /* Space so bottom buttons (e.g. Take Photo) are not cut off */
   background-color: var(--color-disabled-bg);
   min-height: 0;
 }
