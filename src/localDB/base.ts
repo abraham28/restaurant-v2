@@ -56,9 +56,16 @@ export function openDatabase(): Promise<IDBDatabase> {
     };
 
     request.onsuccess = () => {
-      dbInstance.db = request.result;
+      const db = request.result;
+      dbInstance.db = db;
       dbInstance.promise = null;
-      resolve(request.result);
+
+      // Clear cached instance when database closes (e.g., during upgrades)
+      db.onclose = () => {
+        dbInstance.db = null;
+      };
+
+      resolve(db);
     };
 
     request.onupgradeneeded = (event) => {

@@ -46,7 +46,7 @@ const STORE_NAMES = {
 
 export const INDEXED_DB_CONSTANTS = {
   DB_NAME: 'abrasoft_db',
-  DB_VERSION: 1,
+  DB_VERSION: 2, // Incremented to trigger database upgrade and create missing object stores
   STORE_NAMES,
   // Backward compatibility - references STORE_NAMES.TOKENS
   STORE_NAME: STORE_NAMES.TOKENS,
