@@ -1,9 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button';
 import { ROUTES } from 'utils/constants';
 import { getDraft, storeDraft, generateDraftId } from 'utils/indexedDBUtils';
+import cifTitleData from 'data/cifTableOfRecord/cifTitle.json';
+import cifClientNameSuffixData from 'data/cifTableOfRecord/cifClientNameSuffix.json';
 import ClientType from './ClientType/ClientType';
 import IndividualTab from './Individual/Individual';
 import CompanyTab from './Company/Company';
@@ -564,6 +566,24 @@ function CIFInsert() {
   ];
   const salaryIndicatorOptions = ['Monthly', 'Weekly', 'Bi-weekly', 'Yearly'];
 
+  const titleOptions = useMemo(
+    () =>
+      (cifTitleData as Array<{ TitleID: string; Description: string }>).map(
+        (t) => t.Description,
+      ),
+    [],
+  );
+  const suffixOptions = useMemo(
+    () =>
+      (
+        cifClientNameSuffixData as Array<{
+          SuffixID: string;
+          Suffix: string;
+        }>
+      ).map((s) => s.Suffix),
+    [],
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -613,8 +633,8 @@ function CIFInsert() {
             formData={formData}
             onInputChange={handleInputChange}
             onBirthDateChange={handleBirthDateChange}
-            titleOptions={['Mr', 'Mrs', 'Ms', 'Dr', 'Eng', 'Atty']}
-            suffixOptions={['Jr', 'Sr', 'II', 'III', 'IV']}
+            titleOptions={titleOptions}
+            suffixOptions={suffixOptions}
             genderOptions={['Male', 'Female']}
             maritalStatusOptions={['Single', 'Married', 'Divorced', 'Widowed']}
             bloodTypeOptions={[
