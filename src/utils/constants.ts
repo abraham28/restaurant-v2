@@ -12,7 +12,7 @@ export const ROUTES = {
   AUTH_CALLBACK: '/auth/callback',
   CLIENT_INFORMATION_SYSTEM: {
     ROOT: '/client-information-system',
-    INSERT: '/client-information-system/insert',
+    INSERT: '/client-information-system/new',
     IDIVIDUAL_INSERT: '/client-information-system/individual/insert',
     COMPANY_INSERT: '/client-information-system/company/insert',
     GOVERNMENT_INSERT: '/client-information-system/government/insert',
