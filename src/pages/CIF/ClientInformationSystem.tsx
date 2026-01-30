@@ -104,6 +104,15 @@ function ClientInformationSystem() {
     });
   }, []);
 
+  if (loading) {
+    return (
+      <div className={styles.pageLoading}>
+        <div className={styles.loadingSpinner} aria-hidden="true" />
+        <p className={styles.loadingText}>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -115,9 +124,7 @@ function ClientInformationSystem() {
       <div className={styles.content}>
         <div className={styles.draftsSection}>
           <h2 className={styles.draftsTitle}>Drafts</h2>
-          {loading ? (
-            <div className={styles.loadingState}>Loading drafts...</div>
-          ) : drafts.length === 0 ? (
+          {drafts.length === 0 ? (
             <div className={styles.emptyState}>No drafts found</div>
           ) : (
             <div className={styles.draftsList}>
