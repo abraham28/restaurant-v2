@@ -44,9 +44,9 @@ function AppHeader() {
   // Navigation items - can be customized based on routes
   const navItems: HeaderNavItem[] = [
     {
-      label: t('sample'),
-      to: ROUTES.SAMPLE.ROOT,
-      active: location.pathname.startsWith(ROUTES.SAMPLE.ROOT),
+      label: t('headerItem1'),
+      to: ROUTES.PRODUCTS.ROOT,
+      active: location.pathname.startsWith(ROUTES.PRODUCTS.ROOT),
     },
   ];
 
