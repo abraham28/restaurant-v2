@@ -17,6 +17,9 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   AUTH_CALLBACK: '/auth/callback',
+  PRODUCTS: {
+    ROOT: '/products',
+  },
   SAMPLE: {
     ROOT: '/sample',
     CREATE: '/sample/create',
