@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'lucide-react';
@@ -7,44 +7,51 @@ import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import SelectDropdown from 'atomic-components/SelectDropdown';
 import { ROUTES } from 'utils/constants';
 import { formatDate } from 'utils/dateUtils';
-import localDB, { type DraftMetadata } from 'localDB';
+import localDB from 'localDB';
 import {
   useClientFormStore,
   type ClientFormState,
 } from 'stores/clientFormStore';
+import { useDraftsStore } from 'stores/draftsStore';
+import clientTypeData from 'data/cisClientType.json';
+import statusData from 'data/cisStatus.json';
+import classificationData from 'data/cisClassification.json';
 import styles from './ClientInformationSystem.module.scss';
 
 function ClientInformationSystem() {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { drafts, loading, loadDrafts, refreshDrafts } = useDraftsStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [clientType, setClientType] = useState('');
   const [status, setStatus] = useState('');
   const [classification, setClassification] = useState('');
 
-  // Hardcoded filter options
-  const clientTypeOptions = [
-    'Individual',
-    'Company',
-    'Organization',
-    'Business',
-  ];
-  const statusOptions = [
-    'Active',
-    'Inactive',
-    'Pending',
-    'Suspended',
-    'Closed',
-  ];
-  const classificationOptions = [
-    'Retail',
-    'Corporate',
-    'SME',
-    'High Net Worth',
-    'Institutional',
-  ];
+  // Load filter options from JSON data files
+  const clientTypeOptions = useMemo(
+    () =>
+      (clientTypeData as Array<{ ID: string; ClientType: string }>).map(
+        (item) => item.ClientType,
+      ),
+    [],
+  );
+  const statusOptions = useMemo(
+    () =>
+      (statusData as Array<{ ID: string; Status: string }>).map(
+        (item) => item.Status,
+      ),
+    [],
+  );
+  const classificationOptions = useMemo(
+    () =>
+      (
+        classificationData as Array<{
+          ID: string;
+          Classification: string;
+        }>
+      ).map((item) => item.Classification),
+    [],
+  );
 
   const resetForm: () => void = useClientFormStore(
     (state: ClientFormState): ClientFormState['resetForm'] => state.resetForm,
@@ -52,19 +59,8 @@ function ClientInformationSystem() {
 
   // Load drafts on component mount
   useEffect(() => {
-    const loadDrafts = async () => {
-      setLoading(true);
-      try {
-        const allDrafts = await localDB.getAllDrafts();
-        setDrafts(allDrafts);
-      } catch (error) {
-        console.error('Failed to load drafts:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     void loadDrafts();
-  }, []);
+  }, [loadDrafts]);
 
   const handleAdd = useCallback(() => {
     resetForm(); // Clear any existing form data
@@ -87,16 +83,15 @@ function ClientInformationSystem() {
       if (window.confirm(t('confirmDeleteDraft'))) {
         try {
           await localDB.deleteDraft(draftId);
-          // Reload drafts list
-          const allDrafts = await localDB.getAllDrafts();
-          setDrafts(allDrafts);
+          // Refresh drafts list from store
+          await refreshDrafts();
         } catch (error) {
           console.error('Failed to delete draft:', error);
           alert(t('failedToDeleteDraft'));
         }
       }
     },
-    [t],
+    [t, refreshDrafts],
   );
 
   if (loading) {

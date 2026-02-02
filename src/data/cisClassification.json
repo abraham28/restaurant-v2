@@ -1,0 +1,22 @@
+[
+  {
+    "ID": "1",
+    "Classification": "Retail"
+  },
+  {
+    "ID": "2",
+    "Classification": "Corporate"
+  },
+  {
+    "ID": "3",
+    "Classification": "SME"
+  },
+  {
+    "ID": "4",
+    "Classification": "High Net Worth"
+  },
+  {
+    "ID": "5",
+    "Classification": "Institutional"
+  }
+]

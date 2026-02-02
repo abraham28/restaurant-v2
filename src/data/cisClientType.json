@@ -1,0 +1,18 @@
+[
+  {
+    "ID": "1",
+    "ClientType": "Individual"
+  },
+  {
+    "ID": "2",
+    "ClientType": "Company"
+  },
+  {
+    "ID": "3",
+    "ClientType": "Organization"
+  },
+  {
+    "ID": "4",
+    "ClientType": "Business"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "ID": "1",
+    "Status": "Active"
+  },
+  {
+    "ID": "2",
+    "Status": "Inactive"
+  },
+  {
+    "ID": "3",
+    "Status": "Pending"
+  },
+  {
+    "ID": "4",
+    "Status": "Suspended"
+  },
+  {
+    "ID": "5",
+    "Status": "Closed"
+  }
+]
