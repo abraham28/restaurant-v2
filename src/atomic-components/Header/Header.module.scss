@@ -12,12 +12,12 @@
 
 .headerContainer {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 0 320px; /* Account for sidebar width */
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: calc(var(--padding-xxxxx-large) + var(--padding-xx-large));
+  padding-left: var(--padding-xx-large);
   padding-right: var(--padding-xx-large);
 }
 

@@ -120,14 +120,13 @@ function ClientInformationSystem() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{t('clientInformationSystem')}</h1>
+        <h1 className={styles.title}>{t('drafts')}</h1>
         <Button variant="primary" onClick={handleAdd}>
           {t('add')}
         </Button>
       </div>
       <div className={styles.content}>
         <div className={styles.draftsSection}>
-          <h2 className={styles.draftsTitle}>{t('drafts')}</h2>
           {drafts.length === 0 ? (
             <div className={styles.emptyState}>{t('noDraftsFound')}</div>
           ) : (

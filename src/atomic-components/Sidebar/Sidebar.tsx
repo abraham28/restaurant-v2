@@ -1,12 +1,8 @@
 import React from 'react';
-import { Menu, X } from 'lucide-react';
 import type { SidebarProps } from './types';
 import styles from './Sidebar.module.scss';
 
 function Sidebar({
-  isOpen,
-  onClose,
-  onToggle,
   logo,
   logoAlt = 'Logo',
   title,
@@ -14,45 +10,19 @@ function Sidebar({
   className = '',
 }: SidebarProps) {
   return (
-    <>
-      {/* Burger Icon Button */}
-      {!isOpen && (
-        <button
-          className={styles.burgerButton}
-          onClick={onToggle}
-          aria-label="Toggle sidebar"
-        >
-          <Menu size={16} />
-        </button>
-      )}
-
-      {/* Overlay */}
-      {isOpen && <div className={styles.overlay} onClick={onClose} />}
-
-      {/* Sidebar */}
-      <aside
-        className={`${styles.sidebar} ${isOpen ? styles.open : ''} ${className}`.trim()}
-      >
-        <div className={styles.sidebarHeader}>
-          <div className={styles.sidebarTitleContainer}>
-            {logo && (
-              <img src={logo} alt={logoAlt} className={styles.sidebarLogo} />
-            )}
-            <span className={styles.sidebarTitle}>{title}</span>
-          </div>
-          <button
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label="Close sidebar"
-          >
-            <X size={16} strokeWidth={2.5} />
-          </button>
+    <aside className={`${styles.sidebar} ${className}`.trim()}>
+      <div className={styles.sidebarHeader}>
+        <div className={styles.sidebarTitleContainer}>
+          {logo && (
+            <img src={logo} alt={logoAlt} className={styles.sidebarLogo} />
+          )}
+          <span className={styles.sidebarTitle}>{title}</span>
         </div>
-        <nav className={styles.nav}>
-          <ul className={styles.navList}>{children}</ul>
-        </nav>
-      </aside>
-    </>
+      </div>
+      <nav className={styles.nav}>
+        <ul className={styles.navList}>{children}</ul>
+      </nav>
+    </aside>
   );
 }
 
