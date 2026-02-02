@@ -4,7 +4,7 @@ import TextInput from 'atomic-components/TextInput/TextInput';
 import Radio from 'atomic-components/Radio/Radio';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
@@ -79,7 +79,7 @@ function AmlaTab({
                   placeholder="Enter bank employee name"
                 />
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   iconOnly
                   onClick={() => onOpenModal('Bank Employee List')}
@@ -99,7 +99,7 @@ function AmlaTab({
                   placeholder="Enter relationship"
                 />
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   iconOnly
                   onClick={() => onOpenModal('Relationship List')}
@@ -137,7 +137,7 @@ function AmlaTab({
                   placeholder="Enter employee type"
                 />
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   iconOnly
                   onClick={() => onOpenModal('Employee Type List')}

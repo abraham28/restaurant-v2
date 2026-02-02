@@ -17,7 +17,9 @@ code {
 }
 
 :root {
+ 
   --color-primary: #1e3a8a;
+  --color-button-primary: #1F9EF9;
   --color-error: #e91a1a;
   --color-border: #e0e0e0;
   --color-text: #0f172a;
@@ -92,4 +94,6 @@ code {
   --input-padding-horizontal: var(--padding-large);
   --input-font-size: var(--font-size-medium);
   --input-line-height: 1.5;
+  /*button padding*/
+  --button-padding: 8px 16px;
 }

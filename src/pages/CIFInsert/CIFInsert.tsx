@@ -650,7 +650,7 @@ function CIFInsert() {
             <RequiredFieldBullet type="amla" />
           </span>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => {
               void handleCancel();
             }}
@@ -825,7 +825,7 @@ function CIFInsert() {
       {(hasSelectedType || !isFirstTab) && (
         <div className={styles.floatingNavButtons}>
           {!isFirstTab && (
-            <Button variant="outline" onClick={handleBack}>
+            <Button variant="secondary" onClick={handleBack}>
               Back
             </Button>
           )}

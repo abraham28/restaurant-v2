@@ -70,7 +70,7 @@ function Review({
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Client Information System - Review</h1>
-        <Button variant="outline" onClick={onBack}>
+        <Button variant="secondary" onClick={onBack}>
           Back to Edit
         </Button>
       </div>
@@ -785,7 +785,7 @@ function ReviewPage() {
         <div className={styles.header}>
           <h1 className={styles.title}>Client Information System - Review</h1>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={() => navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT)}
           >
             Go to Form

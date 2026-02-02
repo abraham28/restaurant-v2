@@ -1,6 +1,6 @@
 import React from 'react';
 import { RefreshCw } from 'lucide-react';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import styles from './RefreshButton.module.scss';
 import { RefreshButtonProps } from './types';
 
@@ -12,7 +12,7 @@ function RefreshButton({
   return (
     <Button
       onClick={onClick}
-      variant="outline"
+      variant="secondary"
       disabled={disabled || loading}
       className={styles.refreshButton}
     >

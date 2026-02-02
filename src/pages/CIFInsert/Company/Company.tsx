@@ -5,7 +5,7 @@ import TextInput from 'atomic-components/TextInput/TextInput';
 import Radio from 'atomic-components/Radio/Radio';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import styles from '../CIFIndividual.module.scss';
 
 interface CompanyTabProps {
@@ -164,7 +164,7 @@ function CompanyTab({
                     placeholder="Enter conglomerate domain"
                   />
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
                     iconOnly
                     onClick={() => {}}

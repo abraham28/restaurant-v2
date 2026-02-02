@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Camera, Upload } from 'lucide-react';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import styles from '../CIFIndividual.module.scss';
 import PictureStyles from './Picture.module.scss';
 
@@ -239,7 +239,7 @@ function PictureTab({ formData, onInputChange }: PictureTabProps) {
               ))}
             </select>
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={handleCaptureClick}
               className={PictureStyles.actionButton}
             >
@@ -247,7 +247,7 @@ function PictureTab({ formData, onInputChange }: PictureTabProps) {
               {isCapturing ? 'Stop' : 'Capture'}
             </Button>
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={handleUploadClick}
               className={PictureStyles.actionButton}
             >
@@ -280,7 +280,7 @@ function PictureTab({ formData, onInputChange }: PictureTabProps) {
                 <Button variant="primary" onClick={capturePhoto}>
                   Take Photo
                 </Button>
-                <Button variant="outline" onClick={stopCamera}>
+                <Button variant="secondary" onClick={stopCamera}>
                   Cancel
                 </Button>
               </div>
@@ -292,7 +292,8 @@ function PictureTab({ formData, onInputChange }: PictureTabProps) {
                 alt={selectedImageType}
                 className={PictureStyles.image}
               />
-              <button
+              <Button
+                variant="secondary"
                 className={PictureStyles.removeButton}
                 onClick={() => {
                   setCurrentImage(null);
@@ -311,7 +312,7 @@ function PictureTab({ formData, onInputChange }: PictureTabProps) {
                 aria-label="Remove image"
               >
                 ×
-              </button>
+              </Button>
             </div>
           ) : (
             <div className={PictureStyles.placeholder}>
