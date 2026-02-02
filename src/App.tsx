@@ -8,7 +8,7 @@ import { useServiceWorker } from 'hooks/useServiceWorker';
 import Home from 'pages/home';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
-import ClientInformationSystem from 'pages/CIF/ClientInformationSystem';
+import ClientInformationSystem from 'pages/CIS/ClientInformationSystem';
 import CIFInsert from 'pages/CIFInsert/CIFInsert';
 import CIFInsertReview from 'pages/CIFInsert/Review';
 import CsvToJson from 'pages/CsvToJson';
