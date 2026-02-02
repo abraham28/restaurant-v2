@@ -51,7 +51,11 @@ function AppSidebar() {
           />
         </NavListGroup>
 
-        <NavListGroup label="CIS Sections">
+        <NavListGroup
+          label="CIS Sections"
+          collapsible
+          defaultExpanded={false}
+        >
           <NavListItem
             label="Customer Details"
             icon={User}

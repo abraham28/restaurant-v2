@@ -7,4 +7,8 @@ export interface NavListGroupProps {
   children: ReactNode;
   /** Additional CSS class name */
   className?: string;
+  /** Whether the group is collapsible */
+  collapsible?: boolean;
+  /** Whether the group is expanded by default (only applies if collapsible is true) */
+  defaultExpanded?: boolean;
 }
