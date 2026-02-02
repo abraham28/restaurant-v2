@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Modal } from 'react-bootstrap';
 import Button from 'atomic-components/Button';
-import Radio from 'atomic-components/Radio/Radio';
 import { ROUTES } from 'utils/constants';
+import { formatDate } from 'utils/dateUtils';
 import localDB, { type DraftMetadata } from 'localDB';
 import {
   useClientFormStore,
@@ -12,62 +11,36 @@ import {
 } from 'stores/clientFormStore';
 import styles from './ClientInformationSystem.module.scss';
 
-type ClientType = 'Individual' | 'Company' | 'Government' | 'Organization';
-
 function ClientInformationSystem() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { t } = useTranslation();
-  const [showModal, setShowModal] = useState(false);
-  const [selectedClientType, setSelectedClientType] =
-    useState<ClientType>('Individual');
   const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const resetForm: () => void = useClientFormStore(
     (state: ClientFormState): ClientFormState['resetForm'] => state.resetForm,
   ) as () => void;
 
-  const clientTypeOptions: ClientType[] = [
-    'Individual',
-    'Company',
-    'Government',
-    'Organization',
-  ];
-
-  // Load drafts function
-  const loadDrafts = useCallback(async () => {
-    setLoading(true);
-    try {
-      const allDrafts = await localDB.getAllDrafts();
-      setDrafts(allDrafts);
-    } catch (error) {
-      console.error('Failed to load drafts:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Load drafts on component mount and when location changes (user navigates back)
+  // Load drafts on component mount
   useEffect(() => {
+    const loadDrafts = async () => {
+      setLoading(true);
+      try {
+        const allDrafts = await localDB.getAllDrafts();
+        setDrafts(allDrafts);
+      } catch (error) {
+        console.error('Failed to load drafts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
     void loadDrafts();
-  }, [loadDrafts, location.pathname]);
+  }, []);
 
   const handleAdd = useCallback(() => {
     resetForm(); // Clear any existing form data
     navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
   }, [resetForm, navigate]);
-
-  const handleCloseModal = useCallback(() => {
-    setShowModal(false);
-    setSelectedClientType('Individual'); // Reset to default
-  }, []);
-
-  const handleModalOk = useCallback(() => {
-    navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
-    handleCloseModal();
-  }, [navigate, handleCloseModal]);
 
   const handleDraftClick = useCallback(
     (draftId: string) => {
@@ -96,17 +69,6 @@ function ClientInformationSystem() {
     },
     [t],
   );
-
-  const formatDate = useCallback((timestamp: number) => {
-    const date = new Date(timestamp);
-    return date.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  }, []);
 
   if (loading) {
     return (
@@ -173,31 +135,6 @@ function ClientInformationSystem() {
           )}
         </div>
       </div>
-
-      <Modal show={showModal} onHide={handleCloseModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>{t('selectClientType')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className={styles.modalContent}>
-            <label className={styles.label}>{t('clientType')}:</label>
-            <Radio
-              value={selectedClientType}
-              onChange={(value) => setSelectedClientType(value as ClientType)}
-              options={clientTypeOptions}
-              placeholder={t('selectClientTypePlaceholder')}
-            />
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            {t('cancel')}
-          </Button>
-          <Button variant="primary" onClick={handleModalOk}>
-            {t('ok')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </div>
   );
 }

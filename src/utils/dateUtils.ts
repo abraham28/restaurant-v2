@@ -100,3 +100,19 @@ export const getThisYearRange = () => {
     dateTo: formatDateToUTC(dateTo),
   };
 };
+
+/**
+ * Format timestamp to a readable date string
+ * @param timestamp - Unix timestamp in milliseconds
+ * @returns Formatted date string (e.g., "Jan 15, 2024, 02:30 PM")
+ */
+export const formatDate = (timestamp: number): string => {
+  const date = new Date(timestamp);
+  return date.toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
