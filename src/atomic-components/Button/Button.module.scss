@@ -65,41 +65,41 @@
 // Primary variant - meron color (solid blue, white text)
 .primary {
   background-color: var(--color-button-primary);
-  color: var(--color-white);
+  color: var(--color-button-text);
   border-color: transparent;
 
   &:hover:not(:disabled) {
-    background-color: var(--color-primary-hover);
+    background-color: var(--color-button-primary-hover);
     border-color: transparent;
   }
 
   &:active:not(:disabled) {
-    background-color: var(--color-primary-active);
+    background-color: var(--color-button-primary-active);
     border-color: transparent;
   }
 }
 
 // Secondary variant - walang color (white bg, light gray border, dark text)
 .secondary {
-  background-color: var(--color-white);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
+  background-color: var(--color-button-secondary);
+  color: var(--color-button-secondary-text);
+  border: 1px solid var(--color-button-secondary-border);
 
   &:hover:not(:disabled) {
-    background-color: var(--color-hover-bg);
-    border-color: var(--color-border);
+    background-color: var(--color-button-secondary-hover);
+    border-color: var(--color-button-secondary-border);
   }
 
   &:active:not(:disabled) {
-    background-color: var(--color-disabled-bg);
-    border-color: var(--color-border);
+    background-color: var(--color-button-secondary-active);
+    border-color: var(--color-button-secondary-border);
   }
 }
 
 // Danger variant
 .danger {
   background-color: var(--color-error);
-  color: white;
+  color: var(--color-white);
 
   &:hover:not(:disabled) {
     background-color: var(--color-error-hover);
@@ -110,32 +110,3 @@
   }
 }
 
-// Outline variant
-.outline {
-  background-color: transparent;
-  color: var(--color-text);
-  border-color: var(--color-disabled-bg);
-
-  &:hover:not(:disabled) {
-    background-color: var(--color-hover-bg);
-    border-color: var(--color-primary);
-  }
-
-  &:active:not(:disabled) {
-    background-color: var(--color-disabled-bg);
-  }
-}
-
-// Ghost variant
-.ghost {
-  background-color: var(--color-transparent);
-  color: var(--color-text);
-
-  &:hover:not(:disabled) {
-    background-color: var(--color-hover-bg);
-  }
-
-  &:active:not(:disabled) {
-    background-color: var(--color-disabled-bg);
-  }
-}

@@ -20,6 +20,14 @@ code {
  
   --color-primary: #1e3a8a;
   --color-button-primary: #1F9EF9;
+  --color-button-text: #ffffff;
+  --color-button-primary-hover: #117ac6;
+  --color-button-primary-active: #117ac6;
+  --color-button-secondary: #FFFFFF;
+  --color-button-secondary-text: #171A1FFF;
+  --color-button-secondary-border: #DEE1E6FF;
+  --color-button-secondary-hover: #f8f9fa;
+  --color-button-secondary-active: #e9ecef;
   --color-error: #e91a1a;
   --color-border: #e0e0e0;
   --color-text: #0f172a;

@@ -5,12 +5,9 @@ import { TextInputProps } from './types';
 const TextInput: React.FC<TextInputProps> = ({
   value,
   onChange,
-  placeholder = '',
-  required = false,
-  disabled = false,
-  type = 'text',
   className = '',
-  onBlur,
+  type = 'text',
+  ...props
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
@@ -22,11 +19,8 @@ const TextInput: React.FC<TextInputProps> = ({
         type={type}
         value={value}
         onChange={handleChange}
-        onBlur={onBlur}
-        placeholder={placeholder}
-        required={required}
-        disabled={disabled}
         className={styles.input}
+        {...props}
       />
     </div>
   );
