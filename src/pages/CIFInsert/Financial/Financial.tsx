@@ -4,7 +4,7 @@ import TextInput from 'atomic-components/TextInput/TextInput';
 import Radio from 'atomic-components/Radio/Radio';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import styles from '../CIFIndividual.module.scss';
 
 interface FormData {
@@ -77,7 +77,7 @@ function FinancialTab({
                   placeholder="Enter fund source"
                 />
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   iconOnly
                   onClick={() => onOpenModal('Fund Source List')}

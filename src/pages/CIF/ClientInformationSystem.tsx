@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Modal } from 'react-bootstrap';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import Radio from 'atomic-components/Radio/Radio';
 import { ROUTES } from 'utils/constants';
 import localDB, { type DraftMetadata } from 'localDB';
@@ -160,7 +160,7 @@ function ClientInformationSystem() {
                     )}
                   </div>
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     onClick={(e) => {
                       void handleDeleteDraft(draft.id, e);
                     }}
@@ -191,7 +191,7 @@ function ClientInformationSystem() {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline" onClick={handleCloseModal}>
+          <Button variant="secondary" onClick={handleCloseModal}>
             {t('cancel')}
           </Button>
           <Button variant="primary" onClick={handleModalOk}>

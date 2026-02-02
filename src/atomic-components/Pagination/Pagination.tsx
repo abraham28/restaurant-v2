@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useId, useMemo, useState } from 'react';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import styles from './Pagination.module.scss';
 import { PaginationProps } from './types';
 
@@ -136,7 +136,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.controls}>
         <Button
           type="button"
-          variant="outline"
+          variant="secondary"
           size="sm"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -154,7 +154,7 @@ const Pagination: React.FC<PaginationProps> = ({
               <Button
                 key={item}
                 type="button"
-                variant={item === currentPage ? 'primary' : 'outline'}
+                variant={item === currentPage ? 'primary' : 'secondary'}
                 size="sm"
                 onClick={() => handlePageChange(item)}
                 className={`${styles.pageButton} ${
@@ -169,7 +169,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
         <Button
           type="button"
-          variant="outline"
+          variant="secondary"
           size="sm"
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
@@ -192,7 +192,7 @@ const Pagination: React.FC<PaginationProps> = ({
           onChange={handlePageInputChange}
           className={styles.pageJumpInput}
         />
-        <Button type="submit" variant="outline" size="sm">
+        <Button type="submit" variant="secondary" size="sm">
           Go
         </Button>
       </form>

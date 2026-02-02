@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import Textarea from 'atomic-components/Textarea/Textarea';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import { csvToObjects } from 'utils/csvUtils';
@@ -143,13 +143,13 @@ function CsvToJson() {
                 aria-label={t('uploadCsvFile')}
               />
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={handleFileButtonClick}
               >
                 {t('uploadFile')}
               </Button>
-              <Button variant="outline" size="sm" onClick={handleClear}>
+              <Button variant="secondary" size="sm" onClick={handleClear}>
                 {t('clear')}
               </Button>
             </div>
@@ -188,7 +188,7 @@ function CsvToJson() {
                 />
               )}
               {jsonOutput && (
-                <Button variant="outline" size="sm" onClick={handleCopyJson}>
+                <Button variant="secondary" size="sm" onClick={handleCopyJson}>
                   {t('copyJson')}
                 </Button>
               )}

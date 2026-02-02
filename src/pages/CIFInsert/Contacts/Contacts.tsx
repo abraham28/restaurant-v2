@@ -6,7 +6,7 @@ import Radio from 'atomic-components/Radio/Radio';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import ListButton from 'atomic-components/ListButton/ListButton';
-import Button from 'atomic-components/Button/Button';
+import Button from 'atomic-components/Button';
 import styles from '../CIFIndividual.module.scss';
 
 interface FormData {

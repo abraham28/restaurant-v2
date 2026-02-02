@@ -2,6 +2,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: var(--button-padding);
   border-radius: var(--border-radius-medium);
   font-weight: 400;
   font-size: var(--font-size-medium);
@@ -15,8 +16,7 @@
   user-select: none;
 
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    outline: none;
   }
 
   &:disabled {
@@ -32,19 +32,19 @@
 // Size variants
 .sm {
   height: 32px;
-  padding: var(--padding-none) var(--padding-x-large);
+  padding: var(--button-padding);
   font-size: var(--font-size-small);
 }
 
 .md {
   height: 40px;
-  padding: var(--padding-none) var(--padding-xx-large);
+  padding: var(--button-padding);
   font-size: var(--font-size-medium);
 }
 
 .lg {
   height: 44px;
-  padding: var(--padding-none) var(--padding-xx-large);
+  padding: var(--button-padding);
   font-size: var(--font-size-small);
 }
 
@@ -62,31 +62,37 @@
   }
 }
 
-// Primary variant
+// Primary variant - meron color (solid blue, white text)
 .primary {
-  background-color: var(--color-primary);
-  color: white;
+  background-color: var(--color-button-primary);
+  color: var(--color-white);
+  border-color: transparent;
 
   &:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
+    border-color: transparent;
   }
 
   &:active:not(:disabled) {
     background-color: var(--color-primary-active);
+    border-color: transparent;
   }
 }
 
-// Secondary variant
+// Secondary variant - walang color (white bg, light gray border, dark text)
 .secondary {
-  background-color: var(--color-disabled-bg);
+  background-color: var(--color-white);
   color: var(--color-text);
+  border: 1px solid var(--color-border);
 
   &:hover:not(:disabled) {
     background-color: var(--color-hover-bg);
+    border-color: var(--color-border);
   }
 
   &:active:not(:disabled) {
     background-color: var(--color-disabled-bg);
+    border-color: var(--color-border);
   }
 }
 
