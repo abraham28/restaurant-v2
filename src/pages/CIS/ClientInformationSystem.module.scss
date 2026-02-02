@@ -48,6 +48,14 @@
   margin: var(--margin-none);
 }
 
+.filtersContainer {
+  display: flex;
+  gap: var(--padding-large);
+  align-items: center;
+  margin-bottom: var(--margin-x-large);
+  flex-wrap: wrap;
+}
+
 .content {
   padding: var(--padding-none);
 }

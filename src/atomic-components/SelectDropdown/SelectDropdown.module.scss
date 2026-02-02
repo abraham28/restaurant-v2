@@ -1,6 +1,5 @@
 .container {
   position: relative;
-  width: 100%;
 }
 
 .trigger {
@@ -76,13 +75,14 @@
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.radioOption {
+.dropdownOption {
   display: flex;
   align-items: center;
   width: 100%;
@@ -115,7 +115,7 @@
   }
 }
 
-.radioText {
+.dropdownText {
   width: 100%;
   font-size: var(--font-size-medium);
 }

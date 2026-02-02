@@ -1,7 +1,7 @@
 import React from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
-import Radio from 'atomic-components/Radio/Radio';
+import SelectDropdown from 'atomic-components/SelectDropdown';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
 import styles from '../CIFIndividual.module.scss';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
@@ -139,7 +139,7 @@ function RemarksTab({
                 Client Status
                 <RequiredFieldBullet /> <RequiredFieldBullet type="amla" />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.clientStatus}
                 onChange={(value) => onInputChange('clientStatus', value)}
                 options={clientStatusOptions}

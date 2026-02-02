@@ -2,7 +2,7 @@ import React from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
 import NameInput from 'atomic-components/NameInput/NameInput';
-import Radio from 'atomic-components/Radio/Radio';
+import SelectDropdown from 'atomic-components/SelectDropdown';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
@@ -75,7 +75,7 @@ function IndividualTab({
               <label className={styles.label}>
                 Title <RequiredFieldBullet />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.title}
                 onChange={(value) => onInputChange('title', value)}
                 options={titleOptions}
@@ -121,7 +121,7 @@ function IndividualTab({
 
             <div className={styles.field}>
               <label className={styles.label}>Suffix</label>
-              <Radio
+              <SelectDropdown
                 value={formData.suffix}
                 onChange={(value) => onInputChange('suffix', value)}
                 options={suffixOptions}
@@ -133,7 +133,7 @@ function IndividualTab({
               <label className={styles.label}>
                 Gender <RequiredFieldBullet />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.gender}
                 onChange={(value) => onInputChange('gender', value)}
                 options={genderOptions}
@@ -145,7 +145,7 @@ function IndividualTab({
               <label className={styles.label}>
                 Marital Status <RequiredFieldBullet />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.maritalStatus}
                 onChange={(value) => onInputChange('maritalStatus', value)}
                 options={maritalStatusOptions}
@@ -213,7 +213,7 @@ function IndividualTab({
 
             <div className={styles.field}>
               <label className={styles.label}>Blood Type</label>
-              <Radio
+              <SelectDropdown
                 value={formData.bloodType}
                 onChange={(value) => onInputChange('bloodType', value)}
                 options={bloodTypeOptions}

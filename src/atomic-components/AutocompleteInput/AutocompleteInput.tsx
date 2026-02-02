@@ -1,5 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Search, X } from 'lucide-react';
+import { useClickOutside } from 'hooks/useClickOutside';
+import { useDropdownNavigation } from 'hooks/useDropdownNavigation';
 import styles from './AutocompleteInput.module.scss';
 import { AutocompleteInputProps } from './types';
 
@@ -11,10 +13,10 @@ function AutocompleteInput({
   required = false,
   disabled = false,
   onBlur,
+  width = '100%',
 }: AutocompleteInputProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -24,25 +26,42 @@ function AutocompleteInput({
     return suggestion.toLowerCase().includes(searchQuery.toLowerCase());
   });
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-        setHighlightedIndex(-1);
-      }
-    };
+  // Handle suggestion selection
+  const handleSelect = useCallback(
+    (suggestion: string) => {
+      onChange(suggestion);
+      setSearchQuery('');
+      setIsOpen(false);
+      inputRef.current?.blur();
+    },
+    [onChange],
+  );
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isOpen]);
+  // Close dropdown when clicking outside
+  useClickOutside(
+    containerRef,
+    () => {
+      setIsOpen(false);
+    },
+    isOpen,
+  );
+
+  // Handle dropdown navigation
+  const {
+    highlightedIndex,
+    handleKeyDown: handleDropdownKeyDown,
+    resetHighlight,
+  } = useDropdownNavigation({
+    itemCount: filteredSuggestions.length,
+    isOpen,
+    onSelect: (index) => {
+      handleSelect(filteredSuggestions[index]);
+    },
+    onClose: () => {
+      setIsOpen(false);
+      inputRef.current?.blur();
+    },
+  });
 
   // Handle input focus
   const handleFocus = () => {
@@ -56,16 +75,7 @@ function AutocompleteInput({
     setSearchQuery(newValue);
     onChange(newValue);
     setIsOpen(true);
-    setHighlightedIndex(-1);
-  };
-
-  // Handle suggestion selection
-  const handleSelect = (suggestion: string) => {
-    onChange(suggestion);
-    setSearchQuery('');
-    setIsOpen(false);
-    setHighlightedIndex(-1);
-    inputRef.current?.blur();
+    resetHighlight();
   };
 
   // Handle clear
@@ -74,44 +84,13 @@ function AutocompleteInput({
     onChange('');
     setSearchQuery('');
     setIsOpen(false);
-    setHighlightedIndex(-1);
+    resetHighlight();
     inputRef.current?.focus();
   };
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isOpen || filteredSuggestions.length === 0) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        return;
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        setHighlightedIndex((prev) =>
-          prev < filteredSuggestions.length - 1 ? prev + 1 : prev,
-        );
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (highlightedIndex >= 0) {
-          handleSelect(filteredSuggestions[highlightedIndex]);
-        }
-        break;
-      case 'Escape':
-        e.preventDefault();
-        setIsOpen(false);
-        setHighlightedIndex(-1);
-        inputRef.current?.blur();
-        break;
-    }
+    handleDropdownKeyDown(e);
   };
 
   // Handle blur
@@ -119,7 +98,7 @@ function AutocompleteInput({
     // Delay to allow click events on suggestions to fire
     setTimeout(() => {
       setIsOpen(false);
-      setHighlightedIndex(-1);
+      resetHighlight();
       setSearchQuery('');
       onBlur?.();
     }, 200);
@@ -128,7 +107,7 @@ function AutocompleteInput({
   const displayValue = isOpen ? searchQuery : value;
 
   return (
-    <div ref={containerRef} className={styles.container}>
+    <div ref={containerRef} className={styles.container} style={{ width }}>
       <div className={styles.inputWrapper}>
         <Search size={16} className={styles.searchIcon} />
         <input

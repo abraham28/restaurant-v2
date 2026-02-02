@@ -1,7 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Plus } from 'lucide-react';
 import Button from 'atomic-components/Button';
+import AutocompleteInput from 'atomic-components/AutocompleteInput';
+import SelectDropdown from 'atomic-components/SelectDropdown';
 import { ROUTES } from 'utils/constants';
 import { formatDate } from 'utils/dateUtils';
 import localDB, { type DraftMetadata } from 'localDB';
@@ -16,6 +19,32 @@ function ClientInformationSystem() {
   const { t } = useTranslation();
   const [drafts, setDrafts] = useState<DraftMetadata[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [clientType, setClientType] = useState('');
+  const [status, setStatus] = useState('');
+  const [classification, setClassification] = useState('');
+
+  // Hardcoded filter options
+  const clientTypeOptions = [
+    'Individual',
+    'Company',
+    'Organization',
+    'Business',
+  ];
+  const statusOptions = [
+    'Active',
+    'Inactive',
+    'Pending',
+    'Suspended',
+    'Closed',
+  ];
+  const classificationOptions = [
+    'Retail',
+    'Corporate',
+    'SME',
+    'High Net Worth',
+    'Institutional',
+  ];
 
   const resetForm: () => void = useClientFormStore(
     (state: ClientFormState): ClientFormState['resetForm'] => state.resetForm,
@@ -82,15 +111,46 @@ function ClientInformationSystem() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{t('drafts')}</h1>
+        <h1 className={styles.title}>{t('clientSearch')}</h1>
+      </div>
+      <div className={styles.filtersContainer}>
+        <AutocompleteInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          suggestions={[]}
+          placeholder={t('searchClients')}
+          width="300px"
+        />
+        <SelectDropdown
+          value={clientType}
+          onChange={setClientType}
+          options={clientTypeOptions}
+          placeholder={t('clientType')}
+          width="fit-content"
+        />
+        <SelectDropdown
+          value={status}
+          onChange={setStatus}
+          options={statusOptions}
+          placeholder={t('status')}
+          width="fit-content"
+        />
+        <SelectDropdown
+          value={classification}
+          onChange={setClassification}
+          options={classificationOptions}
+          placeholder={t('classification')}
+          width="fit-content"
+        />
         <Button variant="primary" onClick={handleAdd}>
-          {t('add')}
+          <Plus size={16} style={{ marginRight: '8px' }} />
+          {t('addClient')}
         </Button>
       </div>
       <div className={styles.content}>
         <div className={styles.draftsSection}>
           {drafts.length === 0 ? (
-            <div className={styles.emptyState}>{t('noDraftsFound')}</div>
+            <div className={styles.emptyState}>{t('noClientsFound')}</div>
           ) : (
             <div className={styles.draftsList}>
               {drafts.map((draft) => (

@@ -6,4 +6,5 @@ export interface AutocompleteInputProps {
   required?: boolean;
   disabled?: boolean;
   onBlur?: () => void;
+  width?: string;
 }

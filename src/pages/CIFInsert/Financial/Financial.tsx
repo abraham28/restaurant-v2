@@ -1,7 +1,7 @@
 import React from 'react';
 import { Info, Folder } from 'lucide-react';
 import TextInput from 'atomic-components/TextInput/TextInput';
-import Radio from 'atomic-components/Radio/Radio';
+import SelectDropdown from 'atomic-components/SelectDropdown';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
 import Button from 'atomic-components/Button';
@@ -60,7 +60,7 @@ function FinancialTab({
                 Salary Indicator:
                 <Info size={14} className={styles.infoIcon} />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.salaryIndicator}
                 onChange={(value) => onInputChange('salaryIndicator', value)}
                 options={salaryIndicatorOptions}

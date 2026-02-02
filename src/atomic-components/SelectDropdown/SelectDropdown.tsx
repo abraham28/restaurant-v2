@@ -1,37 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
-import styles from './Radio.module.scss';
-import { RadioProps } from './types';
+import { useClickOutside } from 'hooks/useClickOutside';
+import styles from './SelectDropdown.module.scss';
+import { SelectDropdownProps } from './types';
 
-const Radio: React.FC<RadioProps> = ({
+const SelectDropdown: React.FC<SelectDropdownProps> = ({
   value,
   onChange,
   options,
   className = '',
   disabled = false,
   placeholder = 'Select an option',
+  width = '100%',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }
-  }, [isOpen]);
+  useClickOutside(containerRef, () => setIsOpen(false), isOpen);
 
   const handleSelect = (optionValue: string) => {
     onChange(optionValue);
@@ -41,7 +27,11 @@ const Radio: React.FC<RadioProps> = ({
   const displayValue = value || placeholder;
 
   return (
-    <div ref={containerRef} className={`${styles.container} ${className}`}>
+    <div
+      ref={containerRef}
+      className={`${styles.container} ${className}`}
+      style={{ width }}
+    >
       <div
         className={`${styles.trigger} ${isOpen ? styles.open : ''} ${
           disabled ? styles.disabled : ''
@@ -71,11 +61,11 @@ const Radio: React.FC<RadioProps> = ({
                 key={option}
                 type="button"
                 onClick={() => handleSelect(option)}
-                className={`${styles.radioOption} ${
+                className={`${styles.dropdownOption} ${
                   isSelected ? styles.selected : ''
                 }`}
               >
-                <span className={styles.radioText}>{option}</span>
+                <span className={styles.dropdownText}>{option}</span>
               </button>
             );
           })}
@@ -85,4 +75,4 @@ const Radio: React.FC<RadioProps> = ({
   );
 };
 
-export default Radio;
+export default SelectDropdown;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Info, Folder } from 'lucide-react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
-import Radio from 'atomic-components/Radio/Radio';
+import SelectDropdown from 'atomic-components/SelectDropdown';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
 import Button from 'atomic-components/Button';
@@ -62,7 +62,7 @@ function CompanyTab({
                   Company Type
                   <Info size={14} className={styles.infoIcon} />
                 </label>
-                <Radio
+                <SelectDropdown
                   value={formData.companyType}
                   onChange={(value) => onInputChange('companyType', value)}
                   options={companyTypeOptions}
@@ -142,7 +142,7 @@ function CompanyTab({
                   Firm Size
                   <Info size={14} className={styles.infoIcon} />
                 </label>
-                <Radio
+                <SelectDropdown
                   value={formData.firmSize}
                   onChange={(value) => onInputChange('firmSize', value)}
                   options={firmSizeOptions}

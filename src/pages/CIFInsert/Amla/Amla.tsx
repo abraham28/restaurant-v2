@@ -1,7 +1,7 @@
 import React from 'react';
 import { Folder } from 'lucide-react';
 import TextInput from 'atomic-components/TextInput/TextInput';
-import Radio from 'atomic-components/Radio/Radio';
+import SelectDropdown from 'atomic-components/SelectDropdown';
 import Checkbox from 'atomic-components/Checkbox/Checkbox';
 import DatePicker from 'atomic-components/DatePicker/DatePicker';
 import Button from 'atomic-components/Button';
@@ -112,7 +112,7 @@ function AmlaTab({
 
             <div className={styles.field}>
               <label className={styles.label}>DOSRI:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.dosri}
                 onChange={(value) => onInputChange('dosri', value)}
                 options={dosriOptions}
@@ -223,7 +223,7 @@ function AmlaTab({
 
             <div className={styles.field}>
               <label className={styles.label}>Related Party:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.relatedParty}
                 onChange={(value) => onInputChange('relatedParty', value)}
                 options={relatedPartyOptions}
@@ -259,7 +259,7 @@ function AmlaTab({
 
             <div className={styles.field}>
               <label className={styles.label}>Customer Due Diligence:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.customerDueDiligence}
                 onChange={(value) =>
                   onInputChange('customerDueDiligence', value)

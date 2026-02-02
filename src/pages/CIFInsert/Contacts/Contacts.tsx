@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid3x3, CreditCard, Phone, User } from 'lucide-react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
-import Radio from 'atomic-components/Radio/Radio';
+import SelectDropdown from 'atomic-components/SelectDropdown';
 import NumberInput from 'atomic-components/NumberInput/NumberInput';
 import RequiredFieldBullet from 'atomic-components/RequiredFieldBullet/RequiredFieldBullet';
 import ListButton from 'atomic-components/ListButton/ListButton';
@@ -106,7 +106,7 @@ function ContactsTab({
               <label className={styles.label}>
                 ID 1: <RequiredFieldBullet />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.primaryID1}
                 onChange={(value) => onInputChange('primaryID1', value)}
                 options={idTypeOptions}
@@ -115,7 +115,7 @@ function ContactsTab({
             </div>
             <div className={styles.field}>
               <label className={styles.label}>ID 2:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.primaryID2}
                 onChange={(value) => onInputChange('primaryID2', value)}
                 options={idTypeOptions}
@@ -124,7 +124,7 @@ function ContactsTab({
             </div>
             <div className={styles.field}>
               <label className={styles.label}>ID 3:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.primaryID3}
                 onChange={(value) => onInputChange('primaryID3', value)}
                 options={idTypeOptions}
@@ -153,7 +153,7 @@ function ContactsTab({
               <label className={styles.label}>
                 ID 1: <RequiredFieldBullet />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.secondaryID1}
                 onChange={(value) => onInputChange('secondaryID1', value)}
                 options={idTypeOptions}
@@ -162,7 +162,7 @@ function ContactsTab({
             </div>
             <div className={styles.field}>
               <label className={styles.label}>ID 2:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.secondaryID2}
                 onChange={(value) => onInputChange('secondaryID2', value)}
                 options={idTypeOptions}
@@ -171,7 +171,7 @@ function ContactsTab({
             </div>
             <div className={styles.field}>
               <label className={styles.label}>ID 3:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.secondaryID3}
                 onChange={(value) => onInputChange('secondaryID3', value)}
                 options={idTypeOptions}
@@ -200,7 +200,7 @@ function ContactsTab({
               <label className={styles.label}>
                 Primary: <RequiredFieldBullet />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.primaryContact}
                 onChange={(value) => onInputChange('primaryContact', value)}
                 options={idTypeOptions}
@@ -209,7 +209,7 @@ function ContactsTab({
             </div>
             <div className={styles.field}>
               <label className={styles.label}>Secondary:</label>
-              <Radio
+              <SelectDropdown
                 value={formData.secondaryContact}
                 onChange={(value) => onInputChange('secondaryContact', value)}
                 options={idTypeOptions}
@@ -227,7 +227,7 @@ function ContactsTab({
               <label className={styles.label}>
                 Presented ID Type: <RequiredFieldBullet type="amla" />
               </label>
-              <Radio
+              <SelectDropdown
                 value={formData.presentedIDType}
                 onChange={(value) => onInputChange('presentedIDType', value)}
                 options={idTypeOptions}
@@ -270,7 +270,7 @@ function ContactsTab({
               <label className={styles.label}>Mobile Number:</label>
               <div className={styles.mobileNumberWrapper}>
                 <div className={styles.countryCodeWrapper}>
-                  <Radio
+                  <SelectDropdown
                     value={formData.countryCode}
                     onChange={(value) => onInputChange('countryCode', value)}
                     options={countryCodeOptions}
