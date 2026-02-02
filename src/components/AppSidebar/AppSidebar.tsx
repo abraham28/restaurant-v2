@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FileText, User, CreditCard, Settings, History } from 'lucide-react';
+import {
+  FileText,
+  User,
+  CreditCard,
+  Settings,
+  History,
+  ClipboardCheck,
+} from 'lucide-react';
 import Sidebar from 'atomic-components/Sidebar';
 import NavListItem from 'atomic-components/NavListItem';
 import NavListGroup from 'atomic-components/NavListGroup';
@@ -15,6 +22,7 @@ import CustomerDetailsModal from './CustomerDetailsModal';
 import AccountsModal from './AccountsModal';
 import SettingsModal from './SettingsModal';
 import AuditLogModal from './AuditLogModal';
+import AssessmentModal from './AssessmentModal';
 
 function AppSidebar() {
   const location = useLocation();
@@ -26,6 +34,7 @@ function AppSidebar() {
   const [showAccountsModal, setShowAccountsModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showAuditLogModal, setShowAuditLogModal] = useState(false);
+  const [showAssessmentModal, setShowAssessmentModal] = useState(false);
 
   const handleLanguageChange = async (
     lang: keyof typeof SUPPORTED_LANGUAGES,
@@ -51,11 +60,7 @@ function AppSidebar() {
           />
         </NavListGroup>
 
-        <NavListGroup
-          label="CIS Sections"
-          collapsible
-          defaultExpanded={false}
-        >
+        <NavListGroup label="CIS Sections" collapsible defaultExpanded={false}>
           <NavListItem
             label="Customer Details"
             icon={User}
@@ -82,6 +87,13 @@ function AppSidebar() {
             icon={History}
             onClick={() => {
               setShowAuditLogModal(true);
+            }}
+          />
+          <NavListItem
+            label="Assessment"
+            icon={ClipboardCheck}
+            onClick={() => {
+              setShowAssessmentModal(true);
             }}
           />
         </NavListGroup>
@@ -115,6 +127,10 @@ function AppSidebar() {
       <AuditLogModal
         show={showAuditLogModal}
         onHide={() => setShowAuditLogModal(false)}
+      />
+      <AssessmentModal
+        show={showAssessmentModal}
+        onHide={() => setShowAssessmentModal(false)}
       />
     </>
   );
