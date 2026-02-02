@@ -3,6 +3,7 @@ import ErrorBoundary from 'atomic-components/ErrorBoundary/ErrorBoundary';
 import PageTitle from 'atomic-components/PageTitle/PageTitle';
 import ServiceWorkerUpdatePrompt from 'atomic-components/ServiceWorkerUpdatePrompt/ServiceWorkerUpdatePrompt';
 import ContentWrapper from 'atomic-components/ContentWrapper';
+import MobileNotice from 'atomic-components/MobileNotice';
 import AppHeader from 'components/AppHeader';
 import AppSidebar from 'components/AppSidebar';
 import { useServiceWorker } from 'hooks/useServiceWorker';
@@ -40,6 +41,7 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <MobileNotice />
       <PageTitle />
       <AppHeader />
       <AppSidebar />
