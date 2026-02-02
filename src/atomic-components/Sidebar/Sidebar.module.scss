@@ -38,15 +38,13 @@
   left: 0;
   height: 100vh;
   width: 320px;
-  background: var(--color-sidebar-bg);
+  background: #ffffff;
   z-index: 1000;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   box-shadow: var(--border-width-medium) 0 var(--padding-small) rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  border-top-right-radius: var(--border-radius-x-large);
-  border-bottom-right-radius: var(--border-radius-x-large);
   overflow: hidden;
 
   &.open {
