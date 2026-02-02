@@ -1,0 +1,84 @@
+.ellipsisContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.breadcrumbEllipsis {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  color: #171a1f;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+
+  &:focus {
+    outline: var(--border-width-medium) solid var(--color-primary);
+    outline-offset: var(--border-width-small);
+    border-radius: var(--border-radius-small);
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--padding-small);
+  background-color: var(--color-white);
+  border: var(--border-width-small) solid var(--color-border);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 var(--padding-small) var(--padding-x-large) rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 200px;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdownItem {
+  display: block;
+  padding: var(--padding-xxx-large) var(--padding-xx-large);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  color: #171a1f;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-hover-bg);
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: var(--border-radius-large);
+    border-bottom-right-radius: var(--border-radius-large);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--padding-small)));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

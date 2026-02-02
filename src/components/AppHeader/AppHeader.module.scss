@@ -1,0 +1,9 @@
+.headerContainer {
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: var(--padding-xx-large);
+  padding-right: var(--padding-xx-large);
+}

@@ -30,8 +30,8 @@
 
 .container {
   padding: var(--padding-xx-large) var(--padding-xx-large);
-  max-width: 1200px;
-  margin: var(--margin-none) auto var(--margin-none) 320px; /* Account for sidebar width */
+  max-width: 1280px;
+  margin: var(--margin-none) auto var(--margin-none) auto; /* Account for sidebar width */
 }
 
 .header {

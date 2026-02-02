@@ -1,0 +1,17 @@
+.link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.underline {
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
