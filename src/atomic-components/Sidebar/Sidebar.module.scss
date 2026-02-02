@@ -64,8 +64,14 @@
 .sidebarTitle {
   margin: var(--margin-none);
   font-size: var(--font-size-xx-large);
-  font-weight: 600;
-  color: var(--color-sidebar-text);
+  font-weight: 700;
+  color: var(--color-sidebar-title);
+}
+
+.sidebarTitleContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-small);
 }
 
 .sidebarLogo {
@@ -161,6 +167,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }

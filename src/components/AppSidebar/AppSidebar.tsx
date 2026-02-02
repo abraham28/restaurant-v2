@@ -39,8 +39,8 @@ function AppSidebar() {
       onClose={handleClose}
       onToggle={handleToggle}
       logo="/android-chrome-192x192.png"
-      logoAlt={t('coreBankingLogo')}
-      title={t('coreBanking')}
+      logoAlt={t('appNameLogo')}
+      title={t('appName')}
     >
       <NavListGroup label={t('clientInformation')}>
         <NavListItem

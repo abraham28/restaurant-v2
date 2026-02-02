@@ -34,10 +34,12 @@ function Sidebar({
         className={`${styles.sidebar} ${isOpen ? styles.open : ''} ${className}`.trim()}
       >
         <div className={styles.sidebarHeader}>
-          {logo && (
-            <img src={logo} alt={logoAlt} className={styles.sidebarLogo} />
-          )}
-          <span className={styles.sidebarTitle}>{title}</span>
+          <div className={styles.sidebarTitleContainer}>
+            {logo && (
+              <img src={logo} alt={logoAlt} className={styles.sidebarLogo} />
+            )}
+            <span className={styles.sidebarTitle}>{title}</span>
+          </div>
           <button
             className={styles.closeButton}
             onClick={onClose}
