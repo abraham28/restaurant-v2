@@ -1,4 +1,12 @@
 .contentWrapper {
-  width: calc(100% - 320px);
-  margin-left: 320px;
+  width: calc(100% - 256px);
+  margin-left: 256px;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .contentWrapper {
+    width: calc(100% - 220px);
+    margin-left: 220px;
+  }
 }
