@@ -7,7 +7,7 @@ import MobileNotice from 'atomic-components/MobileNotice';
 import AppHeader from 'components/AppHeader';
 import AppSidebar from 'components/AppSidebar';
 import { useServiceWorker } from 'hooks/useServiceWorker';
-import Home from 'pages/home';
+import Home from 'pages/Home';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
 import ClientInformationSystem from 'pages/CIS/ClientInformationSystem';
