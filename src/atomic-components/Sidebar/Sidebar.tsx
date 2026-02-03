@@ -10,6 +10,8 @@ function Sidebar({
   title,
   children,
   className = '',
+  userProfile,
+  userActions,
 }: SidebarProps) {
   return (
     <aside className={`${styles.sidebar} ${className}`.trim()}>
@@ -21,6 +23,16 @@ function Sidebar({
           <span className={styles.sidebarTitle}>{title}</span>
         </Link>
       </div>
+      {(userProfile || userActions) && (
+        <div className={styles.userProfileSection}>
+          {userProfile && (
+            <div className={styles.userProfileBlock}>{userProfile}</div>
+          )}
+          {userActions && (
+            <div className={styles.userActionsBlock}>{userActions}</div>
+          )}
+        </div>
+      )}
       <nav className={styles.nav}>
         <ul className={styles.navList}>{children}</ul>
       </nav>

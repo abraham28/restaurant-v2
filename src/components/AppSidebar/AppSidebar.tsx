@@ -19,10 +19,14 @@ import {
 } from 'stores/i18nStore';
 import { ROUTES } from 'utils/constants';
 import CustomerDetailsModal from './CustomerDetailsModal';
+import UserProfile from './UserProfile';
+import UserActions from './UserActions';
 import AccountsModal from './AccountsModal';
 import SettingsModal from './SettingsModal';
 import AuditLogModal from './AuditLogModal';
 import AssessmentModal from './AssessmentModal';
+import UserSettingsModal from './UserSettingsModal';
+import LogoutModal from './LogoutModal';
 
 function AppSidebar() {
   const location = useLocation();
@@ -35,6 +39,8 @@ function AppSidebar() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showAuditLogModal, setShowAuditLogModal] = useState(false);
   const [showAssessmentModal, setShowAssessmentModal] = useState(false);
+  const [showUserSettingsModal, setShowUserSettingsModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLanguageChange = async (
     lang: keyof typeof SUPPORTED_LANGUAGES,
@@ -48,6 +54,13 @@ function AppSidebar() {
         logo="/android-chrome-192x192.png"
         logoAlt={t('appNameLogo')}
         title={t('appName')}
+        userProfile={<UserProfile userName="John Doer" userPhotoUrl={null} />}
+        userActions={
+          <UserActions
+            onSettingsClick={() => setShowUserSettingsModal(true)}
+            onLogoutClick={() => setShowLogoutModal(true)}
+          />
+        }
       >
         <NavListGroup label={t('clientInformation')}>
           <NavListItem
@@ -131,6 +144,14 @@ function AppSidebar() {
       <AssessmentModal
         show={showAssessmentModal}
         onHide={() => setShowAssessmentModal(false)}
+      />
+      <UserSettingsModal
+        show={showUserSettingsModal}
+        onHide={() => setShowUserSettingsModal(false)}
+      />
+      <LogoutModal
+        show={showLogoutModal}
+        onHide={() => setShowLogoutModal(false)}
       />
     </>
   );

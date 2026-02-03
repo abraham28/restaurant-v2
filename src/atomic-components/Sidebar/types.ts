@@ -11,4 +11,8 @@ export interface SidebarProps {
   children: ReactNode;
   /** Additional CSS class name */
   className?: string;
+  /** User profile section (avatar, name) - optional */
+  userProfile?: ReactNode;
+  /** User actions (e.g. Settings, Logout) - always shown when provided, independent of profile */
+  userActions?: ReactNode;
 }

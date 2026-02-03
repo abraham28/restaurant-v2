@@ -19,6 +19,30 @@
   padding: var(--margin-x-large) var(--padding-xxxx-large);
 }
 
+.userProfileSection {
+  padding: var(--padding-medium) var(--padding-xxxx-large);
+  margin-bottom: var(--margin-small);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--padding-medium);
+}
+
+.userProfileBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-medium);
+  flex: 1;
+  min-width: 0;
+}
+
+.userActionsBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-small);
+  flex-shrink: 0;
+}
+
 .sidebarTitle {
   margin: var(--margin-none);
   font-size: var(--font-size-xx-large);
