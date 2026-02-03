@@ -225,6 +225,143 @@
 - Use descriptive prop names
 - Include JSDoc comments for complex props if needed
 
+### Form Validation with Zod
+
+- **Use Zod standalone** for form validation (not React Hook Form)
+- Zod works seamlessly with existing Zustand stores and controlled components
+- Create validation schemas in `src/types/validation.ts` (or domain-specific validation files)
+- Use `z.infer<typeof schema>` to derive TypeScript types from schemas
+- Validate on form submission and optionally on field blur/change
+
+**Schema Definition Pattern:**
+```typescript
+import { z } from 'zod';
+
+// Define schema
+export const individualFormSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  firstName: z.string().min(1, 'First name is required'),
+  middleName: z.string().optional(),
+  birthDate: z.string().min(1, 'Birthdate is required'),
+  age: z.number().min(0).max(150),
+  emailAddress: z.string().email('Invalid email address').optional().or(z.literal('')),
+  mobileNumber: z.string().regex(/^\d+$/, 'Invalid mobile number').optional(),
+  // Use .optional() for optional fields, or .or(z.literal('')) for empty string handling
+});
+
+// Infer TypeScript type from schema
+export type IndividualFormData = z.infer<typeof individualFormSchema>;
+```
+
+**Validation Hook Pattern:**
+```typescript
+import { useState } from 'react';
+import { z } from 'zod';
+
+function useFormValidation<T extends z.ZodTypeAny>(schema: T) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  const validate = (data: unknown): data is z.infer<T> => {
+    try {
+      schema.parse(data);
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: Record<string, string> = {};
+        error.errors.forEach((err) => {
+          if (err.path[0]) {
+            fieldErrors[err.path[0].toString()] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+      }
+      return false;
+    }
+  };
+
+  const validateField = (field: string, value: unknown) => {
+    try {
+      // Access nested schema shape for field validation
+      const fieldSchema = (schema as z.ZodObject<z.ZodRawShape>).shape[field];
+      if (fieldSchema) {
+        fieldSchema.parse(value);
+        setErrors((prev) => {
+          const next = { ...prev };
+          delete next[field];
+          return next;
+        });
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setErrors((prev) => ({
+          ...prev,
+          [field]: error.errors[0]?.message || 'Invalid value',
+        }));
+      }
+    }
+  };
+
+  const clearErrors = () => setErrors({});
+  const clearFieldError = (field: string) => {
+    setErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
+
+  return { errors, validate, validateField, clearErrors, clearFieldError };
+}
+```
+
+**Component Integration Pattern:**
+```typescript
+import { useFormValidation } from 'hooks/useFormValidation';
+import { individualFormSchema, type IndividualFormData } from 'types/validation';
+
+function IndividualTab({ formData, onInputChange }) {
+  const { errors, validate, validateField } = useFormValidation(individualFormSchema);
+
+  const handleSubmit = () => {
+    if (validate(formData)) {
+      // Proceed with submission - form data is valid
+      // TypeScript knows formData is IndividualFormData here
+    }
+    // If validation fails, errors are automatically set
+  };
+
+  const handleBlur = (field: keyof IndividualFormData) => {
+    validateField(field, formData[field]);
+  };
+
+  return (
+    <div>
+      <NameInput
+        value={formData.lastName}
+        onChange={(value) => onInputChange('lastName', value)}
+        onBlur={() => handleBlur('lastName')}
+      />
+      {errors.lastName && (
+        <span className={styles.error}>{errors.lastName}</span>
+      )}
+      {/* ... other fields */}
+    </div>
+  );
+}
+```
+
+**Best Practices:**
+- Validate entire form on submit before proceeding
+- Optionally validate individual fields on blur for better UX
+- Clear field errors when user starts typing again
+- Use descriptive error messages in schema definitions
+- Handle optional fields with `.optional()` or `.or(z.literal(''))` for empty strings
+- Create reusable validation hooks for common patterns
+- Keep schemas in sync with TypeScript interfaces/types
+- Use `z.infer<typeof schema>` to derive types instead of manually maintaining separate types
+
 ### Data Fetching Pattern with Tanstack Query (Offline-First)
 ```typescript
 import { useQuery } from "@tanstack/react-query";
