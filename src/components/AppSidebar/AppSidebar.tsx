@@ -2,21 +2,17 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
+  Database,
+  PiggyBank,
+  Building2,
   FileText,
-  User,
-  CreditCard,
-  Settings,
-  History,
-  ClipboardCheck,
+  BarChart3,
+  Scale,
+  ShieldCheck,
 } from 'lucide-react';
 import Sidebar from 'atomic-components/Sidebar';
 import NavListItem from 'atomic-components/NavListItem';
 import NavListGroup from 'atomic-components/NavListGroup';
-import {
-  useI18nStore,
-  SUPPORTED_LANGUAGES,
-  type SupportedLanguage,
-} from 'stores/i18nStore';
 import { ROUTES } from 'utils/constants';
 import CustomerDetailsModal from './CustomerDetailsModal';
 import UserProfile from './UserProfile';
@@ -31,7 +27,6 @@ import LogoutModal from './LogoutModal';
 function AppSidebar() {
   const location = useLocation();
   const { t } = useTranslation();
-  const { language, setLanguage } = useI18nStore();
 
   const [showCustomerDetailsModal, setShowCustomerDetailsModal] =
     useState(false);
@@ -41,12 +36,6 @@ function AppSidebar() {
   const [showAssessmentModal, setShowAssessmentModal] = useState(false);
   const [showUserSettingsModal, setShowUserSettingsModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const handleLanguageChange = async (
-    lang: keyof typeof SUPPORTED_LANGUAGES,
-  ) => {
-    await setLanguage(lang);
-  };
 
   return (
     <>
@@ -73,55 +62,107 @@ function AppSidebar() {
           />
         </NavListGroup>
 
-        <NavListGroup label="CIS Sections" collapsible defaultExpanded={false}>
+        <NavListGroup label="Core Modules" collapsible defaultExpanded={false}>
           <NavListItem
-            label="Customer Details"
-            icon={User}
+            label="CIS"
+            icon={Database}
+            to={ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT}
+            active={false}
+          />
+          <NavListItem
+            label="Deposits"
+            icon={PiggyBank}
             onClick={() => {
-              setShowCustomerDetailsModal(true);
+              // TODO: Navigate to Deposits page
             }}
           />
           <NavListItem
-            label="Accounts"
-            icon={CreditCard}
+            label="Loans"
+            icon={Building2}
             onClick={() => {
-              setShowAccountsModal(true);
+              // TODO: Navigate to Loans page
             }}
           />
           <NavListItem
-            label="Settings"
-            icon={Settings}
+            label="GL"
+            icon={FileText}
             onClick={() => {
-              setShowSettingsModal(true);
-            }}
-          />
-          <NavListItem
-            label="Audit Log"
-            icon={History}
-            onClick={() => {
-              setShowAuditLogModal(true);
-            }}
-          />
-          <NavListItem
-            label="Assessment"
-            icon={ClipboardCheck}
-            onClick={() => {
-              setShowAssessmentModal(true);
+              // TODO: Navigate to GL page
             }}
           />
         </NavListGroup>
 
-        <NavListGroup label={t('language')}>
-          {Object.entries(SUPPORTED_LANGUAGES).map(([code, name]) => (
-            <NavListItem
-              key={code}
-              label={name}
-              active={language === code}
-              onClick={() =>
-                void handleLanguageChange(code as SupportedLanguage)
-              }
-            />
-          ))}
+        <NavListGroup label="Report Modules" collapsible defaultExpanded={false}>
+          <NavListItem
+            label="CIS"
+            icon={Database}
+            onClick={() => {
+              // TODO: Navigate to CIS Reports page
+            }}
+          />
+          <NavListItem
+            label="Deposits"
+            icon={PiggyBank}
+            onClick={() => {
+              // TODO: Navigate to Deposits Reports page
+            }}
+          />
+          <NavListItem
+            label="Loans"
+            icon={Building2}
+            onClick={() => {
+              // TODO: Navigate to Loans Reports page
+            }}
+          />
+          <NavListItem
+            label="GL"
+            icon={FileText}
+            onClick={() => {
+              // TODO: Navigate to GL Reports page
+            }}
+          />
+          <NavListItem
+            label="Dynamic Query Builder"
+            icon={BarChart3}
+            onClick={() => {
+              // TODO: Navigate to Dynamic Query Builder page
+            }}
+          />
+        </NavListGroup>
+
+        <NavListGroup
+          label="Regulatory Compliance"
+          collapsible
+          defaultExpanded={false}
+        >
+          <NavListItem
+            label="BSP"
+            icon={Scale}
+            onClick={() => {
+              // TODO: Navigate to BSP page
+            }}
+          />
+          <NavListItem
+            label="AMLC"
+            icon={ShieldCheck}
+            onClick={() => {
+              // TODO: Navigate to AMLC page
+            }}
+          />
+          <NavListItem
+            label="PDIC"
+            icon={FileText}
+            onClick={() => {
+              // TODO: Navigate to PDIC page
+            }}
+          />
+          <NavListItem
+            label="CIC"
+            icon={Database}
+            onClick={() => {
+              // TODO: Navigate to CIC page
+            }}
+          />
         </NavListGroup>
       </Sidebar>
 

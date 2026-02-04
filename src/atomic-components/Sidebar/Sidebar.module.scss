@@ -4,7 +4,7 @@
   left: 0;
   height: 100vh;
   width: 256px;
-  background: #ffffff;
+  background: var(--color-sidebar-bg);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -68,15 +68,15 @@
 
 .nav {
   flex: 1;
-  padding: var(--margin-x-large) 0 var(--padding-xxxx-large);
+  padding: var(--margin-large) 0 var(--padding-xxxx-large);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
 
 .navList {
   list-style: none;
-  margin: var(--margin-none);
-  padding: var(--padding-medium) var(--padding-large);
+  padding-left: var(--padding-small);
+  padding-right: var(--padding-small);
 }
 
 .navListItem {
