@@ -1,0 +1,108 @@
+import type { DashboardClient } from './types';
+
+const now = Date.now();
+const oneDayMs = 24 * 60 * 60 * 1000;
+const oneYearAgo = now - 365 * oneDayMs;
+const fortyDaysAgo = now - 40 * oneDayMs;
+const twentyDaysAgo = now - 20 * oneDayMs;
+const tenDaysAgo = now - 10 * oneDayMs;
+
+/** Sample clients for dashboard (mix of active, inactive, risk, new) */
+export const sampleClients: DashboardClient[] = [
+  {
+    id: 'c1',
+    FirstName: 'Juan',
+    LastName: 'Dela Cruz',
+    Gender: 'Male',
+    BirthDate: new Date('1985-01-15'),
+    Age: 39,
+    ClientStatus: 'Active',
+    RiskRating: 'Low',
+    createdAt: twentyDaysAgo,
+    LastClientUpdate: new Date(tenDaysAgo),
+  },
+  {
+    id: 'c2',
+    FirstName: 'Maria',
+    LastName: 'Santos',
+    Gender: 'Female',
+    BirthDate: new Date('1990-05-20'),
+    Age: 34,
+    ClientStatus: 'Active',
+    RiskRating: 'High',
+    createdAt: fortyDaysAgo,
+    LastClientUpdate: new Date(twentyDaysAgo),
+  },
+  {
+    id: 'c3',
+    FirstName: 'Pedro',
+    LastName: 'Reyes',
+    Gender: 'Male',
+    BirthDate: new Date('1978-11-08'),
+    Age: 46,
+    ClientStatus: 'Inactive',
+    RiskRating: 'Low',
+    createdAt: oneYearAgo - 100 * oneDayMs,
+    LastClientUpdate: new Date(oneYearAgo - 5 * oneDayMs),
+  },
+  {
+    id: 'c4',
+    FirstName: 'Ana',
+    LastName: 'Garcia',
+    Gender: 'Female',
+    BirthDate: new Date('1992-03-12'),
+    Age: 32,
+    ClientStatus: 'Active',
+    RiskRating: 'Medium',
+    createdAt: tenDaysAgo,
+    LastClientUpdate: new Date(tenDaysAgo),
+  },
+  {
+    id: 'c5',
+    FirstName: 'Carlos',
+    LastName: 'Lopez',
+    Gender: 'Male',
+    BirthDate: new Date('1988-07-25'),
+    Age: 36,
+    ClientStatus: 'Active',
+    RiskRating: 'High',
+    createdAt: oneYearAgo - 200 * oneDayMs,
+    LastClientUpdate: new Date(twentyDaysAgo),
+  },
+  {
+    id: 'c6',
+    FirstName: 'Elena',
+    LastName: 'Martinez',
+    Gender: 'Female',
+    BirthDate: new Date('1982-09-30'),
+    Age: 42,
+    ClientStatus: 'Inactive',
+    RiskRating: 'Low',
+    createdAt: oneYearAgo - 400 * oneDayMs,
+    LastClientUpdate: new Date(oneYearAgo - 20 * oneDayMs),
+  },
+  {
+    id: 'c7',
+    FirstName: 'Roberto',
+    LastName: 'Fernandez',
+    Gender: 'Male',
+    BirthDate: new Date('1995-02-14'),
+    Age: 29,
+    ClientStatus: 'Active',
+    RiskRating: 'High',
+    createdAt: 5 * oneDayMs,
+    LastClientUpdate: new Date(5 * oneDayMs),
+  },
+  {
+    id: 'c8',
+    FirstName: 'Sofia',
+    LastName: 'Ramos',
+    Gender: 'Female',
+    BirthDate: new Date('1987-12-01'),
+    Age: 37,
+    ClientStatus: 'Active',
+    RiskRating: 'Low',
+    createdAt: 15 * oneDayMs,
+    LastClientUpdate: new Date(2 * oneDayMs),
+  },
+];
