@@ -17,6 +17,7 @@ import clientTypeData from 'data/cisClientType.json';
 import statusData from 'data/cisStatus.json';
 import classificationData from 'data/cisClassification.json';
 import styles from './ClientInformationSystem.module.scss';
+import Dashboard from 'pages/CISDashboard';
 
 function ClientInformationSystem() {
   const navigate = useNavigate();
@@ -105,6 +106,8 @@ function ClientInformationSystem() {
 
   return (
     <div className={styles.container}>
+      <h1 className={styles.title}>{t('CIS Dashboard Overview')}</h1>
+      <Dashboard />
       <div className={styles.header}>
         <h1 className={styles.title}>{t('clientSearch')}</h1>
       </div>

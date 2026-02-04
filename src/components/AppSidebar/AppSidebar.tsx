@@ -63,7 +63,7 @@ function AppSidebar() {
           <NavListItem
             label="CIS"
             icon={Database}
-            to={ROUTES.CLIENT_INFORMATION_SYSTEM.DASHBOARD}
+            to={ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT}
             active={activeNavId === 'core-modules-cis'}
             onClick={() => setActiveNavId('core-modules-cis')}
           />

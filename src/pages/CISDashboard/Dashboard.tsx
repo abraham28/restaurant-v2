@@ -24,7 +24,6 @@ function Dashboard() {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.pageTitle}>CIS Dashboard Overview</h1>
       <div className={styles.cardsGrid}>
         <MetricCard
           title="Total Clients"
