@@ -14,15 +14,15 @@ import Sidebar from 'atomic-components/Sidebar';
 import NavListItem from 'atomic-components/NavListItem';
 import NavListGroup from 'atomic-components/NavListGroup';
 import { ROUTES } from 'utils/constants';
-import CustomerDetailsModal from './CustomerDetailsModal';
+import CustomerDetailsModal from './CIS/CustomerDetails';
 import UserProfile from './UserProfile';
 import UserActions from './UserActions';
-import AccountsModal from './AccountsModal';
-import SettingsModal from './SettingsModal';
-import AuditLogModal from './AuditLogModal';
-import AssessmentModal from './AssessmentModal';
-import UserSettingsModal from './UserSettingsModal';
-import LogoutModal from './LogoutModal';
+import AccountsModal from './CIS/Accounts';
+import SettingsModal from './CIS/Settings';
+import AuditLogModal from './CIS/AuditLog';
+import AssessmentModal from './CIS/Assessment';
+import UserSettingsModal from './UserSettings';
+import LogoutModal from './UserLogOut';
 
 function AppSidebar() {
   const location = useLocation();
