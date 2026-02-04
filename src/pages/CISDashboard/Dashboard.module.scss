@@ -1,0 +1,16 @@
+.container {
+  padding: var(--padding-xxxx-large);
+}
+
+.pageTitle {
+  font-size: var(--font-size-xx-large);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--margin-xxxx-large);
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--margin-xx-large);
+}
