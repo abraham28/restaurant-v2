@@ -21,11 +21,6 @@
     background-color: var(--color-hover, rgba(0, 0, 0, 0.05));
   }
 
-  &:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-
   &.active {
     background-color: var(--color-button-primary);
     color: var(--color-white);
