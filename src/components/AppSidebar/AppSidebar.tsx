@@ -53,7 +53,7 @@ function AppSidebar() {
       >
         <NavListGroup label={t('clientInformation')}>
           <NavListItem
-            label={t('clientInformationSystem')}
+            label={t('navCIS')}
             icon={FileText}
             to={ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT}
             active={location.pathname.startsWith(
