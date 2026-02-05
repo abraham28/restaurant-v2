@@ -14,4 +14,10 @@ export interface NavListGroupProps {
   collapsible?: boolean;
   /** Whether the group is expanded by default (only applies if collapsible is true) */
   defaultExpanded?: boolean;
+  /** Navigation destination URL - if provided, clicking the label will navigate */
+  to?: string;
+  /** Click handler for when the label is clicked */
+  onClick?: () => void;
+  /** Whether this navigation item is currently active */
+  active?: boolean;
 }

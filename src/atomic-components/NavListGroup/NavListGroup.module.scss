@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--padding-small);
+  text-decoration: none; // Remove underline for Link components
 }
 
 .navGroupLabelWithIcon {
@@ -58,10 +59,26 @@
   color: var(--color-sidebar-text);
 }
 
+.navGroupLabel.active {
+  background-color: var(--color-button-primary);
+  color: var(--color-white);
+  font-weight: 500;
+  outline: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  .chevronIcon {
+    color: var(--color-white);
+  }
+}
+
 .chevronIcon {
   transition: transform 0.2s ease;
   flex-shrink: 0;
   color: var(--color-text-muted, rgba(0, 0, 0, 0.6));
+  cursor: pointer;
 }
 
 .chevronIconExpanded {

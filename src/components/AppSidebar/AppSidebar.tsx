@@ -7,7 +7,7 @@ import NavListGroup from 'atomic-components/NavListGroup';
 import {
   useNavigationData,
   groupHasActiveItem,
-  itemHasActiveChild,
+  itemIsActiveOrHasActiveChild,
   type NavItem,
 } from 'hooks/useNavigationData';
 import UserProfile from './UserProfile';
@@ -48,13 +48,20 @@ function AppSidebar() {
         // If item has nested items, render as a collapsible group
         const nestedItems = item.items;
         if (nestedItems && nestedItems.length > 0) {
+          const isExpanded = itemIsActiveOrHasActiveChild(
+            item,
+            location.pathname,
+          );
           return (
             <NavListGroup
               key={item.id}
               label={item.label}
               icon={item.icon}
               collapsible={true}
-              defaultExpanded={itemHasActiveChild(item, location.pathname)}
+              defaultExpanded={isExpanded}
+              to={item.to}
+              active={activeNavId === item.id}
+              onClick={() => handleNavItemClick(item)}
             >
               {renderNavItems(nestedItems)}
             </NavListGroup>

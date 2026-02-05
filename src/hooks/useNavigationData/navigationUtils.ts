@@ -33,6 +33,26 @@ export function itemHasActiveChild(item: NavItem, pathname: string): boolean {
 }
 
 /**
+ * Checks if a navigation item is active (matches pathname) or has an active child
+ * Used to determine if a collapsible item should be expanded by default
+ * @param item - The navigation item to check
+ * @param pathname - The current route pathname
+ * @returns True if the item itself is active or has an active child, false otherwise
+ */
+export function itemIsActiveOrHasActiveChild(
+  item: NavItem,
+  pathname: string,
+): boolean {
+  // Check if the item itself is active
+  if (itemMatchesPathname(item, pathname)) {
+    return true;
+  }
+
+  // Check if any child is active
+  return itemHasActiveChild(item, pathname);
+}
+
+/**
  * Recursively collects all items with routes from navigation items
  */
 function collectItemsWithRoutes(
