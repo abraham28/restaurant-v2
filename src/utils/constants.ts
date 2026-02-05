@@ -22,6 +22,7 @@ export const ROUTES = {
     DASHBOARD: '/client-information-system/dashboard',
     INSERT: '/client-information-system/new',
     REVIEW: '/client-information-system/new/review',
+    BASIC_INFORMATION: '/client-information-system/basic-information',
   },
   CSV_UTILS: {
     CSV_TO_JSON: '/csvutils/csvtojson',
