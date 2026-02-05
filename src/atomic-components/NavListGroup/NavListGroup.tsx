@@ -80,13 +80,14 @@ function NavListGroup({
         {label}
       </span>
       {collapsible && (
-        <ChevronDown
-          className={`${styles.chevronIcon} ${
-            isExpanded ? styles.chevronIconExpanded : ''
-          }`}
-          size={16}
-          onClick={handleChevronClick}
-        />
+        <span className={styles.chevronContainer} onClick={handleChevronClick}>
+          <ChevronDown
+            className={`${styles.chevronIcon} ${
+              isExpanded ? styles.chevronIconExpanded : ''
+            }`}
+            size={16}
+          />
+        </span>
       )}
     </>
   );

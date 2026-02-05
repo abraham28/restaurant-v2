@@ -74,11 +74,21 @@
   }
 }
 
+.chevronContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--chevron-clickable-padding);
+  margin: calc(var(--chevron-clickable-padding) * -1);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
 .chevronIcon {
   transition: transform 0.2s ease;
   flex-shrink: 0;
   color: var(--color-text-muted, rgba(0, 0, 0, 0.6));
-  cursor: pointer;
+  pointer-events: none; // Prevent double-click events on the icon itself
 }
 
 .chevronIconExpanded {
