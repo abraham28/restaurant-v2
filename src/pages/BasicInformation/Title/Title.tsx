@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import SelectDropdown from 'atomic-components/SelectDropdown/SelectDropdown';
+import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
 import { useClientFormStore } from 'stores/clientFormStore';
 import titleData from 'data/cisTitle.json';
 import styles from './Title.module.scss';
@@ -24,11 +24,11 @@ const Title = () => {
     <div className={styles.container}>
       <div className={styles.headerContainer}>
         <label className={styles.label}>Title</label>
-        <SelectDropdown
+        <AutocompleteInput
           value={title}
           onChange={handleChange}
-          options={titleOptions}
-          placeholder=""
+          suggestions={titleOptions}
+          placeholder="Type to search..."
         />
       </div>
     </div>

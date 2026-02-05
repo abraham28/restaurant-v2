@@ -24,9 +24,9 @@ const BasicInformation = () => {
           <div className={styles.contentContainer}>
             <div className={styles.nameGrid}>
               <Title />
+              <LastName />
               <FirstName />
               <MiddleName />
-              <LastName />
               <Suffix />
             </div>
           </div>

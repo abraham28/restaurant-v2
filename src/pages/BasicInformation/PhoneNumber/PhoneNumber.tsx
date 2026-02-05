@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import TextInput from 'atomic-components/TextInput/TextInput';
+import React, { useEffect, useState } from 'react';
+import PhoneNumberInput from 'atomic-components/PhoneNumberInput';
 import { useClientFormStore } from 'stores/clientFormStore';
 import styles from './PhoneNumber.module.scss';
 
@@ -9,87 +9,49 @@ const PhoneNumber = () => {
     (state) => state.formData.mobileNumber,
   );
   const setFormData = useClientFormStore((state) => state.setFormData);
-  const [displayValue, setDisplayValue] = useState('');
-  const isUserTypingRef = useRef(false);
+  const [formattedValue, setFormattedValue] = useState('');
 
-  // Format phone number with spaces: +63 917 123 4567
-  const formatPhoneNumber = (value: string): string => {
-    // Remove all non-digit characters except +
-    const cleaned = value.replace(/[^\d+]/g, '');
-
-    // If starts with +, keep it
-    if (cleaned.startsWith('+')) {
-      const digits = cleaned.slice(1).replace(/\D/g, '');
-      if (digits.length === 0) return '+';
-
-      // Format: +63 917 123 4567
-      if (digits.length <= 2) {
-        return `+${digits}`;
-      } else if (digits.length <= 5) {
-        return `+${digits.slice(0, 2)} ${digits.slice(2)}`;
-      } else if (digits.length <= 8) {
-        return `+${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(5)}`;
-      } else {
-        return `+${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 12)}`;
-      }
-    } else {
-      // No + prefix, add it automatically if user types digits
-      const digits = cleaned.replace(/\D/g, '');
-      if (digits.length === 0) return '';
-
-      // Auto-add + if user starts typing
-      if (digits.length <= 2) {
-        return `+${digits}`;
-      } else if (digits.length <= 5) {
-        return `+${digits.slice(0, 2)} ${digits.slice(2)}`;
-      } else if (digits.length <= 8) {
-        return `+${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(5)}`;
-      } else {
-        return `+${digits.slice(0, 2)} ${digits.slice(2, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 12)}`;
-      }
-    }
-  };
-
-  // Initialize display value from store (only when store changes externally, not from user typing)
+  // Build formatted value from store for display
   useEffect(() => {
-    if (isUserTypingRef.current) {
-      // User is typing, don't update from store
-      return;
-    }
-
-    const fullNumber =
-      countryCode && mobileNumber
-        ? `${countryCode}${mobileNumber}`.replace(/\D/g, '')
-        : mobileNumber || '';
-
-    if (fullNumber) {
-      const formatted = formatPhoneNumber(
-        fullNumber.startsWith('+') ? fullNumber : `+${fullNumber}`,
-      );
-      setDisplayValue(formatted);
+    if (countryCode === '+63' && mobileNumber) {
+      // Format: +63 917 123 4567
+      const formatted =
+        `+63 ${mobileNumber.slice(0, 3)} ${mobileNumber.slice(3, 6)} ${mobileNumber.slice(6, 10)}`.trim();
+      setFormattedValue(formatted);
     } else {
-      setDisplayValue('');
+      setFormattedValue('');
     }
   }, [countryCode, mobileNumber]);
 
   const handleChange = (value: string) => {
-    isUserTypingRef.current = true;
-    const formatted = formatPhoneNumber(value);
-    setDisplayValue(formatted);
+    // Parse formatted value to extract countryCode and mobileNumber
+    const digits = value.replace(/\D/g, ''); // Remove all non-digits
 
-    // Extract country code and mobile number
-    const cleaned = formatted.replace(/\D/g, '');
-    if (cleaned.length >= 2) {
-      const code = cleaned.slice(0, 2);
-      const number = cleaned.slice(2);
+    if (digits.startsWith('63') && digits.length >= 5) {
+      // Extract mobile number (remove 63 prefix)
+      const mobileNum = digits.slice(2);
       setFormData({
-        countryCode: `+${code}`,
-        mobileNumber: number,
+        countryCode: '+63',
+        mobileNumber: mobileNum,
       });
-    } else if (cleaned.length > 0) {
+    } else if (digits.startsWith('09') && digits.length >= 11) {
+      // Extract mobile number (remove 09 prefix)
+      const mobileNum = digits.slice(1);
       setFormData({
-        countryCode: `+${cleaned}`,
-        mobileNumber: '',
+        countryCode: '+63',
+        mobileNumber: mobileNum,
+      });
+    } else if (digits.length >= 9) {
+      // Get last 9 digits as mobile number
+      const mobileNum = digits.slice(-9);
+      setFormData({
+        countryCode: '+63',
+        mobileNumber: mobileNum,
+      });
+    } else if (digits.length > 0) {
+      setFormData({
+        countryCode: '+63',
+        mobileNumber: digits,
       });
     } else {
       setFormData({
@@ -97,19 +59,14 @@ const PhoneNumber = () => {
         mobileNumber: '',
       });
     }
-
-    // Reset flag after a short delay
-    setTimeout(() => {
-      isUserTypingRef.current = false;
-    }, 100);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
         <label className={styles.label}>Phone Number</label>
-        <TextInput
-          value={displayValue}
+        <PhoneNumberInput
+          value={formattedValue}
           onChange={handleChange}
           placeholder="+63 9** *** ****"
         />

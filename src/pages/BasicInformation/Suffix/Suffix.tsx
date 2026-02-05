@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import SelectDropdown from 'atomic-components/SelectDropdown/SelectDropdown';
+import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
 import { useClientFormStore } from 'stores/clientFormStore';
 import suffixData from 'data/cisClientNameSuffix.json';
 import styles from './Suffix.module.scss';
@@ -24,11 +24,11 @@ const Suffix = () => {
     <div className={styles.container}>
       <div className={styles.headerContainer}>
         <label className={styles.label}>Suffix</label>
-        <SelectDropdown
+        <AutocompleteInput
           value={suffix}
           onChange={handleChange}
-          options={suffixOptions}
-          placeholder=""
+          suggestions={suffixOptions}
+          placeholder="Type to search..."
         />
       </div>
     </div>

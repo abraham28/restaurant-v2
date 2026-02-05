@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './BirthdateInput.module.scss';
 import { BirthdateInputProps } from './types';
 
@@ -7,14 +7,16 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
   value,
   onChange,
   className = '',
-  placeholder = 'Select birthdate',
+  placeholder = 'YYYY-MM-DD',
   disabled = false,
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   const [showYearPicker, setShowYearPicker] = useState(false);
+  const [inputValue, setInputValue] = useState(value || '');
   const datePickerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Get today's date (maximum date)
   const today = new Date();
@@ -24,6 +26,11 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
   const minDate = new Date();
   minDate.setFullYear(today.getFullYear() - 120);
   minDate.setHours(0, 0, 0, 0);
+
+  // Sync input value when prop value changes
+  useEffect(() => {
+    setInputValue(value || '');
+  }, [value]);
 
   // Sync calendar month with selected date when value changes
   useEffect(() => {
@@ -61,18 +68,92 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
     };
   }, [isDatePickerOpen]);
 
-  // Format date for display
-  const formatDate = (dateString: string): string => {
-    if (!dateString) return '';
-    // Parse YYYY-MM-DD format to avoid timezone issues
+  // Validate date string format (YYYY-MM-DD)
+  const isValidDateString = (dateString: string): boolean => {
+    if (!dateString) return false;
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(dateString)) return false;
+
     const [year, month, day] = dateString.split('-').map(Number);
-    const date = new Date(year, month - 1, day); // month is 0-indexed
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    };
-    return date.toLocaleDateString('en-US', options);
+    const date = new Date(year, month - 1, day);
+
+    // Check if date is valid and matches input
+    if (
+      isNaN(date.getTime()) ||
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return false;
+    }
+
+    // Check if date is within valid range
+    date.setHours(0, 0, 0, 0);
+    return date >= minDate && date <= today;
+  };
+
+  // Format input as user types (YYYY-MM-DD)
+  const formatInputValue = (value: string): string => {
+    // Extract all digits
+    const digits = value.replace(/\D/g, '');
+
+    if (digits.length === 0) {
+      return '';
+    }
+
+    // Check if user manually typed a dash
+    const endsWithDash = value.endsWith('-');
+
+    // Build formatted string based on digit count
+    if (digits.length <= 4) {
+      // YYYY - only allow dash if exactly 4 digits and user typed it
+      if (endsWithDash && digits.length === 4) {
+        return `${digits}-`;
+      }
+      return digits;
+    } else if (digits.length <= 6) {
+      // YYYY-MM
+      const year = digits.slice(0, 4);
+      const month = digits.slice(4);
+      // Allow dash after MM only if exactly 6 digits and user typed it
+      if (endsWithDash && digits.length === 6) {
+        return `${year}-${month}-`;
+      }
+      return `${year}-${month}`;
+    } else {
+      // YYYY-MM-DD
+      return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`;
+    }
+  };
+
+  // Handle input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value;
+    const formattedValue = formatInputValue(rawValue);
+    setInputValue(formattedValue);
+
+    // If valid date format, update parent component
+    if (isValidDateString(formattedValue)) {
+      onChange(formattedValue);
+    } else if (formattedValue === '') {
+      // Allow clearing the input
+      onChange('');
+    }
+  };
+
+  // Handle input blur
+  const handleInputBlur = () => {
+    if (inputValue && !isValidDateString(inputValue)) {
+      // If invalid, revert to last valid value
+      setInputValue(value || '');
+    }
+  };
+
+  // Handle input focus/click - show calendar
+  const handleInputFocus = () => {
+    if (!disabled) {
+      setIsDatePickerOpen(true);
+    }
   };
 
   // Select month
@@ -155,6 +236,7 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
     const month = calendarMonth.getMonth() + 1; // getMonth() returns 0-11
     const dateString = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     onChange(dateString);
+    setInputValue(dateString);
     setIsDatePickerOpen(false);
   };
 
@@ -239,15 +321,20 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
       className={`${styles.dateInputWrapper} ${className}`}
       ref={datePickerRef}
     >
-      <div
-        className={styles.customDateInput}
-        onClick={() => !disabled && setIsDatePickerOpen(!isDatePickerOpen)}
-        style={disabled ? { cursor: 'not-allowed', opacity: 0.6 } : {}}
-      >
-        <Calendar size={18} className={styles.calendarIcon} />
-        <span className={styles.dateDisplay}>
-          {value ? formatDate(value) : placeholder}
-        </span>
+      <div className={styles.customDateInput}>
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          onFocus={handleInputFocus}
+          onClick={() => !disabled && setIsDatePickerOpen(true)}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={styles.dateInput}
+          maxLength={10}
+        />
       </div>
 
       {isDatePickerOpen && !disabled && (

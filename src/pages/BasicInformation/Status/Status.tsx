@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import SelectDropdown from 'atomic-components/SelectDropdown/SelectDropdown';
+import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
 import { useClientFormStore } from 'stores/clientFormStore';
 import styles from './Status.module.scss';
 
@@ -22,11 +22,11 @@ const Status = () => {
     <div className={styles.container}>
       <div className={styles.headerContainer}>
         <label className={styles.label}>Status</label>
-        <SelectDropdown
+        <AutocompleteInput
           value={maritalStatus}
           onChange={handleChange}
-          options={maritalStatusOptions}
-          placeholder="Select status"
+          suggestions={maritalStatusOptions}
+          placeholder="Type to search..."
         />
       </div>
     </div>

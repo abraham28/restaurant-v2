@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import SelectDropdown from 'atomic-components/SelectDropdown/SelectDropdown';
+import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
 import { useClientFormStore } from 'stores/clientFormStore';
 import styles from './Gender.module.scss';
 
@@ -20,11 +20,11 @@ const Gender = () => {
     <div className={styles.container}>
       <div className={styles.headerContainer}>
         <label className={styles.label}>Gender</label>
-        <SelectDropdown
+        <AutocompleteInput
           value={gender}
           onChange={handleChange}
-          options={genderOptions}
-          placeholder="Select gender"
+          suggestions={genderOptions}
+          placeholder="Type to search..."
         />
       </div>
     </div>
