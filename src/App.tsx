@@ -15,6 +15,7 @@ import CISDashboard from 'pages/CISDashboard';
 import CIFInsert from 'pages/CIFInsert/CIFInsert';
 import CIFInsertReview from 'pages/CIFInsert/Review';
 import CsvToJson from 'pages/CsvToJson';
+import BasicInformation from 'pages/BasicInformation';
 
 function AppContent() {
   return (
@@ -37,6 +38,10 @@ function AppContent() {
         element={<CIFInsertReview />}
       />
       <Route path={ROUTES.CSV_UTILS.CSV_TO_JSON} element={<CsvToJson />} />
+      <Route
+        path={ROUTES.CLIENT_INFORMATION_SYSTEM.BASIC_INFORMATION}
+        element={<BasicInformation />}
+      />
     </Routes>
   );
 }
