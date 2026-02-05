@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
-import { useClientFormStore } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import titleData from 'data/cisTitle.json';
 import styles from './Title.module.scss';
 
 const Title = () => {
-  const title = useClientFormStore((state) => state.formData.title);
-  const setFormData = useClientFormStore((state) => state.setFormData);
+  const title = useIndividualStore((state) => state.formData.title);
+  const setFormData = useIndividualStore((state) => state.setFormData);
 
   const titleOptions = useMemo(
     () =>
