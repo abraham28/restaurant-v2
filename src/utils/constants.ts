@@ -27,6 +27,7 @@ export const ROUTES = {
     SETTINGS: '/client-information-system/settings',
     AUDIT_LOG: '/client-information-system/audit-log',
     ASSESSMENT: '/client-information-system/assessment',
+    BASIC_INFORMATION: '/client-information-system/basic-information',
   },
   DEPOSITS: '/deposits',
   LOANS: '/loans',
@@ -43,7 +44,6 @@ export const ROUTES = {
     AMLA: '/regulatory/amla',
     PDIC: '/regulatory/pdic',
     CIC: '/regulatory/cic',
-    BASIC_INFORMATION: '/client-information-system/basic-information',
   },
   CSV_UTILS: {
     CSV_TO_JSON: '/csvutils/csvtojson',
