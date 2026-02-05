@@ -6,7 +6,6 @@
 .customDateInput {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   width: 100%;
   height: var(--input-height);
   padding: var(--input-padding-vertical) var(--input-padding-horizontal);
@@ -18,8 +17,6 @@
   border: 1px solid hsl(0 0% 85%);
   border-radius: var(--border-radius-medium);
   transition: all 0.2s ease-in-out;
-  cursor: pointer;
-  user-select: none;
 
   &:hover {
     border-color: hsl(148, 100%, 25%);
@@ -29,6 +26,28 @@
   &:focus-within {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px hsla(222.2, 47.4%, 11.2%, 0.1);
+  }
+}
+
+.dateInput {
+  flex: 1;
+  font-weight: 400;
+  font-size: var(--input-font-size);
+  line-height: var(--input-line-height);
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: hsl(222.2 47.4% 11.2%);
+  width: 100%;
+  padding: 0;
+
+  &::placeholder {
+    color: hsl(0 0% 60%);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 

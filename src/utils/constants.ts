@@ -43,6 +43,7 @@ export const ROUTES = {
     AMLA: '/regulatory/amla',
     PDIC: '/regulatory/pdic',
     CIC: '/regulatory/cic',
+    BASIC_INFORMATION: '/client-information-system/basic-information',
   },
   CSV_UTILS: {
     CSV_TO_JSON: '/csvutils/csvtojson',

@@ -16,6 +16,7 @@ import CIFInsert from 'pages/CIFInsert/CIFInsert';
 import CIFInsertReview from 'pages/CIFInsert/Review';
 import CsvToJson from 'pages/CsvToJson';
 import PageNotFound from 'pages/PageNotFound';
+import BasicInformation from 'pages/BasicInformation';
 
 function AppContent() {
   return (
@@ -38,6 +39,10 @@ function AppContent() {
         element={<CIFInsertReview />}
       />
       <Route path={ROUTES.CSV_UTILS.CSV_TO_JSON} element={<CsvToJson />} />
+      <Route
+        path={ROUTES.CLIENT_INFORMATION_SYSTEM.BASIC_INFORMATION}
+        element={<BasicInformation />}
+      />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
