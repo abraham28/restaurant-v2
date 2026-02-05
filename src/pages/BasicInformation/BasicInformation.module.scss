@@ -102,6 +102,20 @@
   grid-template-columns: 0.3fr 1.2fr 1.2fr 1.2fr 0.3fr;
   display: grid;
   gap: var(--padding-large);
+  padding: 8px 16px;
+}
+
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--padding-large);
+  padding: var(--padding-large) 16px;
+}
+
+.smallFieldsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--padding-medium);
 }
 
 .contactGrid {

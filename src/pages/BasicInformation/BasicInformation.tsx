@@ -1,10 +1,14 @@
 import styles from './BasicInformation.module.scss';
 import DateofBirth from './DateofBirth';
+import EmailAddress from './EmailAddress';
 import FirstName from './FirstName/FirstName';
+import Gender from './Gender';
 import LastName from './LastName/LastName';
 import MiddleName from './MiddleName/MiddleName';
+import PhoneNumber from './PhoneNumber';
 import Suffix from './Suffix/Suffix';
 import Title from './Title/Title';
+import Status from './Status';
 
 const BasicInformation = () => {
   return (
@@ -28,7 +32,15 @@ const BasicInformation = () => {
           </div>
         </div>
         <div className={styles.formCardMiddle}>
-          <DateofBirth />
+          <div className={styles.twoColumnGrid}>
+            <DateofBirth />
+            <PhoneNumber />
+            <EmailAddress />
+            <div className={styles.smallFieldsRow}>
+              <Gender />
+              <Status />
+            </div>
+          </div>
         </div>
       </div>
     </div>
