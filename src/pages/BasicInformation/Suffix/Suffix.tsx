@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
-import { useClientFormStore } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import suffixData from 'data/cisClientNameSuffix.json';
 import styles from './Suffix.module.scss';
 
 const Suffix = () => {
-  const suffix = useClientFormStore((state) => state.formData.suffix);
-  const setFormData = useClientFormStore((state) => state.setFormData);
+  const suffix = useIndividualStore((state) => state.formData.suffix);
+  const setFormData = useIndividualStore((state) => state.setFormData);
 
   const suffixOptions = useMemo(
     () =>

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import PhoneNumberInput from 'atomic-components/PhoneNumberInput';
-import { useClientFormStore } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import styles from './PhoneNumber.module.scss';
 
 const PhoneNumber = () => {
-  const countryCode = useClientFormStore((state) => state.formData.countryCode);
-  const mobileNumber = useClientFormStore(
+  const countryCode = useIndividualStore((state) => state.formData.countryCode);
+  const mobileNumber = useIndividualStore(
     (state) => state.formData.mobileNumber,
   );
-  const setFormData = useClientFormStore((state) => state.setFormData);
+  const setFormData = useIndividualStore((state) => state.setFormData);
   const [formattedValue, setFormattedValue] = useState('');
 
   // Build formatted value from store for display

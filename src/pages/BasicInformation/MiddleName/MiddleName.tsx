@@ -1,10 +1,10 @@
 import TextInput from 'atomic-components/TextInput/TextInput';
-import { useClientFormStore } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import styles from './MiddleName.module.scss';
 
 const MiddleName = () => {
-  const middleName = useClientFormStore((state) => state.formData.middleName);
-  const setFormData = useClientFormStore((state) => state.setFormData);
+  const middleName = useIndividualStore((state) => state.formData.middleName);
+  const setFormData = useIndividualStore((state) => state.setFormData);
 
   const handleChange = (value: string) => {
     setFormData({ middleName: value });

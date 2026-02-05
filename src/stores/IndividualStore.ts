@@ -36,6 +36,9 @@ export interface IndividualFormData {
   weight: number;
   height: number;
   isDeceased: boolean;
+  emailAddress: string;
+  countryCode: string;
+  mobileNumber: string;
   // Relationship
   isBeneficiary: boolean;
   primaryBeneficiary: string;
@@ -72,6 +75,9 @@ const initialFormData: IndividualFormData = {
   weight: 0,
   height: 0,
   isDeceased: false,
+  emailAddress: '',
+  countryCode: '',
+  mobileNumber: '',
   isBeneficiary: false,
   primaryBeneficiary: '',
   education: '',
