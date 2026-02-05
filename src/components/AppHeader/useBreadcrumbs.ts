@@ -94,25 +94,22 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
     segments.forEach((segment, index) => {
       currentPath += `/${segment}`;
 
-      // If this segment matches a nav item, use its label
+      // Priority 1: Check routeSegmentKeys first
       let title: string;
-      if (
+      const translationKey = routeSegmentKeys[segment.toLowerCase()];
+      if (translationKey) {
+        title = t(translationKey);
+      } else if (
+        // Priority 2: If no routeSegmentKeys match, try nav item label
         matchingNavItem &&
         matchingNavItem.to === currentPath &&
         index === segments.length - 1
       ) {
         title = matchingNavItem.label;
       } else {
-        // Get translation key for this segment
-        const translationKey = routeSegmentKeys[segment.toLowerCase()];
-        if (translationKey) {
-          title = t(translationKey);
-        } else {
-          // Fallback: capitalize and replace hyphens with spaces
-          title =
-            segment.charAt(0).toUpperCase() +
-            segment.slice(1).replace(/-/g, ' ');
-        }
+        // Fallback: capitalize and replace hyphens with spaces
+        title =
+          segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ');
       }
 
       items.push({
