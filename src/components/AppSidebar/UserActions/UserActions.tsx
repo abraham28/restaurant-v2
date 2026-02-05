@@ -1,27 +1,24 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Settings, LogOut } from 'lucide-react';
-import styles from './UserActions.module.scss';
+import IconButton from 'atomic-components/IconButton';
 import { UserActionsProps } from './types';
 
 function UserActions({ onSettingsClick, onLogoutClick }: UserActionsProps) {
+  const { t } = useTranslation();
+
   return (
     <>
-      <button
-        className={styles.iconButton}
+      <IconButton
+        icon={Settings}
         onClick={onSettingsClick}
-        aria-label="User Settings"
-        title="User Settings"
-      >
-        <Settings size={18} />
-      </button>
-      <button
-        className={styles.iconButton}
+        aria-label={t('userSettings')}
+      />
+      <IconButton
+        icon={LogOut}
         onClick={onLogoutClick}
-        aria-label="Logout"
-        title="Logout"
-      >
-        <LogOut size={18} />
-      </button>
+        aria-label={t('logout')}
+      />
     </>
   );
 }
