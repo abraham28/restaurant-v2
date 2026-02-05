@@ -1,12 +1,19 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import {
+  Database,
+  PiggyBank,
+  Building2,
+  FileText,
+  BarChart3,
+  Scale,
+  ShieldCheck,
+} from 'lucide-react';
 import Sidebar from 'atomic-components/Sidebar';
 import NavListItem from 'atomic-components/NavListItem';
 import NavListGroup from 'atomic-components/NavListGroup';
 import { ROUTES } from 'utils/constants';
-import type { NavItem } from './types';
-import { mapNavigationData } from './navigationMapper';
 import CustomerDetailsModal from './CIS/CustomerDetails';
 import UserProfile from './UserProfile';
 import UserActions from './UserActions';
@@ -17,105 +24,17 @@ import AssessmentModal from './CIS/Assessment';
 import UserSettingsModal from './UserSettings';
 import LogoutModal from './UserLogOut';
 
-// Map routes to navigation IDs (similar to routeTitleKeys in PageTitle.tsx)
-const routeNavIdMap: Record<string, string> = {
-  // Client Information System routes
-  [ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT]: 'core-modules-cis',
-  [ROUTES.CLIENT_INFORMATION_SYSTEM.DASHBOARD]: 'core-modules-cis',
-  [ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT]: 'core-modules-cis',
-  [ROUTES.CLIENT_INFORMATION_SYSTEM.REVIEW]: 'core-modules-cis',
-  '/client-information-system/individual': 'core-modules-cis',
-  '/client-information-system/individual/insert': 'core-modules-cis',
-  '/client-information-system/company': 'core-modules-cis',
-  '/client-information-system/company/insert': 'core-modules-cis',
-  '/client-information-system/government': 'core-modules-cis',
-  '/client-information-system/government/insert': 'core-modules-cis',
-  '/client-information-system/organization': 'core-modules-cis',
-  '/client-information-system/organization/insert': 'core-modules-cis',
-
-  // Add more route mappings as routes are implemented
-  // Deposits routes (when implemented)
-  // [ROUTES.DEPOSITS?.ROOT]: 'core-modules-deposits',
-  // [ROUTES.DEPOSITS?.DASHBOARD]: 'core-modules-deposits',
-  // [ROUTES.DEPOSITS?.INSERT]: 'core-modules-deposits',
-
-  // Loans routes (when implemented)
-  // [ROUTES.LOANS?.ROOT]: 'core-modules-loans',
-  // [ROUTES.LOANS?.DASHBOARD]: 'core-modules-loans',
-  // [ROUTES.LOANS?.INSERT]: 'core-modules-loans',
-
-  // GL routes (when implemented)
-  // [ROUTES.GL?.ROOT]: 'core-modules-gl',
-  // [ROUTES.GL?.DASHBOARD]: 'core-modules-gl',
-
-  // Report routes (when implemented)
-  // [ROUTES.REPORTS?.CIS]: 'report-cis',
-  // [ROUTES.REPORTS?.DEPOSITS]: 'report-deposits',
-  // [ROUTES.REPORTS?.LOANS]: 'report-loans',
-  // [ROUTES.REPORTS?.GL]: 'report-gl',
-  // [ROUTES.REPORTS?.DYNAMIC_QUERY]: 'report-dynamic-query',
-
-  // Regulatory routes (when implemented)
-  // [ROUTES.REGULATORY?.BSP]: 'regulatory-bsp',
-  // [ROUTES.REGULATORY?.AMLC]: 'regulatory-amlc',
-  // [ROUTES.REGULATORY?.PDIC]: 'regulatory-pdic',
-  // [ROUTES.REGULATORY?.CIC]: 'regulatory-cic',
-};
-
-/**
- * Gets the active navigation ID from the current pathname
- * Similar to getTitleFromPath in PageTitle.tsx
- * @param pathname - The current route pathname
- * @returns The navigation ID if a match is found, null otherwise
- */
-function getActiveNavIdFromPath(pathname: string): string | null {
-  // Check exact match first
-  if (routeNavIdMap[pathname]) {
-    return routeNavIdMap[pathname];
-  }
-
-  // Check if pathname starts with any route in the map
-  // Sort routes by length (longest first) to match more specific routes first
-  const sortedRoutes = Object.entries(routeNavIdMap).sort(
-    ([routeA], [routeB]) => routeB.length - routeA.length,
-  );
-
-  for (const [route, navId] of sortedRoutes) {
-    // Ensure we match complete path segments (e.g., '/client' shouldn't match '/client-information-system')
-    // Match if pathname starts with route followed by '/' or if it's an exact match
-    if (pathname.startsWith(route + '/') || pathname === route) {
-      return navId;
-    }
-  }
-
-  return null;
-}
-
 function AppSidebar() {
   const location = useLocation();
   const { t } = useTranslation();
 
-  // Map navigation data from JSON file
-  const navigationGroups = useMemo(() => mapNavigationData(), []);
-
   const [activeNavId, setActiveNavId] = useState<string | null>(null);
 
-  // Automatically set active nav ID from current route (similar to PageTitle.tsx)
   useEffect(() => {
-    const navId = getActiveNavIdFromPath(location.pathname);
-    setActiveNavId(navId);
-  }, [location.pathname]);
-
-  /**
-   * Handles navigation item clicks consistently
-   * Sets the active nav ID and executes the item's onClick handler if provided
-   * @param item - The navigation item that was clicked
-   */
-  const handleNavItemClick = useCallback((item: NavItem) => {
-    setActiveNavId(item.id);
-    if (item.onClick) {
-      item.onClick();
+    if (location.pathname.startsWith(ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT)) {
+      setActiveNavId('core-modules-cis');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- set active nav only on mount so user's clicked item stays active
   }, []);
   const [showCustomerDetailsModal, setShowCustomerDetailsModal] =
     useState(false);
@@ -140,26 +59,137 @@ function AppSidebar() {
           />
         }
       >
-        {/* Render navigation groups and items from navigationGroups array */}
-        {navigationGroups.map((group) => (
-          <NavListGroup
-            key={group.id}
-            label={t(group.labelKey)}
-            collapsible={group.collapsible}
-            defaultExpanded={group.defaultExpanded}
-          >
-            {group.items.map((item) => (
-              <NavListItem
-                key={item.id}
-                label={t(item.labelKey)}
-                icon={item.icon}
-                to={item.to}
-                active={activeNavId === item.id}
-                onClick={() => handleNavItemClick(item)}
-              />
-            ))}
-          </NavListGroup>
-        ))}
+        <NavListGroup label="Core Modules" collapsible defaultExpanded={false}>
+          <NavListItem
+            label="CIS"
+            icon={Database}
+            to={ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT}
+            active={activeNavId === 'core-modules-cis'}
+            onClick={() => setActiveNavId('core-modules-cis')}
+          />
+          <NavListItem
+            label="Deposits"
+            icon={PiggyBank}
+            active={activeNavId === 'core-modules-deposits'}
+            onClick={() => {
+              setActiveNavId('core-modules-deposits');
+              // TODO: Navigate to Deposits page
+            }}
+          />
+          <NavListItem
+            label="Loans"
+            icon={Building2}
+            active={activeNavId === 'core-modules-loans'}
+            onClick={() => {
+              setActiveNavId('core-modules-loans');
+              // TODO: Navigate to Loans page
+            }}
+          />
+          <NavListItem
+            label="GL"
+            icon={FileText}
+            active={activeNavId === 'core-modules-gl'}
+            onClick={() => {
+              setActiveNavId('core-modules-gl');
+              // TODO: Navigate to GL page
+            }}
+          />
+        </NavListGroup>
+
+        <NavListGroup
+          label="Report Modules"
+          collapsible
+          defaultExpanded={false}
+        >
+          <NavListItem
+            label="CIS"
+            icon={Database}
+            active={activeNavId === 'report-cis'}
+            onClick={() => {
+              setActiveNavId('report-cis');
+              // TODO: Navigate to CIS Reports page
+            }}
+          />
+          <NavListItem
+            label="Deposits"
+            icon={PiggyBank}
+            active={activeNavId === 'report-deposits'}
+            onClick={() => {
+              setActiveNavId('report-deposits');
+              // TODO: Navigate to Deposits Reports page
+            }}
+          />
+          <NavListItem
+            label="Loans"
+            icon={Building2}
+            active={activeNavId === 'report-loans'}
+            onClick={() => {
+              setActiveNavId('report-loans');
+              // TODO: Navigate to Loans Reports page
+            }}
+          />
+          <NavListItem
+            label="GL"
+            icon={FileText}
+            active={activeNavId === 'report-gl'}
+            onClick={() => {
+              setActiveNavId('report-gl');
+              // TODO: Navigate to GL Reports page
+            }}
+          />
+          <NavListItem
+            label="Dynamic Query Builder"
+            icon={BarChart3}
+            active={activeNavId === 'report-dynamic-query'}
+            onClick={() => {
+              setActiveNavId('report-dynamic-query');
+              // TODO: Navigate to Dynamic Query Builder page
+            }}
+          />
+        </NavListGroup>
+
+        <NavListGroup
+          label="Regulatory Compliance"
+          collapsible
+          defaultExpanded={false}
+        >
+          <NavListItem
+            label="BSP"
+            icon={Scale}
+            active={activeNavId === 'regulatory-bsp'}
+            onClick={() => {
+              setActiveNavId('regulatory-bsp');
+              // TODO: Navigate to BSP page
+            }}
+          />
+          <NavListItem
+            label="AMLC"
+            icon={ShieldCheck}
+            active={activeNavId === 'regulatory-amlc'}
+            onClick={() => {
+              setActiveNavId('regulatory-amlc');
+              // TODO: Navigate to AMLC page
+            }}
+          />
+          <NavListItem
+            label="PDIC"
+            icon={FileText}
+            active={activeNavId === 'regulatory-pdic'}
+            onClick={() => {
+              setActiveNavId('regulatory-pdic');
+              // TODO: Navigate to PDIC page
+            }}
+          />
+          <NavListItem
+            label="CIC"
+            icon={Database}
+            active={activeNavId === 'regulatory-cic'}
+            onClick={() => {
+              setActiveNavId('regulatory-cic');
+              // TODO: Navigate to CIC page
+            }}
+          />
+        </NavListGroup>
       </Sidebar>
 
       <CustomerDetailsModal
