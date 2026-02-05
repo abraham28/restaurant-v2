@@ -52,6 +52,7 @@ function AppSidebar() {
             <NavListGroup
               key={item.id}
               label={item.label}
+              icon={item.icon}
               collapsible={true}
               defaultExpanded={itemHasActiveChild(item, location.pathname)}
             >

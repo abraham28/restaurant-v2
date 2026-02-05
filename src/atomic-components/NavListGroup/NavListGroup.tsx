@@ -5,6 +5,7 @@ import styles from './NavListGroup.module.scss';
 
 function NavListGroup({
   label,
+  icon: Icon,
   children,
   className = '',
   collapsible = false,
@@ -22,6 +23,8 @@ function NavListGroup({
     <li className={`${styles.navListGroup} ${className}`.trim()}>
       <div
         className={`${styles.navGroupLabel} ${
+          Icon ? styles.navGroupLabelWithIcon : ''
+        } ${
           collapsible ? styles.navGroupLabelClickable : ''
         } ${isExpanded ? styles.navGroupLabelExpanded : ''}`}
         onClick={handleToggle}
@@ -35,7 +38,14 @@ function NavListGroup({
         }}
         aria-expanded={collapsible ? isExpanded : undefined}
       >
-        {label}
+        <span className={styles.navGroupLabelContent}>
+          {Icon && (
+            <span className={styles.navGroupIcon}>
+              <Icon size={19} strokeWidth={1.8} />
+            </span>
+          )}
+          {label}
+        </span>
         {collapsible && (
           <ChevronDown
             className={`${styles.chevronIcon} ${
