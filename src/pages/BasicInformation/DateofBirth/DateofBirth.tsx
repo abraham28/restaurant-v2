@@ -1,11 +1,11 @@
 import React from 'react';
 import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
-import { useClientFormStore } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import styles from './DateofBirth.module.scss';
 
 const DateofBirth = () => {
-  const birthDate = useClientFormStore((state) => state.formData.birthDate);
-  const setFormData = useClientFormStore((state) => state.setFormData);
+  const birthDate = useIndividualStore((state) => state.formData.birthDate);
+  const setFormData = useIndividualStore((state) => state.setFormData);
 
   const handleDateChange = (value: string) => {
     setFormData({ birthDate: value });

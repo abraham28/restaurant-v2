@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
-import { useClientFormStore } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import styles from './Gender.module.scss';
 
 const Gender = () => {
-  const gender = useClientFormStore((state) => state.formData.gender);
-  const setFormData = useClientFormStore((state) => state.setFormData);
+  const gender = useIndividualStore((state) => state.formData.gender);
+  const setFormData = useIndividualStore((state) => state.setFormData);
 
   const genderOptions = useMemo(
     () => ['Male', 'Female', 'Other', 'Prefer not to say'],

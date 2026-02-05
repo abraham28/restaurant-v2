@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import AutocompleteInput from 'atomic-components/AutocompleteInput/AutocompleteInput';
-import { useClientFormStore } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import styles from './Status.module.scss';
 
 const Status = () => {
-  const maritalStatus = useClientFormStore(
+  const maritalStatus = useIndividualStore(
     (state) => state.formData.maritalStatus,
   );
-  const setFormData = useClientFormStore((state) => state.setFormData);
+  const setFormData = useIndividualStore((state) => state.setFormData);
 
   const maritalStatusOptions = useMemo(
     () => ['Single', 'Married', 'Divorced', 'Widowed', 'Separated', 'Other'],
