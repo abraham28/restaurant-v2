@@ -1,4 +1,5 @@
 import styles from './BasicInformation.module.scss';
+import DateofBirth from './DateofBirth';
 import FirstName from './FirstName/FirstName';
 import LastName from './LastName/LastName';
 import MiddleName from './MiddleName/MiddleName';
@@ -9,7 +10,7 @@ const BasicInformation = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <div className={styles.formCard}>
+        <div className={styles.formCardTop}>
           <div className={styles.headerContainer}>
             <h3 className={styles.sectionTitle}>Basic Information</h3>
             <p className={styles.sectionSubtitle}>
@@ -25,6 +26,9 @@ const BasicInformation = () => {
               <Suffix />
             </div>
           </div>
+        </div>
+        <div className={styles.formCardMiddle}>
+          <DateofBirth />
         </div>
       </div>
     </div>
