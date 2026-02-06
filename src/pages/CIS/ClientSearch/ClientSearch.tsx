@@ -12,6 +12,7 @@ import {
   useClientFormStore,
   type ClientFormState,
 } from 'stores/clientFormStore';
+import { useIndividualStore } from 'stores/IndividualStore';
 import { useDraftsStore } from 'stores/draftsStore';
 import clientTypeData from 'data/cisClientType.json';
 import statusData from 'data/cisStatus.json';
@@ -62,19 +63,24 @@ function ClientSearch() {
     (state: ClientFormState): ClientFormState['resetForm'] => state.resetForm,
   ) as () => void;
 
+  const resetIndividualForm = useIndividualStore((state) => state.resetForm);
+  const loadDraft = useIndividualStore((state) => state.loadDraft);
+
   const handleAdd = useCallback(() => {
     resetForm(); // Clear any existing form data
+    resetIndividualForm(); // Clear individual store form data
     navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.BASIC_INFORMATION);
-  }, [resetForm, navigate]);
+  }, [resetForm, resetIndividualForm, navigate]);
 
   const handleDraftClick = useCallback(
-    (draftId: string) => {
-      // Navigate to basic-information with draftId so the form restores the draft
+    async (draftId: string) => {
+      // Load draft into IndividualStore before navigating
+      await loadDraft(draftId);
       navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.BASIC_INFORMATION, {
         state: { draftId },
       });
     },
-    [navigate],
+    [loadDraft, navigate],
   );
 
   const handleDeleteDraft = useCallback(

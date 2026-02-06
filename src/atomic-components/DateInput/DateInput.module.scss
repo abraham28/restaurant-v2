@@ -8,7 +8,6 @@
   align-items: center;
   width: 100%;
   height: var(--input-height);
-  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
   font-size: var(--input-font-size);
   line-height: var(--input-line-height);
   box-sizing: border-box;
@@ -39,7 +38,8 @@
   background-color: transparent;
   color: hsl(222.2 47.4% 11.2%);
   width: 100%;
-  padding: 0;
+  height: 100%;
+  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
 
   &::placeholder {
     color: hsl(0 0% 60%);
@@ -287,4 +287,46 @@
 
 .yearPicker {
   grid-template-columns: repeat(4, 1fr);
+}
+
+// Date Suggestions
+.suggestionsDropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  border: 1.5px solid hsl(0 0% 89%);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: var(--padding-small) 0;
+  max-height: 200px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.suggestionItem {
+  display: flex;
+  align-items: center;
+  padding: var(--padding-small) var(--padding-medium);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover,
+  &.suggestionItemActive {
+    background-color: var(--color-hover-bg);
+  }
+}
+
+.suggestionDate {
+  font-weight: 500;
+  color: hsl(222.2 47.4% 11.2%);
+}
+
+.suggestionRaw {
+  margin-left: auto;
+  font-size: var(--font-size-x-small);
+  color: hsl(0 0% 50%);
 }

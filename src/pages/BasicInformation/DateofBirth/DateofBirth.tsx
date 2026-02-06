@@ -1,5 +1,5 @@
 import React from 'react';
-import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
+import DateInput from 'atomic-components/DateInput';
 import { useIndividualStore } from 'stores/IndividualStore';
 import styles from './DateofBirth.module.scss';
 
@@ -16,10 +16,11 @@ const DateofBirth = () => {
       <div className={styles.headerContainer}>
         <label className={styles.label}>Date of Birth</label>
         <div className={styles.inputWrapper}>
-          <BirthdateInput
+          <DateInput
             value={birthDate}
             onChange={handleDateChange}
             placeholder="Select birthdate"
+            initialView="year"
           />
         </div>
       </div>
