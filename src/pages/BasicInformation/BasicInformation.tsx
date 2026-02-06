@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './BasicInformation.module.scss';
 import Business from './Business';
 import DateofBirth from './DateofBirth';
@@ -10,6 +11,7 @@ import PhoneNumber from './PhoneNumber';
 import Suffix from './Suffix/Suffix';
 import Title from './Title/Title';
 import Status from './Status';
+import { WorkSection } from './Work';
 
 const BasicInformation = () => {
   return (
@@ -46,6 +48,7 @@ const BasicInformation = () => {
         <div className={styles.formCardMiddle}>
           <Business />
         </div>
+        <WorkSection />
       </div>
     </div>
   );
