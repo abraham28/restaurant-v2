@@ -1,7 +1,8 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
 import { Search, X } from 'lucide-react';
 import { useClickOutside } from 'hooks/useClickOutside';
 import { useDropdownNavigation } from 'hooks/useDropdownNavigation';
+import { minSubstringDistance } from 'utils/fuzzySearch';
 import styles from './AutocompleteInput.module.scss';
 import { AutocompleteInputProps } from './types';
 
@@ -20,11 +21,32 @@ function AutocompleteInput({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Filter suggestions based on search query
-  const filteredSuggestions = suggestions.filter((suggestion) => {
-    if (!searchQuery.trim()) return true;
-    return suggestion.toLowerCase().includes(searchQuery.toLowerCase());
-  });
+  // Fuzzy filter and sort suggestions based on search query
+  const filteredSuggestions = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return suggestions;
+
+    // Allow 1 typo per 4 characters, minimum 1
+    const maxDistance = Math.max(1, Math.floor(query.length / 4));
+
+    return suggestions
+      .map((suggestion) => {
+        const target = suggestion.toLowerCase();
+        const exactContains = target.includes(query);
+        const distance = exactContains
+          ? 0
+          : minSubstringDistance(query, target);
+        return { suggestion, distance, exactContains };
+      })
+      .filter(({ distance }) => distance <= maxDistance)
+      .sort((a, b) => {
+        // Exact contains first, then by distance
+        if (a.exactContains !== b.exactContains)
+          return a.exactContains ? -1 : 1;
+        return a.distance - b.distance;
+      })
+      .map(({ suggestion }) => suggestion);
+  }, [searchQuery, suggestions]);
 
   // Handle suggestion selection
   const handleSelect = useCallback(
