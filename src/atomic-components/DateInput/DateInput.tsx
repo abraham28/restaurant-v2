@@ -1,20 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import styles from './BirthdateInput.module.scss';
-import { BirthdateInputProps } from './types';
+import styles from './DateInput.module.scss';
+import { DateInputProps } from './types';
+import {
+  MONTH_NAMES,
+  parseDateInput,
+  formatDisplayDate,
+  formatISODate,
+  generateDateSuggestions,
+} from './dateSearchUtils';
 
-const BirthdateInput: React.FC<BirthdateInputProps> = ({
+const DateInput: React.FC<DateInputProps> = ({
   value,
   onChange,
   className = '',
   placeholder = 'YYYY-MM-DD',
   disabled = false,
+  initialView = 'calendar',
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   const [showYearPicker, setShowYearPicker] = useState(false);
   const [inputValue, setInputValue] = useState(value || '');
+  const [isTyping, setIsTyping] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const datePickerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -56,17 +67,18 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
         setIsDatePickerOpen(false);
         setShowMonthPicker(false);
         setShowYearPicker(false);
+        setIsTyping(false);
       }
     };
 
-    if (isDatePickerOpen) {
+    if (isDatePickerOpen || isTyping) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isDatePickerOpen]);
+  }, [isDatePickerOpen, isTyping]);
 
   // Validate date string format (YYYY-MM-DD)
   const isValidDateString = (dateString: string): boolean => {
@@ -92,67 +104,75 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
     return date >= minDate && date <= today;
   };
 
-  // Format input as user types (YYYY-MM-DD)
-  const formatInputValue = (value: string): string => {
-    // Extract all digits
-    const digits = value.replace(/\D/g, '');
-
-    if (digits.length === 0) {
-      return '';
-    }
-
-    // Check if user manually typed a dash
-    const endsWithDash = value.endsWith('-');
-
-    // Build formatted string based on digit count
-    if (digits.length <= 4) {
-      // YYYY - only allow dash if exactly 4 digits and user typed it
-      if (endsWithDash && digits.length === 4) {
-        return `${digits}-`;
-      }
-      return digits;
-    } else if (digits.length <= 6) {
-      // YYYY-MM
-      const year = digits.slice(0, 4);
-      const month = digits.slice(4);
-      // Allow dash after MM only if exactly 6 digits and user typed it
-      if (endsWithDash && digits.length === 6) {
-        return `${year}-${month}-`;
-      }
-      return `${year}-${month}`;
-    } else {
-      // YYYY-MM-DD
-      return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6, 8)}`;
-    }
-  };
-
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
-    const formattedValue = formatInputValue(rawValue);
-    setInputValue(formattedValue);
+    setInputValue(rawValue);
 
-    // If valid date format, update parent component
-    if (isValidDateString(formattedValue)) {
-      onChange(formattedValue);
-    } else if (formattedValue === '') {
-      // Allow clearing the input
+    if (rawValue.trim().length > 0) {
+      setIsTyping(true);
+      setIsDatePickerOpen(false);
+    } else {
+      setIsTyping(false);
+      setIsDatePickerOpen(true);
       onChange('');
+      if (initialView === 'year') {
+        setShowYearPicker(true);
+        setShowMonthPicker(false);
+      } else if (initialView === 'month') {
+        setShowMonthPicker(true);
+        setShowYearPicker(false);
+      }
     }
   };
 
-  // Handle input blur
+  // Handle input blur - auto-format to YYYY-MM-DD if valid
   const handleInputBlur = () => {
-    if (inputValue && !isValidDateString(inputValue)) {
-      // If invalid, revert to last valid value
-      setInputValue(value || '');
+    setIsTyping(false);
+    setIsFocused(false);
+    if (!inputValue || inputValue.trim() === '') return;
+
+    // If already valid YYYY-MM-DD, keep it
+    if (isValidDateString(inputValue)) return;
+
+    // Try to parse and auto-format
+    const parsed = parseDateInput(inputValue);
+    if (parsed.year && parsed.month && parsed.day) {
+      const candidate = new Date(parsed.year, parsed.month - 1, parsed.day);
+      candidate.setHours(0, 0, 0, 0);
+      if (
+        !isNaN(candidate.getTime()) &&
+        candidate >= minDate &&
+        candidate <= today &&
+        candidate.getFullYear() === parsed.year &&
+        candidate.getMonth() === parsed.month - 1 &&
+        candidate.getDate() === parsed.day
+      ) {
+        const iso = formatISODate(candidate);
+        setInputValue(iso);
+        onChange(iso);
+        return;
+      }
     }
+
+    // If can't parse, revert to last valid value
+    setInputValue(value || '');
   };
 
   // Handle input focus/click - show calendar
   const handleInputFocus = () => {
+    setIsFocused(true);
     if (!disabled) {
-      setIsDatePickerOpen(true);
+      if (!isTyping) {
+        setIsDatePickerOpen(true);
+        if (initialView === 'year') {
+          setShowYearPicker(true);
+          setShowMonthPicker(false);
+        } else if (initialView === 'month') {
+          setShowMonthPicker(true);
+          setShowYearPicker(false);
+        }
+      }
     }
   };
 
@@ -164,6 +184,7 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
       return newDate;
     });
     setShowMonthPicker(false);
+    setShowYearPicker(false);
   };
 
   // Select year
@@ -174,6 +195,7 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
       return newDate;
     });
     setShowYearPicker(false);
+    setShowMonthPicker(true);
   };
 
   // Get year range for picker (from minDate to today)
@@ -184,7 +206,7 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
     for (let i = minYear; i <= maxYear; i++) {
       years.push(i);
     }
-    return years; // Show years from lowest to highest
+    return years.reverse(); // Show years from current to past
   };
 
   // Get days in month
@@ -286,22 +308,64 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
     return selectedDate.getTime() === cellDate.getTime();
   };
 
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  // Generate date suggestions based on flexible input
+  const dateSuggestions = useMemo(
+    () =>
+      isTyping && inputValue
+        ? generateDateSuggestions(inputValue, minDate, today)
+        : [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputValue, isTyping],
+  );
+
+  // Reset highlighted index when suggestions change
+  useEffect(() => {
+    setHighlightedIndex(-1);
+  }, [dateSuggestions]);
+
+  // Select a suggestion
+  const selectSuggestion = (iso: string) => {
+    onChange(iso);
+    setInputValue(iso);
+    setIsTyping(false);
+    setIsDatePickerOpen(false);
+    setHighlightedIndex(-1);
+  };
+
+  // Handle keyboard navigation for suggestions
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setIsTyping(false);
+      setIsDatePickerOpen(false);
+      setShowMonthPicker(false);
+      setShowYearPicker(false);
+      setHighlightedIndex(-1);
+      inputRef.current?.blur();
+      return;
+    }
+
+    if (!isTyping || dateSuggestions.length === 0) return;
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev < dateSuggestions.length - 1 ? prev + 1 : 0,
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setHighlightedIndex((prev) =>
+        prev > 0 ? prev - 1 : dateSuggestions.length - 1,
+      );
+    } else if (e.key === 'Enter' || e.key === 'Tab') {
+      if (highlightedIndex >= 0 && highlightedIndex < dateSuggestions.length) {
+        e.preventDefault();
+        selectSuggestion(dateSuggestions[highlightedIndex].iso);
+      }
+    }
+  };
 
   // Check if navigation buttons should be disabled
   const canNavigatePrev = () => {
@@ -325,19 +389,51 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
         <input
           ref={inputRef}
           type="text"
-          value={inputValue}
+          value={
+            !isFocused && value && isValidDateString(value)
+              ? (() => {
+                  const [y, m, d] = value.split('-').map(Number);
+                  return formatDisplayDate(new Date(y, m - 1, d));
+                })()
+              : inputValue
+          }
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           onFocus={handleInputFocus}
-          onClick={() => !disabled && setIsDatePickerOpen(true)}
+          onKeyDown={handleKeyDown}
+          onClick={() => {
+            if (!disabled && !isTyping) {
+              setIsDatePickerOpen(true);
+            }
+          }}
           placeholder={placeholder}
           disabled={disabled}
           className={styles.dateInput}
-          maxLength={10}
+          autoComplete="off"
         />
       </div>
 
-      {isDatePickerOpen && !disabled && (
+      {isTyping && dateSuggestions.length > 0 && !disabled && (
+        <div className={styles.suggestionsDropdown}>
+          {dateSuggestions.map((suggestion, index) => (
+            <div
+              key={suggestion.iso}
+              className={`${styles.suggestionItem} ${index === highlightedIndex ? styles.suggestionItemActive : ''}`}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                selectSuggestion(suggestion.iso);
+              }}
+            >
+              <span className={styles.suggestionDate}>
+                {suggestion.display}
+              </span>
+              <span className={styles.suggestionRaw}>{suggestion.iso}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isDatePickerOpen && !isTyping && !disabled && (
         <div className={styles.datePickerDropdown}>
           <div className={styles.calendarHeader}>
             <button
@@ -363,7 +459,7 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
                   setShowYearPicker(false);
                 }}
               >
-                {monthNames[calendarMonth.getMonth()]}
+                {MONTH_NAMES[calendarMonth.getMonth()]}
               </button>
               <button
                 type="button"
@@ -394,7 +490,7 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
 
           {showMonthPicker && (
             <div className={styles.monthPicker}>
-              {monthNames.map((month, index) => {
+              {MONTH_NAMES.map((month, index) => {
                 const testDate = new Date(
                   calendarMonth.getFullYear(),
                   index,
@@ -471,4 +567,4 @@ const BirthdateInput: React.FC<BirthdateInputProps> = ({
   );
 };
 
-export default BirthdateInput;
+export default DateInput;
