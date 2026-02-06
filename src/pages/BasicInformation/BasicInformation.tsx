@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './BasicInformation.module.scss';
 import DateofBirth from './DateofBirth';
 import EmailAddress from './EmailAddress';
@@ -9,6 +10,7 @@ import PhoneNumber from './PhoneNumber';
 import Suffix from './Suffix/Suffix';
 import Title from './Title/Title';
 import Status from './Status';
+import { WorkSection } from './Work';
 
 const BasicInformation = () => {
   return (
@@ -42,6 +44,7 @@ const BasicInformation = () => {
             </div>
           </div>
         </div>
+        <WorkSection />
       </div>
     </div>
   );
