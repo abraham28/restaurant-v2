@@ -1,0 +1,27 @@
+.container {
+  width: 100%;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin-small);
+}
+
+.label {
+  font-size: var(--font-size-medium);
+  font-weight: 500;
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+}
+
+.requiredAsterisk {
+  color: var(--color-error);
+  margin-left: 2px;
+}
+
+.error {
+  font-size: var(--font-size-x-small);
+  color: var(--color-error);
+  margin-top: calc(var(--padding-small) * -1);
+}
