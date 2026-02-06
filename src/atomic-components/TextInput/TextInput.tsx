@@ -20,6 +20,7 @@ const TextInput: React.FC<TextInputProps> = ({
         value={value}
         onChange={handleChange}
         className={styles.input}
+        autoComplete="off"
         {...props}
       />
     </div>

@@ -19,8 +19,6 @@ export const ROUTES = {
   AUTH_CALLBACK: '/auth/callback',
   CLIENT_INFORMATION_SYSTEM: {
     ROOT: '/client-information-system',
-    INSERT: '/client-information-system/new',
-    REVIEW: '/client-information-system/new/review',
     CUSTOMER_DETAILS: '/client-information-system/customer-details',
     ACCOUNTS: '/client-information-system/accounts',
     SETTINGS: '/client-information-system/settings',

@@ -64,13 +64,13 @@ function ClientSearch() {
 
   const handleAdd = useCallback(() => {
     resetForm(); // Clear any existing form data
-    navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT);
+    navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.BASIC_INFORMATION);
   }, [resetForm, navigate]);
 
   const handleDraftClick = useCallback(
     (draftId: string) => {
-      // Navigate to /client-information-system/new with draftId so CIFInsert restores the draft
-      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT, {
+      // Navigate to basic-information with draftId so the form restores the draft
+      navigate(ROUTES.CLIENT_INFORMATION_SYSTEM.BASIC_INFORMATION, {
         state: { draftId },
       });
     },

@@ -11,8 +11,6 @@ import Home from 'pages/Home';
 import { Route, Routes } from 'react-router-dom';
 import { ROUTES } from 'utils/constants';
 import ClientInformationSystem from 'pages/CIS/ClientInformationSystem';
-import CIFInsert from 'pages/CIFInsert/CIFInsert';
-import CIFInsertReview from 'pages/CIFInsert/Review';
 import CsvToJson from 'pages/CsvToJson';
 import PageNotFound from 'pages/PageNotFound';
 import BasicInformation from 'pages/BasicInformation';
@@ -24,14 +22,6 @@ function AppContent() {
       <Route
         path={ROUTES.CLIENT_INFORMATION_SYSTEM.ROOT}
         element={<ClientInformationSystem />}
-      />
-      <Route
-        path={ROUTES.CLIENT_INFORMATION_SYSTEM.INSERT}
-        element={<CIFInsert />}
-      />
-      <Route
-        path={ROUTES.CLIENT_INFORMATION_SYSTEM.REVIEW}
-        element={<CIFInsertReview />}
       />
       <Route path={ROUTES.CSV_UTILS.CSV_TO_JSON} element={<CsvToJson />} />
       <Route
