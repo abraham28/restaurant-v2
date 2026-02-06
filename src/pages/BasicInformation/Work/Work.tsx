@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
+import DateInput from 'atomic-components/DateInput';
 import Button from 'atomic-components/Button';
 import PhoneNumberInput from 'atomic-components/PhoneNumberInput';
 import TextInput from 'atomic-components/TextInput/TextInput';
@@ -78,7 +78,7 @@ export function WorkDetailsFields({ entry }: { entry: WorkEntry }) {
           <label className={styles.workDetailsLabel}>
             Date Employed / Business Started / Retired
           </label>
-          <BirthdateInput
+          <DateInput
             value={entry.dateEmployedBusinessStartedRetired}
             onChange={noop}
             disabled

@@ -1,4 +1,4 @@
-import BirthdateInput from 'atomic-components/BirthdateInput/BirthdateInput';
+import DateInput from 'atomic-components/DateInput';
 import { useWorkFormStore } from 'stores/WorkFormStore';
 import styles from './DateEmployedBusinessStartedRetired.module.scss';
 
@@ -23,7 +23,7 @@ const DateEmployedBusinessStartedRetired = () => {
           <span className={styles.requiredAsterisk}>*</span>
         </label>
         <div className={styles.inputWrapper}>
-          <BirthdateInput
+          <DateInput
             value={dateEmployedBusinessStartedRetired}
             onChange={handleChange}
             placeholder="Select date"
