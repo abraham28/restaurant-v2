@@ -8,6 +8,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   onChange,
   className = '',
   placeholder = 'Select date',
+  disabled = false,
 }) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [calendarMonth, setCalendarMonth] = useState(new Date());
@@ -183,8 +184,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
       ref={datePickerRef}
     >
       <div
-        className={styles.customDateInput}
-        onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+        className={`${styles.customDateInput} ${disabled ? styles.disabled : ''}`}
+        onClick={() => !disabled && setIsDatePickerOpen(!isDatePickerOpen)}
       >
         <Calendar size={18} className={styles.calendarIcon} />
         <span className={styles.dateDisplay}>
@@ -192,7 +193,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
         </span>
       </div>
 
-      {isDatePickerOpen && (
+      {!disabled && isDatePickerOpen && (
         <div className={styles.datePickerDropdown}>
           <div className={styles.calendarHeader}>
             <button

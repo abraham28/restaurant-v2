@@ -1,0 +1,110 @@
+.modal {
+  :global(.modal-content) {
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.modalHeader {
+  padding: var(--padding-xx-large) var(--padding-xxx-large);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-white);
+}
+
+.modalTitle {
+  font-size: var(--font-size-x-large);
+  font-weight: 600;
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+}
+
+.modalBody {
+  padding: var(--padding-xxx-large);
+  background-color: var(--color-white);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-xx-large);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+}
+
+.sectionSubtitle {
+  font-size: var(--font-size-small);
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+  opacity: 0.75;
+}
+
+.formLayout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-xx-large);
+}
+
+.rowThreeCols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--padding-large);
+}
+
+.rowTwoCols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--padding-large);
+}
+
+.rowAddressContact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--padding-large);
+  align-items: start;
+}
+
+.addressColumn,
+.contactColumn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-large);
+  min-width: 0;
+}
+
+.modalFooter {
+  padding: var(--padding-xx-large) var(--padding-xxx-large);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-white);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--padding-large);
+}
+
+@media (max-width: 768px) {
+  .modalBody {
+    padding: var(--padding-large);
+  }
+
+  .rowThreeCols,
+  .rowTwoCols,
+  .rowAddressContact {
+    grid-template-columns: 1fr;
+  }
+
+  .modalFooter {
+    flex-direction: column;
+    padding: var(--padding-large);
+
+    button {
+      width: 100%;
+    }
+  }
+}

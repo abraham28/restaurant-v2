@@ -1,4 +1,5 @@
 import styles from './BasicInformation.module.scss';
+import Business from './Business';
 import DateofBirth from './DateofBirth';
 import EmailAddress from './EmailAddress';
 import FirstName from './FirstName/FirstName';
@@ -41,6 +42,9 @@ const BasicInformation = () => {
               <Status />
             </div>
           </div>
+        </div>
+        <div className={styles.formCardMiddle}>
+          <Business />
         </div>
       </div>
     </div>

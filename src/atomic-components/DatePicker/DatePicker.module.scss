@@ -30,6 +30,18 @@
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px hsla(222.2, 47.4%, 11.2%, 0.1);
   }
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+    background-color: var(--color-disabled-bg);
+    border-color: var(--color-border);
+    opacity: 0.85;
+
+    .calendarIcon {
+      color: hsl(0 0% 65%);
+    }
+  }
 }
 
 .calendarIcon {

@@ -1,0 +1,32 @@
+.container {
+  width: 100%;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-large);
+  margin-bottom: var(--padding-medium);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-medium);
+  font-weight: 600;
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+}
+
+.sectionSubtitle {
+  font-size: var(--font-size-small);
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+  opacity: 0.75;
+}
+
+.addButton {
+  align-self: flex-start;
+}
+
+.list {
+  margin-top: var(--padding-medium);
+}

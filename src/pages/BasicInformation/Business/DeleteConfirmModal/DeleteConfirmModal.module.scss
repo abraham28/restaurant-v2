@@ -1,0 +1,32 @@
+.modalHeader {
+  padding: var(--padding-xx-large) var(--padding-xxx-large);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-white);
+}
+
+.modalTitle {
+  font-size: var(--font-size-x-large);
+  font-weight: 600;
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+}
+
+.modalBody {
+  padding: var(--padding-xxx-large);
+  background-color: var(--color-white);
+}
+
+.message {
+  font-size: var(--font-size-medium);
+  color: hsl(222.2 47.4% 11.2%);
+  margin: var(--margin-none);
+}
+
+.modalFooter {
+  padding: var(--padding-xx-large) var(--padding-xxx-large);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-white);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--padding-large);
+}
